@@ -16,12 +16,11 @@ from scipy.ndimage import gaussian_filter as gf
 from scipy import optimize
 import os
 import time
-
-from DM_simulate import Zernike_func
+from zern_funcs import Zernike_func
 
 global nactuator = 140
 
-class zmode_gat(object):
+def zmode_gat(z_mode, amplitudes):
     """
     gat:guess and check
     key function:
@@ -31,26 +30,7 @@ class zmode_gat(object):
     4. Evaluate the image quality using Frequency-based metrics
     5. repeat the procedure by multiple times
     6. do the fitting.
-
-
     """
-    def __init__(self, npixels):
-        """
-        initialize the AO correction
-        """
-        self.npixels = npixels
-        self.nactuators = nactuators
-        self.seg_pattern = np.zeros([12,12])
-        self.seg_line = np.zeros(nactuator)
-        self.Z_func = Zernike_func(radius = npixels/2)
-        self.response = np.zeros(10)
-
-    def single_zern_modulate(self, ampli):
-        """
-        Modulate single zernikes
-        """
-
-# --------------------------------------------------------------
 
 
 class Control(inLib.Module):
@@ -69,8 +49,8 @@ class Control(inLib.Module):
         self._PFradius = None
         self._sharpness = None
 
-
         self.sharpnessList = []
+        self.zern_func = None
         self.zernModesToFit = 22 #Number of zernike modes to fit unwrapped pupil functions
 
 
@@ -82,8 +62,10 @@ class Control(inLib.Module):
         '''
 
         self.dims =  self._control.camera.getDimensions()
+        self.zern_func = Zernike_func(radius = self.dims[0]/2, mask = True)
         return self.dims
-        
+
+
 
     def _getGeo(self):
         '''
@@ -138,5 +120,23 @@ class Control(inLib.Module):
         return Ims
 
 
-
+    def guess_and_test(self, ampli, z_mode = 5):
+        """
+        Guess-and-check algorithm
+        """
         # Some parameters
+
+        ZF = self.zern_func
+        for aa in ampli:
+            z_pat = ZF.single_zern(z_mode, aa)
+            self._addMod(z_pat)
+            IMs = self.acquireImage(nsteps = 1)
+
+
+    def _addMod(self, MOD):
+        """
+        Add modulation to mirror
+        """
+        self._control.mirror.pattern += MOD # this is a very rough operation
+        ind = self._control.mirror.applyToMirror(wtime = 60)
+        print("Pattern added.")
