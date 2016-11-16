@@ -36,7 +36,7 @@ class Pupil(object):
 
 
     def spatial_radial_coordinate_to_xy_slope(self, s):
-        
+
         _mc = _msqrt((self.n*self.f/self.s)**2-1)
         return _np.real(_mc) - _np.imag(_mc)
 
@@ -101,7 +101,7 @@ class Pupil(object):
 
 
     def get_sli_pupil_function(self, z0, n_photons, dmf=0, tilt=(0,0)):
-        
+
         '''
         Computes the pupil function of a point source in front of a mirror.
 
@@ -142,7 +142,7 @@ class Pupil(object):
             if th != 0:
                 pf2 = pf2*_np.exp(1j*horizontal_tilt)
             return pf1 - pf2
-       
+
         if type(z0) in (list,tuple):
             z0 = _np.array(z0)
 
@@ -151,11 +151,11 @@ class Pupil(object):
 
         if _np.ndim(z0) in (0,2):
             return compute_sli_pupil_function(z1,z2)
-        
+
         elif _np.ndim(z0) == 1:
             return _np.array(
                     [compute_sli_pupil_function(*_) for _ in zip(z1,z2)])
-        
+
 
 
     def get_sli_virtual_focalplane_modulation(self, z, dmf=0, tilt=(0,0), correction=None):
@@ -174,7 +174,7 @@ class Pupil(object):
 	PF[self.r>1] = 0
 	return PF
 
-    
+
     def compute_Fisher_Information(self, PSF, poisson_noise, voxel_size,
             mask=None):
 
@@ -238,7 +238,7 @@ class Geometry:
         The diameter of the pupil function on the pupil device
         in pixels.
     '''
-    
+
 
     def __init__(self, size, cx, cy, d):
 
@@ -256,7 +256,7 @@ class Geometry:
         self.x = 2.0*self.x_pxl/d
         self.y = 2.0*self.y_pxl/d
 
-    
+
 
 class Experiment(Pupil):
 
@@ -279,7 +279,7 @@ class Experiment(Pupil):
     f: float
         The objective focal length in micrometer.
     '''
-    
+
     def __init__(self, geometry, l, n, NA, f):
 
         l = float(l)
@@ -320,7 +320,7 @@ class Simulation(Pupil):
         The numerical aperture of the microscope objective.
     f: float
         The objective focal length in micrometer.
-    ''' 
+    '''
 
     def __init__(self, nx=256, dx=0.1, l=0.68, n=1.33, NA=1.27, f=9000, wavelengths=10, wavelength_halfmax=0.005):
 
@@ -332,7 +332,7 @@ class Simulation(Pupil):
         f = float(f)
         self.nx = nx
         self.ny = nx
-        
+
         Pupil.__init__(self, l, n, NA, f)
 
         self.numWavelengths = wavelengths
@@ -349,14 +349,14 @@ class Simulation(Pupil):
         kx = dk*x
         ky = dk*y
         self.k = _msqrt(kx**2+ky**2)
-        
+
         # Axial Fourier space coordinate:
         self.kz = _msqrt((n/l)**2-self.k**2)
         self.kzs = _np.zeros((self.numWavelengths,self.kz.shape[0],self.kz.shape[1]),dtype=self.kz.dtype)
         ls = _np.linspace(l-wavelength_halfmax,l+wavelength_halfmax,self.kzs.shape[0])
         for i in range(0,self.kzs.shape[0]):
             self.kzs[i] = _msqrt((n/ls[i])**2-self.k**2)
-        
+
         # Scaled pupil function radial coordinate:
         self.r = self.k/self.k_max
 
@@ -374,7 +374,7 @@ class Simulation(Pupil):
 
 
     def pf2psf(self, PF, zs, intensity=True, verbose=False, use_pyfftw=True):
-        
+
         """
         Computes the point spread function for a given pupil function.
 
@@ -396,7 +396,7 @@ class Simulation(Pupil):
         """
 
         nx = self.nx
-        
+
         if _np.isscalar(zs):
             zs = [zs]
         nz = len(zs)
@@ -443,7 +443,7 @@ class Simulation(Pupil):
 
         if nz == 1:
             PSF = PSF[0]
-        
+
         return PSF
 
 
@@ -472,14 +472,14 @@ class Simulation(Pupil):
             The initial guess for the complex pupil function with shape
             (Simulation.nx, Simulation.nx).
         '''
-        
+
         # z spacing:
         dz = float(dz)
         # Number of z slices:
         nz = PSF.shape[0]
         # Noise level:
         mu = float(mu)
-        
+
         kz = self.kz
         k = self.k
         k_max = self.k_max
@@ -501,11 +501,11 @@ class Simulation(Pupil):
 
         expr1 = "Ue = (PSF/Ic)*U"
         expr2 = "Ic = mu + (U * Uconj)"
-        
+
 
         for ii in xrange(nIterations):
-            
-            print 'Iteration',ii+1        
+
+            print 'Iteration',ii+1
             # Calculate PSF field from given PF:
             U = self.pf2psf(A, zs, intensity=False)
             # Calculated PSF intensity with noise:
@@ -536,9 +536,9 @@ class Simulation(Pupil):
                     A[i] = A[i] + fted_ue/_np.exp(2*_np.pi*1j*self.kzs[j]*zs[i])/N
                 A[i] = A[i]/(1+self.kzs.shape[0])
             A = _np.mean(A,axis=0)
-            
+
             #mean(abs(A))*_np.exp(1j*_np.angle(A))
-            
+
             # NA restriction:
             A[k>k_max] = 0
             if resetAmp:
@@ -548,7 +548,7 @@ class Simulation(Pupil):
             if symmeterize:
                 if ii>(nIterations/2):
                     A = 0.5*(A+_np.flipud(A))
-                
+
                 #counts = sum(abs(A))/self.pupil_npxl
                 #A = counts*_np.exp(1j*angle(A))
                 #A[k>k_max] = 0

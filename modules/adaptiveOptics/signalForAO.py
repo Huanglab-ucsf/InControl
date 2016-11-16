@@ -2,7 +2,7 @@
 #
 ## @file
 #
-# 
+#
 # RJM 2/15
 
 
@@ -28,6 +28,9 @@ def window(ndim, pixelSize, diffLimit):
     return freqs,freqs<res
 
 def secondMoment(image, pixelSize, diffLimit):
+    """
+    This is indeed the frequency-based metric.
+    """
     ndim = image.shape[0]
     freqs, win = window(ndim,pixelSize,diffLimit)
     fI = np.abs(fftImage(image))

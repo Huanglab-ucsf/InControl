@@ -8,28 +8,56 @@ from scipy.ndimage import interpolation
 from scipy.ndimage import gaussian_filter as gf
 from scipy import optimize
 
-def psf_processing(raw_scan, r_mask = 40):
+def psf_processing(raw_scan, raw_center, r_mask = 40):
     """
-    processing raw_scan
+    processing raw_scan: find the center, trim background
     """
     nz, ny, nx = raw_scan.shape
+    cy, cx = raw_center
     PSF = np.zeros_like(raw_scan)
 
-    cz, cy, cx = np.unravel_index(np.argmax(gf(raw_scan*mask,2)), raw_scan.shape)
-    print "Center found at: ", (cz,cy,cx)
-    self._center = [cz, cy, cx] # save this for one-run procedure
-    # We laterally center the raw_scan at the brightest pixel
-    shift_y = int(ny/2-cy)
-    shift_x = int(nx/2-cx)
-    PSF_raw = np.roll(raw_scan, shift_y, axis = 1)
-    PSF_raw = np.roll(PSF_raw, shift_x, axis = 2)
+    pupil_g = pupil_geometry((ny,nx), cy, cx, r_mask)
+    center = np.unravel_index(np.argmax(gf(raw_scan*pupil_g.mask,2)), raw_scan.shape)
+    print "Center found at: ", center
+    pz, py, px = center
+    pupil_g = pupil_geometry((ny,nx), py, px, r_mask) # new geometry
+    hcyl = np.array(nz*[np.logical_and(pupil_g.r_pxl>=r_mask*1.30, pupil_g.r_pxl<1.50)])
+    background = np.mean(raw_scan[hcyl]) # average in the hollow cylinder is taken as the background
+    new_cyl = np.array(nz*[pupil_g.mask])
+    PSF[new_cyl] = raw_scan[new_cyl]
+    PSF[np.logical_not(new_cyl)] = background
+    return PSF, background
+#-------------------------- a small class of geometry
 
-    cut = raw_scan[:,cy-mask_size:cy+mask_size,cx-mask_size:cx+mask_size]
-    PSF = np.zeros((nz,ny,nx))
-    PSF[:,nx/2-mask_size:ny/2+mask_size,ny/2-mask_size:nx/2+mask_size] = cut
-    # Background estimation
-    self._background = np.mean(raw_scan[hcyl])
-    print "Background guess: ", self._background
-else:
-    self._background = np.mean(raw_scan[hcyl])
-    PSF[np.logical_not(new_cyl)] = self._background
+
+class pupil_geometry:
+
+    '''
+    A base class which provides basic
+    geometrical data of a microscope experiment.
+
+    Parameters
+    ----------
+    size: tuple
+        The pixel size of a device in the pupil plane of the
+        microscope.
+    cx: float
+        The x coordinate of the pupil function center on the
+        pupil plane device in pixels.
+    cy: float
+        The y coordinate (see cx).
+    '''
+
+    def __init__(self, size, cy, cx, r_mask = None):
+
+        self.cy = float(cy)
+        self.cx = float(cx)
+        self.size = size
+        self.ny, self.nx = size
+        self.x_pxl, self.y_pxl = np.meshgrid(np.arange(self.nx),np.arange(self.ny))
+        self.x_pxl -= cx
+        self.y_pxl -= cy
+        self.r_pxl = _msqrt(self.y_pxl**2+self.x_pxl**2)
+        self.theta = np.arctan2(self.y_pxl, self.x_pxl)
+        if mask is not None:
+            self.mask = r_pxl < r_mask
