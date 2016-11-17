@@ -8,9 +8,15 @@
 
 from PyQt4 import QtCore, QtGui, QtWidgets
 
+try:
+    _fromUtf8 = QtCore.QString.fromUtf8
+except AttributeError:
+    _fromUtf8 = lambda s: s
+
+
 class Ui_Form(object):
     def setupUi(self, Form):
-        Form.setObjectName("Form")
+        Form.setObjectName(_fromUtf8("Form"))
         Form.resize(920, 698)
         self.centralwidget = QtWidgets.QWidget(Form)
         self.centralwidget.setObjectName("centralwidget")
