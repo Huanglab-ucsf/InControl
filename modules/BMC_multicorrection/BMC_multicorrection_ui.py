@@ -43,7 +43,7 @@ class UI(inLib.ModuleUI):
         input an \n into the PIPE.
         '''
         self._control.advanceWithPipe()
-        print("Mirror reset").
+        print("Mirror reset.")
 
 
 

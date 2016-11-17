@@ -172,7 +172,8 @@ modules:
             ThorlabsMotor: true
     BMC_multicorrection:
         active: true
-        settings: {filename: psf_ref, range: 9.0, nSlices: 31, basis:zern}
+        settings:
+            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
     scripts:
         active: false
         settings: null

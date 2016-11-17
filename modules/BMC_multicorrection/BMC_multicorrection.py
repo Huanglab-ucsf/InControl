@@ -18,7 +18,7 @@ class Control(inLib.Module):
         self._modulations = []
         self.n_mod = 0
         self._PSF = None
-        self.DM = DM(nPixels = dims.min()) # Initialize a DM simulation
+        self.DM = DM(nPixels = dims[0]) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
         self.gain = 1.0
         self.raw_MOD = np.zeros(dims)

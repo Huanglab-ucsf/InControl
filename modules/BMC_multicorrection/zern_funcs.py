@@ -5,7 +5,7 @@ Created by Dan on 11/09. Zernike function.
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-import seaborn
+# import seaborn
 
 
 class Zernike_func(object):
