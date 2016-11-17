@@ -72,9 +72,9 @@ class UI(object):
             if settings['modules'][module]['active']:
                 module_ui_path = inLib.get_module_ui_path(module)
                 try:
-                    print(module)
                     print 'Trying to import', module_ui_path
                     module_ui_module = inLib.import_module(module_ui_path)
+                    print("Module imported.")
                     self._module_ui_controls[module] = module_ui_module.UI(module_controls[module],
                             self)
                 except ImportError:

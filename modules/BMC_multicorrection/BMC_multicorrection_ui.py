@@ -3,13 +3,11 @@
 
 from PyQt4 import QtGui,QtCore
 import inLib
-from Utilities import QExtensions as qext
 import numpy as np
 from numpy.lib.scimath import sqrt as _msqrt
-import fit_results_design
 import copy
 import time
-from libs import scipy_gaussfitter
+
 
 class UI(inLib.ModuleUI):
 
@@ -18,8 +16,8 @@ class UI(inLib.ModuleUI):
         This is the initialization part of the UI.
         '''
         design_path = 'modules.BMC_multicorrection.BMC_multicorrection_design'
-        inLib.ModuleUI.__init__(self, control, ui_control, design_path)
-
+        print('design_path is:', design_path)
+        inLib.ModuleUI.__init__(self, control, ui_control,  'modules.BMC_multicorrection.BMC_multicorrection_design')
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquirePSF)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)

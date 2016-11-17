@@ -37,7 +37,7 @@ def import_module(path):
             In instance of the imported module.
     '''
     file = path.split('.')[-1]
-    print("fileis:", file)
+    # print("fileis:", file)
     return __import__(path, globals(), locals(), [file], -1)
 
 
@@ -115,7 +115,7 @@ DeviceUI = _UI
 
 class ModuleUI(_UI):
     def __init__(self, control, ui_control, design_path):
-        _UI.__init__(self, control, design_path)
+        _UI.__init__(self, control, design_path) # this is where the problem emerges
         self._ui_control = ui_control
 
 
