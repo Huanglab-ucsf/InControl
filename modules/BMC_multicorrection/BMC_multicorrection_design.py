@@ -6,7 +6,7 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt4 import QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -144,4 +144,3 @@ class Ui_Form(object):
         self.pushButton_reset.setText(_translate("Form", "Reset Mirror"))
         self.pushButton_apply2mirror.setText(_translate("Form", "Apply to mirror"))
         self.pushButton_acquire.setText(_translate("Form", "Acquire image"))
-

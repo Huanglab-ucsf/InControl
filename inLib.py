@@ -37,6 +37,7 @@ def import_module(path):
             In instance of the imported module.
     '''
     file = path.split('.')[-1]
+    print("fileis:", file)
     return __import__(path, globals(), locals(), [file], -1)
 
 
@@ -49,11 +50,11 @@ def get_module_path(module):
 
 
 def get_device_ui_path(name):
-    return get_device_path(name) + '_ui'    
+    return get_device_path(name) + '_ui'
 
 
 def get_module_ui_path(name):
-    return get_module_path(name) + '_ui'    
+    return get_module_path(name) + '_ui'
 
 
 def get_nested_attr(obj, attr):
@@ -100,7 +101,7 @@ class _UI:
 
         def dropEvent(self, event):
             print "Drop event..."
-		
+
         def _hide_window(self, event):
                 self._window.hide()
                 event.ignore()
@@ -140,12 +141,12 @@ class Module:
     def shutDown(self):
         pass
 
-		
 
-class CommandQueue: 
+
+class CommandQueue:
 
     def __init__(self, control):
-        
+
         self.__lock = threading.RLock()
 
         attributes = {}
@@ -186,4 +187,3 @@ class MplCanvasAxes(MplCanvas):
     def __init__(self, parent=None, figsize=(5,4), dpi=72):
         MplCanvas.__init__(self, parent, figsize, dpi)
         self.axes = self.figure.add_subplot(111)
-
