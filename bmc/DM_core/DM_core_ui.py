@@ -12,11 +12,11 @@ import skimage
 
 
 class UI(inLib.DeviceUI):
-    
+
     def __init__(self, control):
 
         #path to design_path
-        design_path = 'bmc.MultiDM_Dan.mirror_design'
+        design_path = 'bmc.DM_core.mirror_design'
         inLib.DeviceUI.__init__(self, control, design_path)
 
         self._ui.pushButton_load.clicked.connect(self.loadPattern)
@@ -122,11 +122,11 @@ class UI(inLib.DeviceUI):
     def reset(self):
         self._resetThread = Reset(self._control)
         self._resetThread.start()
-        
-        
-        
-   
-   
+
+
+
+
+
 
     def pokeSegment(self):
         segment = self._ui.spinBox_segment.value()
@@ -176,7 +176,7 @@ class UI(inLib.DeviceUI):
         self._displayPhase(self._control.returnPattern())
         self._displaySegments(self._control.returnSegments())
 
-    
+
     def _displayDummyPattern(self, pattern):
         if pattern is not None:
             self._ui.mplwidgetGrouped.figure.axes[0].matshow(pattern, cmap='RdBu')
@@ -186,7 +186,7 @@ class UI(inLib.DeviceUI):
         if zernike is not None:
             self._ui.mplwidgetZern.figure.axes[0].matshow(zernike, cmap='RdBu')
             self._ui.mplwidgetZern.draw()
-        
+
     def _displayPhase(self, phase):
         if phase is not None:
             self._ui.mplwidgetPhase.figure.axes[0].matshow(phase, cmap='RdBu')
@@ -226,7 +226,7 @@ class Reset(QtCore.QThread):
     def __init__(self, control):
         QtCore.QThread.__init__(self)
         self._control = control
-        
+
     def run(self):
         self._control.advancePatternWithPipe()
 
@@ -257,7 +257,7 @@ class Modulation:
 
 
 class FitResultsDialog(QtGui.QDialog):
-    
+
     def __init__(self, PF, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.PF = PF
@@ -284,7 +284,7 @@ class Scanner(QtCore.QThread):
 
     def __init__(self, control, range_, nSlices, nFrames, center_xy, fname, maskRadius, maskCenter):
         QtCore.QThread.__init__(self)
-        
+
         self.control = control
         self.range_ = range_
         self.nSlices = nSlices
