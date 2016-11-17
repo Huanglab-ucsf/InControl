@@ -17,7 +17,7 @@ class UI(inLib.ModuleUI):
         '''
         This is the initialization part of the UI.
         '''
-        design_path = 'BMC_multicorrection.BMC_multicorrection_design'
+        design_path = 'modules.BMC_multicorrection.BMC_multicorrection_design'
         inLib.ModuleUI.__init__(self, control, ui_control, design_path)
 
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
