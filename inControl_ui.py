@@ -11,12 +11,12 @@ import sys
 from PyQt4 import QtGui
 import inLib
 import inControl_design
-	
+
 class UI(object):
 
     def __init__(self, control):
         self._control = control
-        
+
         self._app = QtGui.QApplication(sys.argv)
 
         self._window = QtGui.QWidget()
@@ -49,6 +49,7 @@ class UI(object):
                 if settings['devices'][device]['active']:
                     # Get the path to a potential ui module:
                     device_ui_path = inLib.get_device_ui_path(settings['devices'][device])
+					print("device UI path is: " device_ui_path)
                     # Try to import the ui module:
                     try:
                         print 'Trying to import', device_ui_path
