@@ -1,18 +1,11 @@
 import inLib
 import numpy as np
-from Utilities import zernike
-from scipy.ndimage import interpolation
-from scipy.ndimage import gaussian_filter as gf
-from scipy import optimize
 import os
 import time
 import matplotlib.pyplot as plt
-import libtim
-import libtim.zern
-import skimage
-from skimage.restoration import unwrap_phase
-from AO_algos.DM_simulate import DM
+from DM_simulate import DM, pupil_geometry
 import psf_tools
+
 
 
 class Control(inLib.Module):
@@ -21,26 +14,30 @@ class Control(inLib.Module):
         print 'Initializing BMC_multicorrection.'
         inLib.Module.__init__(self, control, settings) # inheriting
         dims = self._control.camera.getDimensions()
-        # A list to store the indices of the 'Other' modulations, given by the SLM API:
+        self.executable = settings['executable'] # specify the executable of the deformable mirror
         self._modulations = []
-        print('BMC_multicorrection initialized.')
-
+        self.n_mod = 0
         self._PSF = None
-        self.DM = DM(nPixels = dims.min()) # where to store the patterns
-
-
-
+        self.DM = DM(nPixels = dims.min()) # Initialize a DM simulation
+        self.proc = None # the procedure for running the deformable mirror
+        print('BMC_multicorrection initialized.')
     #------------------------- Private functions
-    def _getGeo(self):
+
+    def _alignPupil(self, MOD):
         '''
-        Gets geometry from either SLM (if exist) or elsewhere
+        Align the pupil pattern, which is vertical with the mirror pattern, which
+        is horizontal.
         '''
-        geometry = self._control.mirror.getGeometry()
-        return geometry
-        # endof _getGeo
+        MOD = -1*MOD
+        MOD = np.flipud(MOD)
+        MOD = np.rot90(MOD)
+        MOD = np.rot90(-1.0*MOD)
+        n_pattern = self.DM.nPixels
+        zoom = n_pattern/MOD.shape[0]
+        MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
 
-
-
+        return MOD
+        # done with _alignPupil
 
     def updateImSize(self):
         '''
@@ -53,9 +50,9 @@ class Control(inLib.Module):
 
     def acquirePSF(self, range_, nSlices, nFrames, center_xy=True, filename=None,
                    mask_size = 40, mask_center = (-1,-1)):
+
         '''
         Acquires a PSF stack. The PSF is returned but also stored internally.
-
         :Parameters:
             *range_*: float
                 The range of the scan around the current axial position in micrometers.
@@ -101,8 +98,41 @@ class Control(inLib.Module):
         # end of acquiring PSF
 
 
-    def modulateDM(self):
+
+    def modulateDM(self, MOD):
         """
         Simply, modulate the created pattern.
         """
-        self.control.
+        new_MOD = self._alignPupil(MOD)
+
+        if self.proc is not None:
+            print "Polling proc: ", self.proc.poll()
+            if self.proc.poll() is None:
+                self.proc.terminate()
+                self.proc.communicate()
+                self.proc = None
+        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
+        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+
+
+        self.new_MOD = new_MOD
+
+
+    def storeMOD(self):
+        '''
+        If this modulation is worth keeping
+        '''
+        if(self.new_MOD is not None):
+            self._modulations.append(new_MOD)
+            self.n_mod+=1
+            self.new_MOD = None
+        else:
+            print("no new modulation to save.")
+        # get the handle of the DM
+
+    def advancePatternWithPipe(self):
+        '''
+        Is it equivalent to typing a '\n' from the prompt?
+        '''
+        if self.proc is not None:
+            self.proc.stdin.write("\n")
