@@ -129,8 +129,21 @@ class DM(object):
         """
         self.pattern[:] = 0
         print("Pattern cleared.")
+        # done with clearPattern
 
-        # ------------------------------OK it's still good to add some visualizetion function. ------------------------
+    def exportSegs(self, filename):
+        allSegments = self.segOffsets.astype(np.int16).flatten()
+        forMirror = np.zeros((160),dtype=np.int16)
+        forMirror[0:10] = allSegments[1:11]
+        forMirror[10:130] = allSegments[12:132]
+        forMirror[130:140] = allSegments[133:143]
+        segs = np.append(forMirror, np.zeros((16),dtype=np.int16))
+        #segs = np.append(self.segOffsets.astype(np.int16).flatten(),np.zeros((16),dtype=np.int16))
+        np.savetxt(filename, segs, fmt='%i', delimiter='\n')
+        return segs
+
+
+    #---------------------------OK it's still good to add some visualizetion function. ------------------------
 
 
 

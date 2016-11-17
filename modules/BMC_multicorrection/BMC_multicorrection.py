@@ -20,6 +20,7 @@ class Control(inLib.Module):
         self._PSF = None
         self.DM = DM(nPixels = dims.min()) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
+        self.gain = 1.0
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
@@ -99,7 +100,7 @@ class Control(inLib.Module):
 
 
 
-    def modulateDM(self, MOD):
+    def modulateDM(self, MOD, fname):
         """
         Simply, modulate the created pattern.
         """
@@ -111,7 +112,10 @@ class Control(inLib.Module):
                 self.proc.terminate()
                 self.proc.communicate()
                 self.proc = None
-        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
+
+        self.DM.exportSegs(fname) # save the pattern as the output file
+
+        args = [self.executable, fname, str(self.gain), "1", "-1"] # add only one  file 
         self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
 
