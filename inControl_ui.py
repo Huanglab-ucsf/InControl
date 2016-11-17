@@ -49,7 +49,6 @@ class UI(object):
                 if settings['devices'][device]['active']:
                     # Get the path to a potential ui module:
                     device_ui_path = inLib.get_device_ui_path(settings['devices'][device])
-					print("device UI path is: " device_ui_path)
                     # Try to import the ui module:
                     try:
                         print 'Trying to import', device_ui_path

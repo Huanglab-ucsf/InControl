@@ -6,9 +6,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt4 import QtCore, QtGui, QtWidgets
 
-class Ui_BMC_Multicorrection(object):
+class UI_Form(object):
     def setupUi(self, BMC_Multicorrection):
         BMC_Multicorrection.setObjectName("BMC_Multicorrection")
         BMC_Multicorrection.resize(920, 698)
@@ -144,4 +144,3 @@ class Ui_BMC_Multicorrection(object):
         self.pushButton_reset.setText(_translate("BMC_Multicorrection", "Reset Mirror"))
         self.pushButton_apply2mirror.setText(_translate("BMC_Multicorrection", "Apply to mirror"))
         self.pushButton_acquire.setText(_translate("BMC_Multicorrection", "Acquire image"))
-

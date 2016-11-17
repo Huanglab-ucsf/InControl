@@ -164,7 +164,7 @@ modules:
         active: false
         settings: null
     adaptiveOptics:
-        active: true
+        active: false
         settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
     piezoscan:
         active: true
