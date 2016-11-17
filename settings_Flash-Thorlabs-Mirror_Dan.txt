@@ -11,7 +11,7 @@ devices:
     mirror:
         active: true
         manufacturer: bmc
-        model: MultiDM_core
+        model: DM_core
         settings:
             pixels: 512
             segments: 12
@@ -67,7 +67,7 @@ devices:
                     ch_on: 0.0
                     ch_off: 1.0
 
-               
+
     lasers:
         manufacturer: coherent
         model: obis
@@ -128,8 +128,8 @@ devices:
             precision: 0.01         # After a move cmd, the position is probed every
                                     # 'response_time' secs, until the std of the last 5
                                     # position is below the 'precision'.
- 
-    
+
+
 modules:
     activationLED:
         active: false
@@ -168,8 +168,11 @@ modules:
         settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
     piezoscan:
         active: true
-        settings: 
+        settings:
             ThorlabsMotor: true
+    BMC_multicorrection:
+        active: true
+        settings: {filename: psf_ref, range: 9.0, nSlices: 31, basis:zern}
     scripts:
         active: false
         settings: null
@@ -181,5 +184,5 @@ modules:
         settings:
             # List all relevant devices and provide the functions
             # to probe and set the positon:
-            hal4000: [getStagePosition, moveTo] 
+            hal4000: [getStagePosition, moveTo]
             scope: [PFS.getPosition, PFS.MoveAbsolute]
