@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'BMC_Multicorrection.ui'
+# Form implementation generated from reading ui file 'BMC_multicorrection_design.ui'
 #
 # Created by: PyQt5 UI code generator 5.6
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
-class UI_Form(object):
-    def setupUi(self, BMC_Multicorrection):
-        BMC_Multicorrection.setObjectName("BMC_Multicorrection")
-        BMC_Multicorrection.resize(920, 698)
-        self.centralwidget = QtWidgets.QWidget(BMC_Multicorrection)
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(920, 698)
+        self.centralwidget = QtWidgets.QWidget(Form)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(40, 470, 231, 81))
@@ -95,52 +95,53 @@ class UI_Form(object):
         self.pushButton_acquire = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_acquire.setGeometry(QtCore.QRect(350, 600, 141, 41))
         self.pushButton_acquire.setObjectName("pushButton_acquire")
-        BMC_Multicorrection.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(BMC_Multicorrection)
+        Form.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(Form)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 920, 25))
         self.menubar.setObjectName("menubar")
-        BMC_Multicorrection.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(BMC_Multicorrection)
+        Form.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(Form)
         self.statusbar.setObjectName("statusbar")
-        BMC_Multicorrection.setStatusBar(self.statusbar)
+        Form.setStatusBar(self.statusbar)
 
-        self.retranslateUi(BMC_Multicorrection)
-        QtCore.QMetaObject.connectSlotsByName(BMC_Multicorrection)
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def retranslateUi(self, BMC_Multicorrection):
+    def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        BMC_Multicorrection.setWindowTitle(_translate("BMC_Multicorrection", "MainWindow"))
-        self.pushButton_clearpattern.setText(_translate("BMC_Multicorrection", "Clear"))
-        self.pushButton_Fit.setText(_translate("BMC_Multicorrection", "Fit"))
-        self.pushButton_modulate.setText(_translate("BMC_Multicorrection", "Modulate"))
+        Form.setWindowTitle(_translate("Form", "MainWindow"))
+        self.pushButton_clearpattern.setText(_translate("Form", "Clear"))
+        self.pushButton_Fit.setText(_translate("Form", "Fit"))
+        self.pushButton_modulate.setText(_translate("Form", "Modulate"))
         item = self.Zernike_coefficients.verticalHeaderItem(0)
-        item.setText(_translate("BMC_Multicorrection", "Z4 (defocus)"))
+        item.setText(_translate("Form", "Z4 (defocus)"))
         item = self.Zernike_coefficients.verticalHeaderItem(1)
-        item.setText(_translate("BMC_Multicorrection", "Z5 (astigm. )"))
+        item.setText(_translate("Form", "Z5 (astigm. )"))
         item = self.Zernike_coefficients.verticalHeaderItem(2)
-        item.setText(_translate("BMC_Multicorrection", "Z6 (astigm. )"))
+        item.setText(_translate("Form", "Z6 (astigm. )"))
         item = self.Zernike_coefficients.verticalHeaderItem(3)
-        item.setText(_translate("BMC_Multicorrection", "Z7 (coma)"))
+        item.setText(_translate("Form", "Z7 (coma)"))
         item = self.Zernike_coefficients.verticalHeaderItem(4)
-        item.setText(_translate("BMC_Multicorrection", "Z8 (coma)"))
+        item.setText(_translate("Form", "Z8 (coma)"))
         item = self.Zernike_coefficients.verticalHeaderItem(5)
-        item.setText(_translate("BMC_Multicorrection", "Z9"))
+        item.setText(_translate("Form", "Z9"))
         item = self.Zernike_coefficients.verticalHeaderItem(6)
-        item.setText(_translate("BMC_Multicorrection", "Z10"))
+        item.setText(_translate("Form", "Z10"))
         item = self.Zernike_coefficients.verticalHeaderItem(7)
-        item.setText(_translate("BMC_Multicorrection", "Z11 (pri. spherical)"))
+        item.setText(_translate("Form", "Z11 (pri. spherical)"))
         item = self.Zernike_coefficients.verticalHeaderItem(8)
-        item.setText(_translate("BMC_Multicorrection", "Z12"))
+        item.setText(_translate("Form", "Z12"))
         item = self.Zernike_coefficients.verticalHeaderItem(9)
-        item.setText(_translate("BMC_Multicorrection", "Z13"))
+        item.setText(_translate("Form", "Z13"))
         item = self.Zernike_coefficients.verticalHeaderItem(10)
-        item.setText(_translate("BMC_Multicorrection", "Z14"))
+        item.setText(_translate("Form", "Z14"))
         item = self.Zernike_coefficients.verticalHeaderItem(11)
-        item.setText(_translate("BMC_Multicorrection", "Z15"))
+        item.setText(_translate("Form", "Z15"))
         item = self.Zernike_coefficients.verticalHeaderItem(12)
-        item.setText(_translate("BMC_Multicorrection", "Z16"))
+        item.setText(_translate("Form", "Z16"))
         item = self.Zernike_coefficients.horizontalHeaderItem(0)
-        item.setText(_translate("BMC_Multicorrection", "Amplitude"))
-        self.pushButton_reset.setText(_translate("BMC_Multicorrection", "Reset Mirror"))
-        self.pushButton_apply2mirror.setText(_translate("BMC_Multicorrection", "Apply to mirror"))
-        self.pushButton_acquire.setText(_translate("BMC_Multicorrection", "Acquire image"))
+        item.setText(_translate("Form", "Amplitude"))
+        self.pushButton_reset.setText(_translate("Form", "Reset Mirror"))
+        self.pushButton_apply2mirror.setText(_translate("Form", "Apply to mirror"))
+        self.pushButton_acquire.setText(_translate("Form", "Acquire image"))
+
