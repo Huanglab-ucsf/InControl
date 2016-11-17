@@ -21,15 +21,16 @@ class Control(inLib.Module):
         self.DM = DM(nPixels = dims.min()) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
         self.gain = 1.0
+        self.raw_MOD = np.zeros(dims)
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
-    def _alignPupil(self, MOD):
+    def _alignPupil(self):
         '''
         Align the pupil pattern, which is vertical with the mirror pattern, which
         is horizontal.
         '''
-        MOD = -1*MOD
+        MOD = -1*self.raw_MOD
         MOD = np.flipud(MOD)
         MOD = np.rot90(MOD)
         MOD = np.rot90(-1.0*MOD)
@@ -100,11 +101,11 @@ class Control(inLib.Module):
 
 
 
-    def modulateDM(self, MOD, fname):
+    def modulateDM(self, fname):
         """
         Simply, modulate the created pattern.
         """
-        new_MOD = self._alignPupil(MOD)
+        new_MOD = self._alignPupil()
 
         if self.proc is not None:
             print "Polling proc: ", self.proc.poll()
@@ -115,7 +116,7 @@ class Control(inLib.Module):
 
         self.DM.exportSegs(fname) # save the pattern as the output file
 
-        args = [self.executable, fname, str(self.gain), "1", "-1"] # add only one  file 
+        args = [self.executable, fname, str(self.gain), "1", "-1"] # add only one  file
         self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 
 
@@ -134,9 +135,10 @@ class Control(inLib.Module):
             print("no new modulation to save.")
         # get the handle of the DM
 
-    def advancePatternWithPipe(self):
+    def advanceWithPipe(self):
         '''
         Is it equivalent to typing a '\n' from the prompt?
+        It seems yes!
         '''
         if self.proc is not None:
             self.proc.stdin.write("\n")

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>BMC_Multicorrection</class>
+ <widget class="QMainWindow" name="BMC_Multicorrection">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -18,29 +18,51 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>200</y>
-      <width>291</width>
-      <height>391</height>
+      <y>470</y>
+      <width>231</width>
+      <height>81</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="Continuous_varying">
+     <property name="leftMargin">
+      <number>1</number>
+     </property>
+     <property name="rightMargin">
+      <number>1</number>
+     </property>
      <item>
-      <widget class="QSlider" name="horizontalSlider_2">
+      <widget class="QSlider" name="Zernike_slider">
+       <property name="minimum">
+        <number>-50</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="Zernike_mode"/>
+      <widget class="QSpinBox" name="Zernike_mode">
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>10</y>
+      <x>310</x>
+      <y>70</y>
       <width>481</width>
       <height>481</height>
      </rect>
@@ -49,21 +71,21 @@
      <item row="1" column="0" rowspan="2">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButton_clearpattern">
          <property name="text">
           <string>Clear</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="pushButton_Fit">
          <property name="text">
           <string>Fit</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="pushButton_modulate">
          <property name="text">
           <string>Modulate</string>
          </property>
@@ -72,17 +94,17 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <widget class="QGraphicsView" name="graphicsView"/>
+      <widget class="QGraphicsView" name="Pupil_pattern"/>
      </item>
     </layout>
    </widget>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="Zernike_coefficients">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>20</y>
-      <width>240</width>
-      <height>300</height>
+      <x>40</x>
+      <y>70</y>
+      <width>251</width>
+      <height>391</height>
      </rect>
     </property>
     <row>
@@ -130,11 +152,70 @@
       <string>Z12</string>
      </property>
     </row>
+    <row>
+     <property name="text">
+      <string>Z13</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z14</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z15</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z16</string>
+     </property>
+    </row>
     <column>
      <property name="text">
       <string>Amplitude</string>
      </property>
     </column>
+   </widget>
+   <widget class="QPushButton" name="pushButton_reset">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>600</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Reset Mirror</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_apply2mirror">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>600</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Apply to mirror</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_acquire">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>600</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Acquire image</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
