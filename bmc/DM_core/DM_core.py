@@ -174,6 +174,7 @@ class Control(inLib.Device):
             self.proc.stdin.write("\n")
 
     def resetPipe(self):
+        self.advancePatternWithPipe()
         self.proc = None
 
     def varyGroupOffset(self, maxAmp, minAmp, num, wTime, group=None, useMask=True,
@@ -228,11 +229,6 @@ class Control(inLib.Device):
             return 1
 
 
-
-
-
-
-
     def applyToMirror(self, wtime=-1):
         #First save mirror
         self.mirror.outputSegs(self.tempfilename)
@@ -241,11 +237,15 @@ class Control(inLib.Device):
         wTimeStr = str(wtime)
         args = [self.executable, self.tempfilename, str(self.multiplier),
                          "1", wTimeStr]
+        if self.proc is not None:
+            if self.proc.poll() is None: # the child process is terminated
+                self.proc.terminate()
+                self.proc.communicate()
+                self.proc = None
 
+        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        print("Applied to the mirror.")
 
-        subprocess.call(args, shell=True)
-        #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
-         #                "1", "30000"], shell=True)
 
     def add_pattern(self,pattern):
         nax = np.newaxis

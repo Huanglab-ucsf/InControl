@@ -4,7 +4,9 @@ import os
 import time
 import matplotlib.pyplot as plt
 from DM_simulate import DM, pupil_geometry
+from scipy.ndimage import interpolation
 import psf_tools
+import subprocess
 
 
 
@@ -118,7 +120,7 @@ class Control(inLib.Module):
 
         args = [self.executable, fname, str(self.gain), "1", "-1"] # add only one  file
         self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-
+        print("The pattern is added to the mirror.")
 
         self.new_MOD = new_MOD
 
@@ -142,3 +144,5 @@ class Control(inLib.Module):
         '''
         if self.proc is not None:
             self.proc.stdin.write("\n")
+            output = self.proc.stdout.read()
+            print("stdout:", output)

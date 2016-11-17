@@ -132,7 +132,7 @@ class DM(object):
         # done with clearPattern
 
     def exportSegs(self, filename):
-        allSegments = self.segOffsets.astype(np.int16).flatten()
+        allSegments = self.DMsegs.astype(np.int16).flatten()
         forMirror = np.zeros((160),dtype=np.int16)
         forMirror[0:10] = allSegments[1:11]
         forMirror[10:130] = allSegments[12:132]
