@@ -451,7 +451,7 @@
       <item row="4" column="1">
        <widget class="QDoubleSpinBox" name="doubleSpinBoxFocal">
         <property name="maximum">
-         <double>9999.989999999999782</double>
+         <double>9999.989999999999792</double>
         </property>
         <property name="value">
          <double>5000.000000000000000</double>
