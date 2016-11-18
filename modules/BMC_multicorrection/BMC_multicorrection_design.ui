@@ -23,7 +23,7 @@
       <height>81</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="Continuous_varying">
+    <layout class="QVBoxLayout" name="Modulation_setting">
      <property name="leftMargin">
       <number>1</number>
      </property>
