@@ -6,106 +6,256 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>920</width>
+    <width>968</width>
     <height>698</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>470</y>
-      <width>231</width>
-      <height>81</height>
+      <x>10</x>
+      <y>440</y>
+      <width>191</width>
+      <height>128</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="Modulation_setting">
-     <property name="leftMargin">
-      <number>1</number>
+    <layout class="QGridLayout" name="grid_aqsettings">
+     <property name="bottomMargin">
+      <number>0</number>
      </property>
-     <property name="rightMargin">
-      <number>1</number>
-     </property>
-     <item>
-      <widget class="QSlider" name="Zernike_slider">
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_nsteps">
+       <property name="text">
+        <string># of steps</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QSpinBox" name="spinbox_Nsteps">
        <property name="minimum">
-        <number>-50</number>
+        <number>3</number>
        </property>
        <property name="maximum">
         <number>50</number>
        </property>
-       <property name="singleStep">
-        <number>1</number>
-       </property>
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="Zernike_mode">
-       <property name="autoFillBackground">
-        <bool>false</bool>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>70</y>
-      <width>481</width>
-      <height>481</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0" rowspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="pushButton_clearpattern">
-         <property name="text">
-          <string>Clear</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_Fit">
-         <property name="text">
-          <string>Fit</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_modulate">
-         <property name="text">
-          <string>Modulate</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </item>
      <item row="0" column="0">
-      <widget class="QGraphicsView" name="Pupil_pattern"/>
+      <widget class="QLabel" name="label_fname">
+       <property name="text">
+        <string>Filename</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEdit_dz"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_stepsize">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>dz</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEdit_mask"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLineEdit" name="line_Filename"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_masksize">
+       <property name="text">
+        <string>r_mask</string>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
-   <widget class="QTableWidget" name="Zernike_coefficients">
+   <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>70</y>
-      <width>251</width>
+      <x>210</x>
+      <y>440</y>
+      <width>451</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="grid_mainbuttons">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
+     <property name="horizontalSpacing">
+      <number>6</number>
+     </property>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_synthesize">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Synthesize</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="pushButton_clear">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Clear Pattern</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="pushButton_apply2mirror">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Apply to mirror</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QPushButton" name="pushButton_reset">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Reset Mirror</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButton_acquire">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Acquire stack</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButton_snapshot">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Snapshot</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QTabWidget" name="tab_display">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>661</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>2</number>
+    </property>
+    <widget class="QWidget" name="tab_image_phase">
+     <attribute name="title">
+      <string>Image and phase</string>
+     </attribute>
+     <widget class="QGraphicsView" name="mpl_image">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>311</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QGraphicsView" name="mpl_phase">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>30</y>
+        <width>311</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_metric">
+     <attribute name="title">
+      <string>Metric</string>
+     </attribute>
+     <widget class="QGraphicsView" name="mpl_metrics">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>41</y>
+        <width>571</width>
+        <height>251</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_zfit">
+     <attribute name="title">
+      <string>Zernike_fit</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QTableWidget" name="table_Zcoeffs">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>40</y>
+      <width>269</width>
       <height>391</height>
      </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
     </property>
     <row>
      <property name="text">
@@ -172,58 +322,160 @@
       <string>Z16</string>
      </property>
     </row>
+    <row>
+     <property name="text">
+      <string>Z17</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z18</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z19</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z20</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z21</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z22</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z23</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z24</string>
+     </property>
+    </row>
+    <row>
+     <property name="text">
+      <string>Z25</string>
+     </property>
+    </row>
     <column>
      <property name="text">
       <string>Amplitude</string>
      </property>
     </column>
+    <item row="0" column="0">
+     <property name="text">
+      <string/>
+     </property>
+    </item>
    </widget>
-   <widget class="QPushButton" name="pushButton_reset">
+   <widget class="QWidget" name="gridLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>600</y>
-      <width>151</width>
-      <height>41</height>
+      <x>680</x>
+      <y>440</y>
+      <width>231</width>
+      <height>131</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Reset Mirror</string>
-    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_zmode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Z_modes(4 -- 25)</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_zamplitude">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Amplitude</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QSpinBox" name="spinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="pushButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Flush</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <widget class="QPushButton" name="pushButton_apply2mirror">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>600</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Apply to mirror</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_acquire">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>600</y>
-      <width>141</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Acquire image</string>
-    </property>
-   </widget>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>gridLayoutWidget_2</zorder>
+   <zorder>tab_display</zorder>
+   <zorder>table_Zcoeffs</zorder>
+   <zorder>line_Filename</zorder>
+   <zorder>table_Zcoeffs</zorder>
+   <zorder>gridLayoutWidget_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>920</width>
+     <width>968</width>
      <height>25</height>
     </rect>
    </property>

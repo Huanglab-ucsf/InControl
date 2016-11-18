@@ -19,8 +19,9 @@ class UI(inLib.ModuleUI):
         print('design_path is:', design_path)
         inLib.ModuleUI.__init__(self, control, ui_control,  'modules.BMC_multicorrection.BMC_multicorrection_design')
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
-        self._ui.pushButton_acquire.clicked.connect(self.acquirePSF)
+        self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)
+        self._ui.pushButton_synthesize.clicked.connect(self.syncPattern)
         # done with initialization
 
     def apply2mirror(self):
@@ -29,10 +30,16 @@ class UI(inLib.ModuleUI):
         '''
         self._control.modulateDM('text.txt')
 
-    def acquirePSF(self):
+    def acquireImage(self):
         """
         acquire PSF or other images
         """
+        dz = float(self._ui.lineEdit_dz.text()) # set the steps
+        nSlices = self._ui.spinbox_Nsteps.value()
+        center_xy = self._ui.checkBoxCenterLateral.isChecked()
+        maskRadius = int(self._ui.lineEdit_mask.text())
+        self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=None,
+                       mask_size = 40, mask_center = (-1,-1))
         pass # to be filled later
 
 
@@ -41,6 +48,33 @@ class UI(inLib.ModuleUI):
         input an \n into the PIPE.
         '''
         self._control.advanceWithPipe()
+        # done with reset Mirror
+
+
+    def syncPattern(self):
+        '''
+        synthesize patterns.
+        0. pass all the zernike coefficients to self.control.DM for zernike synthesis.
+        1. create a pattern as self.control.raw_MOD
+        2. display on the panel.
+        '''
+        pass
+
+
+    def setZern(self):
+        '''
+        set single zernike
+        '''
+        item = self.table_Zcoeffs.item(0, 0)
+        item.setText(_translate("Form", "3.3"))
+
+
+
+    def clearPattern(self):
+        '''
+        Clear current pattern.
+        '''
+
 
 
 

@@ -74,10 +74,6 @@ class Control(inLib.Module):
         '''
 
         # Logging
-        self._settings['range'] = range_
-        self._settings['nSlices'] = nSlices
-        self._settings['nFrames'] = nFrames
-        self._settings['filename'] = filename
 
         self.filename = filename
 
@@ -146,3 +142,12 @@ class Control(inLib.Module):
             self.proc.stdin.write("\n")
             output = self.proc.stdout.read()
             print("stdout:", output)
+        # done with advanceWithPipe
+
+
+    def clearMOD(self):
+        '''
+        clear the raw mod and new mod.
+        '''
+        self.raw_MOD[:] = 0
+        self.new_MOD[:] = 0
