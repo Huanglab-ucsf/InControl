@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+   <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -20,83 +20,12 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>440</y>
-      <width>191</width>
-      <height>128</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="grid_aqsettings">
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_nsteps">
-       <property name="text">
-        <string># of steps</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QSpinBox" name="spinbox_Nsteps">
-       <property name="minimum">
-        <number>3</number>
-       </property>
-       <property name="maximum">
-        <number>50</number>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_fname">
-       <property name="text">
-        <string>Filename</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLineEdit" name="lineEdit_dz"/>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_stepsize">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="layoutDirection">
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text">
-        <string>dz</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEdit_mask"/>
-     </item>
-     <item row="0" column="2">
-      <widget class="QLineEdit" name="line_Filename"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_masksize">
-       <property name="text">
-        <string>r_mask</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QWidget" name="gridLayoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>440</y>
-      <width>451</width>
+      <x>230</x>
+      <y>430</y>
+      <width>357</width>
       <height>131</height>
      </rect>
     </property>
@@ -108,7 +37,7 @@
       <number>6</number>
      </property>
      <item row="0" column="1">
-      <widget class="QPushButton" name="pushButton_synthesize">
+      <widget class="QPushButton" name="pushButton_segments">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -116,7 +45,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Synthesize</string>
+        <string>Segments</string>
        </property>
       </widget>
      </item>
@@ -142,7 +71,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Apply to mirror</string>
+        <string>Apply to DM</string>
        </property>
       </widget>
      </item>
@@ -191,13 +120,13 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>50</y>
-      <width>661</width>
-      <height>381</height>
+      <y>40</y>
+      <width>581</width>
+      <height>361</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_image_phase">
      <attribute name="title">
@@ -208,18 +137,18 @@
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>311</width>
-        <height>301</height>
+        <width>271</width>
+        <height>271</height>
        </rect>
       </property>
      </widget>
      <widget class="QGraphicsView" name="mpl_phase">
       <property name="geometry">
        <rect>
-        <x>330</x>
+        <x>280</x>
         <y>30</y>
-        <width>311</width>
-        <height>301</height>
+        <width>281</width>
+        <height>271</height>
        </rect>
       </property>
      </widget>
@@ -239,19 +168,19 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_zfit">
+    <widget class="QWidget" name="tab_Optimize">
      <attribute name="title">
-      <string>Zernike_fit</string>
+      <string>Optimization</string>
      </attribute>
     </widget>
    </widget>
    <widget class="QTableWidget" name="table_Zcoeffs">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>610</x>
       <y>40</y>
-      <width>269</width>
-      <height>391</height>
+      <width>341</width>
+      <height>331</height>
      </rect>
     </property>
     <property name="editTriggers">
@@ -294,7 +223,7 @@
     </row>
     <row>
      <property name="text">
-      <string>Z11 (pri. spherical)</string>
+      <string>Z11 (pri.spher.)</string>
      </property>
     </row>
     <row>
@@ -372,29 +301,78 @@
       <string>Amplitude</string>
      </property>
     </column>
+    <column>
+     <property name="text">
+      <string>Stepsize</string>
+     </property>
+    </column>
     <item row="0" column="0">
      <property name="text">
       <string/>
+     </property>
+    </item>
+    <item row="5" column="0">
+     <property name="text">
+      <string>15</string>
      </property>
     </item>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget_3">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>440</y>
-      <width>231</width>
-      <height>131</height>
+      <x>610</x>
+      <y>390</y>
+      <width>341</width>
+      <height>171</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit">
+    <layout class="QGridLayout" name="grid_zernset">
+     <item row="4" column="2">
+      <widget class="QPushButton" name="pushButton_Evolve">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Evolve</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pushButton_flush">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Flush</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QPushButton" name="pushButton_setsingleZern">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_gain"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_gain">
+       <property name="text">
+        <string>Gain</string>
        </property>
       </widget>
      </item>
@@ -407,12 +385,22 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Z_modes(4 -- 25)</string>
+        <string>Z_modes</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="label_zamplitude">
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="lineEdit_zmode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_zampli">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
          <horstretch>0</horstretch>
@@ -424,51 +412,148 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QSpinBox" name="spinBox">
+     <item row="3" column="0">
+      <widget class="QLineEdit" name="lineEdit_zernampli">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_zernstep">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>stepsize</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="lineEdit_zernstep">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QCheckBox" name="checkBox_mask">
+       <property name="text">
+        <string>Mask</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_segfile">
+       <property name="text">
+        <string>seg_file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLineEdit" name="lineEdit_segfile">
+       <property name="text">
+        <string>dummy.txt</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>430</y>
+      <width>211</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="grid_acquisition">
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_masksize">
+       <property name="text">
+        <string>r_mask</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_nsteps">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="text">
+        <string># of steps</string>
+       </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton">
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="lineEdit_mask"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_dz"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QSpinBox" name="spinbox_Nsteps">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="text">
-        <string>Set</string>
+       <property name="minimum">
+        <number>3</number>
+       </property>
+       <property name="maximum">
+        <number>50</number>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QPushButton" name="pushButton_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_fname">
+       <property name="text">
+        <string>Filename</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLineEdit" name="line_Filename"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_stepsize">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <property name="text">
-        <string>Flush</string>
+        <string>dz</string>
        </property>
       </widget>
      </item>
     </layout>
    </widget>
-   <zorder>gridLayoutWidget</zorder>
    <zorder>gridLayoutWidget_2</zorder>
    <zorder>tab_display</zorder>
    <zorder>table_Zcoeffs</zorder>
-   <zorder>line_Filename</zorder>
-   <zorder>table_Zcoeffs</zorder>
    <zorder>gridLayoutWidget_3</zorder>
+   <zorder>label_zernstep</zorder>
+   <zorder>gridLayoutWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
