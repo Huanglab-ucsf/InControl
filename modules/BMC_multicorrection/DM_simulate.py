@@ -5,11 +5,8 @@ Last modification: 11/01/2016 by Dan.
 """
 
 import numpy as np
-import libtim.zern
-import matplotlib.pyplot as plt
+import libtim.zern as lzern
 from scipy.ndimage import interpolation
-from zern_funcs import Zernike_func
-
 
 class pupil_geometry:
 
@@ -48,13 +45,13 @@ class pupil_geometry:
 
 class DM(object):
 
-    def __init__(self, nseg = 12, nPixels = 256, pattern=None):
+    def __init__(self, nseg = 12, nPixels = 256, pattern=None, mask = False):
         self.nSegments = nseg
         self.nPixels = nPixels
+        self.radius = nPixels/2
         self.DMsegs = np.zeros((self.nSegments, self.nSegments))
-        self.zern = Zernike_func(nPixels/2)
         self.borders = np.linspace(0,self.nPixels,num=self.nSegments+1).astype(int)
-
+        self.useMask = mask
 
         if pattern is None:
             self.pattern = np.zeros((nPixels,nPixels))
@@ -96,15 +93,14 @@ class DM(object):
         return rseg
 
 
-    def zernSeg(self, zernmode):
+    def zernSeg(self, z_ampli):
         """
-        Display a zernike mode on the deformable mirror
-        To be filled later.
+        Take amplitudes of zernike modes and synthesize into a pattern;
+        convert into segment patterns.
         """
-        self.pattern = self.zern.single_zern(zernmode, amp=1.)
+        self.pattern = lzern.calc_zernike(z_ampli, self.radius, mask = self.useMask, zern_data = {})
         self.findSeg()
         # done with zernSeg
-
 
     def setPattern(self, newPattern):
         """
@@ -113,15 +109,6 @@ class DM(object):
         self.pattern = newPattern.copy()
     # done with setPattern
 
-
-
-    def add2Pattern(self, adpat):
-        if(adpat.shape == self.pattern.shape):
-            self.pattern += adpat
-        else:
-            print("Error! The pattern dimensions mismatch.")
-            # pass
-    # done with add2Pattern
 
     def clearPattern(self):
         """
@@ -140,7 +127,16 @@ class DM(object):
         segs = np.append(forMirror, np.zeros((16),dtype=np.int16))
         #segs = np.append(self.segOffsets.astype(np.int16).flatten(),np.zeros((16),dtype=np.int16))
         np.savetxt(filename, segs, fmt='%i', delimiter='\n')
-        return segs
+
+
+    def getPattern(self):
+        return self.pattern
+        # done with getPattern
+
+    def getSegs(self):
+        return self.DMsegs
+        # done with getSegs
+
 
 
     #---------------------------OK it's still good to add some visualizetion function. ------------------------
@@ -152,7 +148,7 @@ The following codes are just for testing the function
 """
 
 def main():
-    ZF = Zernike_func(radius = 47)
+    pass
 
 
 if __name__ =="__main__":

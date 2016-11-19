@@ -16,6 +16,7 @@ class Control(inLib.Module):
         print 'Initializing BMC_multicorrection.'
         inLib.Module.__init__(self, control, settings) # inheriting
         dims = self._control.camera.getDimensions()
+        self.dims = dims
         self.executable = settings['executable'] # specify the executable of the deformable mirror
         self._modulations = []
         self.n_mod = 0
@@ -23,23 +24,21 @@ class Control(inLib.Module):
         self.DM = DM(nPixels = dims[0]) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
         self.gain = 1.0
-        self.raw_MOD = np.zeros(dims)
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
-    def _alignPupil(self):
+    def _alignPupil(raw_MOD):
         '''
         Align the pupil pattern, which is vertical with the mirror pattern, which
         is horizontal.
         '''
-        MOD = -1*self.raw_MOD
+        MOD = -1*raw_MOD
         MOD = np.flipud(MOD)
         MOD = np.rot90(MOD)
         MOD = np.rot90(-1.0*MOD)
         n_pattern = self.DM.nPixels
         zoom = n_pattern/MOD.shape[0]
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
-
         return MOD
         # done with _alignPupil
 
@@ -48,7 +47,8 @@ class Control(inLib.Module):
         Gets the image size from the camera.
         _ui uses this for sharpness calculations...
         '''
-        return self._control.camera.getDimensions()
+
+        self.dims = self._control.camera.getDimensions()
         # endof updateImSize
 
 
@@ -57,24 +57,7 @@ class Control(inLib.Module):
 
         '''
         Acquires a PSF stack. The PSF is returned but also stored internally.
-        :Parameters:
-            *range_*: float
-                The range of the scan around the current axial position in micrometers.
-            *nSlices*: int
-                The number of PSF slices to acquire.
-            *nFrames*: int
-                The number of frames to be averaged for each PSF slice.
-            *filename*: str
-                The file name into which the PSF will be saved.
-
-        :Returns:
-            *PSF*: numpy.array
-                An array of shape (k,l,m), where k are the number of PSF slices and
-                (l,m) the lateral slice dimensions.
         '''
-
-        # Logging
-
         self.filename = filename
 
         # Some parameters
@@ -98,13 +81,17 @@ class Control(inLib.Module):
         # end of acquiring PSF
 
 
+    def pattern2Segs(self, raw_MOD):
+        new_MOD = self._alignPupil(raw_MOD)
+        self.DM.setPattern(new_MOD)
+        # end of pattern2Segs
+
 
     def modulateDM(self, fname):
         """
         Simply, modulate the created pattern.
         """
-        new_MOD = self._alignPupil()
-
+        self.pattern2Segs()
         if self.proc is not None:
             print "Polling proc: ", self.proc.poll()
             if self.proc.poll() is None:
@@ -118,19 +105,16 @@ class Control(inLib.Module):
         self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
         print("The pattern is added to the mirror.")
 
-        self.new_MOD = new_MOD
 
 
-    def storeMOD(self):
+    def storeDM_seg(self):
         '''
         If this modulation is worth keeping
         '''
-        if(self.new_MOD is not None):
-            self._modulations.append(new_MOD)
-            self.n_mod+=1
-            self.new_MOD = None
-        else:
-            print("no new modulation to save.")
+        seg_copy = self.getDM_segs()
+        self._modulations.append[seg_copy]
+
+
         # get the handle of the DM
 
     def advanceWithPipe(self):
@@ -145,9 +129,19 @@ class Control(inLib.Module):
         # done with advanceWithPipe
 
 
-    def clearMOD(self):
+    def getDM_segs(self):
         '''
-        clear the raw mod and new mod.
+        return the DM_segs
         '''
-        self.raw_MOD[:] = 0
-        self.new_MOD[:] = 0
+        seg_copy = np.copy(self.DM.getSegs())
+        return seg_copy
+
+        # done with clearMOD
+
+
+    def clearZern(self):
+        '''
+        clear all the zernike mode coeeficients
+        '''
+        self.z_coeff[:] = 0.0
+        self.DM.clearPattern() # clear the deformable mirror pattern

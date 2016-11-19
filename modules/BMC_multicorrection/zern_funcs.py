@@ -27,7 +27,3 @@ class Zernike_func(object):
         return self.pattern
 #         RMSE[ii] = np.sqrt(np.var(PF_core))
 #         ii +=1
-
-    def plot_zern(self):
-        plt.imshow(self.pattern, interpolation='none')
-        plt.show()
