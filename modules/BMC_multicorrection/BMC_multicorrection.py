@@ -3,7 +3,7 @@ import numpy as np
 import os
 import time
 import matplotlib.pyplot as plt
-from DM_simulate import DM, pupil_geometry
+from DM_simulate import DM
 from scipy.ndimage import interpolation
 import psf_tools
 import subprocess
@@ -27,7 +27,7 @@ class Control(inLib.Module):
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
-    def _alignPupil(raw_MOD):
+    def _alignPupil(self,raw_MOD):
         '''
         Align the pupil pattern, which is vertical with the mirror pattern, which
         is horizontal.
@@ -67,7 +67,7 @@ class Control(inLib.Module):
 
         # Scan the PSF:
         scan_psf = self._control.piezoscan.scan(start, end, nSlices, nFrames, filename)
-        nz, ny, nx = scan.shape
+        nz, ny, nx = scan_psf.shape
         # An empty PSF
         PSF, background = psf_tools.psf_processing(scan_psf, raw_center=mask_center, r_mask = mask_size)
 
@@ -143,5 +143,8 @@ class Control(inLib.Module):
         '''
         clear all the zernike mode coeeficients
         '''
-        self.z_coeff[:] = 0.0
         self.DM.clearPattern() # clear the deformable mirror pattern
+        # done with clearZern
+
+    def setGain(self, gain):
+        self.gain = gain

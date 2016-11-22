@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'BMC_multicorrection_design.ui'
 #
-# Created: Fri Nov 18 17:10:32 2016
+# Created: Tue Nov 22 14:58:01 2016
 #      by: PyQt4 UI code generator 4.8.6
 #
 # WARNING! All changes made in this file will be lost!
@@ -93,10 +93,10 @@ class Ui_Form(object):
         self.tab_display.setObjectName(_fromUtf8("tab_display"))
         self.tab_image_phase = QtGui.QWidget()
         self.tab_image_phase.setObjectName(_fromUtf8("tab_image_phase"))
-        self.mpl_image = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_image = MatplotlibWidget(self.tab_image_phase)
         self.mpl_image.setGeometry(QtCore.QRect(10, 30, 271, 271))
         self.mpl_image.setObjectName(_fromUtf8("mpl_image"))
-        self.mpl_phase = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_phase = MatplotlibWidget(self.tab_image_phase)
         self.mpl_phase.setGeometry(QtCore.QRect(280, 30, 281, 271))
         self.mpl_phase.setObjectName(_fromUtf8("mpl_phase"))
         self.tab_display.addTab(self.tab_image_phase, _fromUtf8(""))
@@ -198,15 +198,15 @@ class Ui_Form(object):
         self.grid_zernset = QtGui.QGridLayout(self.gridLayoutWidget_3)
         self.grid_zernset.setMargin(0)
         self.grid_zernset.setObjectName(_fromUtf8("grid_zernset"))
-        self.pushButton_Evolve = QtGui.QPushButton(self.gridLayoutWidget_3)
+        self.pushButton_evolve = QtGui.QPushButton(self.gridLayoutWidget_3)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_Evolve.sizePolicy().hasHeightForWidth())
-        self.pushButton_Evolve.setSizePolicy(sizePolicy)
-        self.pushButton_Evolve.setText(QtGui.QApplication.translate("Form", "Evolve", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_Evolve.setObjectName(_fromUtf8("pushButton_Evolve"))
-        self.grid_zernset.addWidget(self.pushButton_Evolve, 4, 2, 1, 1)
+        sizePolicy.setHeightForWidth(self.pushButton_evolve.sizePolicy().hasHeightForWidth())
+        self.pushButton_evolve.setSizePolicy(sizePolicy)
+        self.pushButton_evolve.setText(QtGui.QApplication.translate("Form", "Evolve", None, QtGui.QApplication.UnicodeUTF8))
+        self.pushButton_evolve.setObjectName(_fromUtf8("pushButton_evolve"))
+        self.grid_zernset.addWidget(self.pushButton_evolve, 4, 2, 1, 1)
         self.pushButton_flush = QtGui.QPushButton(self.gridLayoutWidget_3)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -334,9 +334,9 @@ class Ui_Form(object):
         self.label_fname.setText(QtGui.QApplication.translate("Form", "Filename", None, QtGui.QApplication.UnicodeUTF8))
         self.label_fname.setObjectName(_fromUtf8("label_fname"))
         self.grid_acquisition.addWidget(self.label_fname, 0, 0, 1, 1)
-        self.line_Filename = QtGui.QLineEdit(self.gridLayoutWidget)
-        self.line_Filename.setObjectName(_fromUtf8("line_Filename"))
-        self.grid_acquisition.addWidget(self.line_Filename, 1, 0, 1, 1)
+        self.lineEdit_filename = QtGui.QLineEdit(self.gridLayoutWidget)
+        self.lineEdit_filename.setObjectName(_fromUtf8("lineEdit_filename"))
+        self.grid_acquisition.addWidget(self.lineEdit_filename, 1, 0, 1, 1)
         self.label_stepsize = QtGui.QLabel(self.gridLayoutWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -393,3 +393,5 @@ class Ui_Form(object):
         item = self.table_Zcoeffs.item(5, 0)
         self.table_Zcoeffs.setSortingEnabled(__sortingEnabled)
 
+
+from matplotlibwidget import MatplotlibWidget

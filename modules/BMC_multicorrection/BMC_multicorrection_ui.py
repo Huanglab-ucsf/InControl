@@ -4,7 +4,6 @@
 from PyQt4 import QtGui,QtCore
 import inLib
 import numpy as np
-from numpy.lib.scimath import sqrt as _msqrt
 import copy
 import time
 import libtim.zern as lzern
@@ -26,19 +25,26 @@ class UI(inLib.ModuleUI):
         self.z_coeff = np.zeros(self.z_max)
         self.z_step = np.zeros(self.z_max)
         self.image = None
+        self.radius = 128
         '''
-        Below is the pushButton links group
+        Below is the initial value group
+        '''
+        self._ui.lineEdit_filename.setText('test.npy')
+        self._ui.lineEdit_dz.setText(str("0.30"))
+        '''
+        Below is the pushButton and lineEdits links group
         '''
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)
-        self._ui.pushButton_synthesize.clicked.connect(self.toDMSegs)
+        self._ui.pushButton_segments.clicked.connect(self.toDMSegs)
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_setsingleZern.clicked.connect(self.setZern_ampli)
-        self._ui.pushButton_Evolve.clicked.connect(self.runGradZern)
+        self._ui.pushButton_evolve.clicked.connect(self.runGradZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.setZern_ampli)
+        self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         # done with initialization
 
 
@@ -56,7 +62,10 @@ class UI(inLib.ModuleUI):
         """
         dz = float(self._ui.lineEdit_dz.text()) # set the steps
         nSlices = self._ui.spinbox_Nsteps.value()
-        self.image = self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=None,
+        nFrames = 2
+        range_ = (nSlices-1)*dz
+        image_filename = str(self._ui.lineEdit_filename.text())
+        self.image = self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=image_filename,
                        mask_size = 40, mask_center = (-1,-1)) # acquired image
         # done with acquireImage
 
@@ -80,17 +89,18 @@ class UI(inLib.ModuleUI):
         self._control.advanceWithPipe()
         # done with reset Mirror
 
-    def syncRawZern(self, mask = False):
+    def syncRawZern(self, usemask = False):
         '''
         create a raw_MOD.
         DM is not updated!!!
         '''
-        self.raw_MOD = lzern.calc_zernike(self.z_coeff, self.radius, mask, zern_data = {})
+        self.raw_MOD = lzern.calc_zernike(self.z_coeff, self.radius, mask = usemask, zern_data = {})
 
 
     def get_rawMOD(self):
         rm = np.copy(self.raw_MOD)
         return rm
+        # done with get_rawMOD
 
 
     def toDMSegs(self):
@@ -101,6 +111,13 @@ class UI(inLib.ModuleUI):
         2. display on the panel.
         '''
         self._control.pattern2Segs(self.raw_MOD)
+        self.displaySegs()
+        # done with toDMSegs
+
+    def setGain(self):
+        gain = float(self._ui.lineEdit_gain.text())
+        self._control.setGain(gain)
+        # done with setGain
 
 
     def setZern_ampli(self, zmode = None, ampli = None):
@@ -112,19 +129,29 @@ class UI(inLib.ModuleUI):
         if(zmode is None and ampli is None):
             zmode = int(self._ui.lineEdit_zmode.text())
             ampli = float(self._ui.lineEdit_zernampli.text())
-        item = self._ui.table_Zcoeffs.item(zmode-4, 0) # find the correct item
-        item.setText(_translate("Form", str(ampli)))
+            print("Zernike mode:", zmode, "Amplitude:", ampli)
+
+        item = QtGui.QTableWidgetItem()
+        item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
+        self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
+
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
         self.updateZern(zmode, ampli, mask)
         # done with setZern
 
-    def setZern_step(self, zmode, stepsize):
+    def setZern_step(self, zmode = None, stepsize = None):
         '''
         setZernike steps
         '''
-        item = self._ui.table_Zcoeffs.item(zmode-4, 1)
-        item.setText(_translate("Form", str(stepsize)))
-        self.z_step[zmode-1] = stepsize
+        if(zmode is None and stepsize is None):
+            zmode = int(self._ui.lineEdit_zmode.text())
+            stepsize = float(self._ui.lineEdit_zernstep.text())
+            print("Zernike mode:", zmode, "stepsize: ", stepsize)
+
+
+        item = QtGui.QTableWidgetItem()
+        item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+        self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
         # done with setZern_step
 
 
@@ -134,6 +161,7 @@ class UI(inLib.ModuleUI):
         '''
         self.z_coeff[zmode-1] = ampli
         self.syncRawZern(mask)
+        self.displayPhase()
 
 
     def flushZern(self):
