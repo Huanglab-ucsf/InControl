@@ -8,6 +8,9 @@ from numpy.lib.scimath import sqrt as _msqrt
 import copy
 import time
 import libtim.zern as lzern
+import AO_algos.Image_metrics as ao_metric
+
+
 
 class UI(inLib.ModuleUI):
 
@@ -22,16 +25,18 @@ class UI(inLib.ModuleUI):
         self.z_max = self._control._settings['zmax']
         self.z_coeff = np.zeros(self.z_max)
         self.z_step = np.zeros(self.z_max)
+        self.image = None
         '''
         Below is the pushButton links group
         '''
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)
-        self._ui.pushButton_synthesize.clicked.connect(self.pattern2Segs)
+        self._ui.pushButton_synthesize.clicked.connect(self.toDMSegs)
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_setsingleZern.clicked.connect(self.setZern_ampli)
+        self._ui.pushButton_Evolve.clicked.connect(self.runGradZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.setZern_ampli)
         # done with initialization
@@ -51,11 +56,21 @@ class UI(inLib.ModuleUI):
         """
         dz = float(self._ui.lineEdit_dz.text()) # set the steps
         nSlices = self._ui.spinbox_Nsteps.value()
-        center_xy = self._ui.checkBoxCenterLateral.isChecked()
-        maskRadius = int(self._ui.lineEdit_mask.text())
-        self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=None,
-                       mask_size = 40, mask_center = (-1,-1))
-        pass # to be filled later
+        self.image = self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=None,
+                       mask_size = 40, mask_center = (-1,-1)) # acquired image
+        # done with acquireImage
+
+
+    def calc_image_metric(self):
+        '''
+        calculate image metrics (second moment)
+        '''
+        if self.image is not None:
+            image = self.image
+            if image.shape[0] >1:
+                metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
+            else:
+                metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
 
 
     def resetMirror(self):
@@ -88,12 +103,15 @@ class UI(inLib.ModuleUI):
         self._control.pattern2Segs(self.raw_MOD)
 
 
-    def setZern_ampli(self, zmode, ampli):
+    def setZern_ampli(self, zmode = None, ampli = None):
         '''
         set single zernike
         since the zmode starts from defocusing (4th), the row number should subtract 4.
         display ampli.
         '''
+        if(zmode is None and ampli is None):
+            zmode = int(self._ui.lineEdit_zmode.text())
+            ampli = float(self._ui.lineEdit_zernampli.text())
         item = self._ui.table_Zcoeffs.item(zmode-4, 0) # find the correct item
         item.setText(_translate("Form", str(ampli)))
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
@@ -102,8 +120,12 @@ class UI(inLib.ModuleUI):
 
     def setZern_step(self, zmode, stepsize):
         '''
-        setZernike steps 
+        setZernike steps
         '''
+        item = self._ui.table_Zcoeffs.item(zmode-4, 1)
+        item.setText(_translate("Form", str(stepsize)))
+        self.z_step[zmode-1] = stepsize
+        # done with setZern_step
 
 
     def updateZern(self, zmode, ampli, mask = False):
@@ -149,18 +171,45 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.draw()
 
 
-    def single_runGradZern(self, n_modes):
+    def single_GradZern(self, n_modes):
         '''
         run gradient algorithm over the selected modes. Use sharpness as a metric.
         0. set a starting point. if None, use the current zernike settings.
         1. nModes: a list of zernike modes (4 --- 25)
         '''
         z_coeff = self.z_coeff
+        z_step = self.z_step
         for zn in n_modes:
-            ampli = z_coeff[zn-1] +
-            rm = self.get_rawMOD()
-            self.toDMSegs(rm)
+            '''
+            Evolve the selected Zernike modes with a tiny step
+            '''
+            ampli = z_coeff[zn-1] + z_step[zn-1]
+            self.setZern_ampli(zn, ampli) # so this is not affected by the lineEdit values.
 
+        rm = self.get_rawMOD()
+        self.displayPhase() # display on the figure
+        self.toDMSegs() # this only modulates
+        self.apply2mirror()
+        self.acquireImage()
+        self.resetMirror()
+        mt = self.calc_image_metric()
+        return mt
+        '''
+        OK, the mirror is reset and the metric is applied.
+        what's next?
+        '''
+        # done with single_runGradZern
+
+    def runGradZern(self, nmodes, nsteps):
+        '''
+        run GradZernike for multiple steps.
+        '''
+        metrics = []
+        for xn in np.arange(nsteps):
+            mt = self.single_GradZern(nmodes)
+            metrics.append(mt)
+
+        return(metrics)
 
 
 

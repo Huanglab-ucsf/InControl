@@ -91,7 +91,7 @@ class Control(inLib.Module):
         """
         Simply, modulate the created pattern.
         """
-        self.pattern2Segs()
+        # self.pattern2Segs()
         if self.proc is not None:
             print "Polling proc: ", self.proc.poll()
             if self.proc.poll() is None:
