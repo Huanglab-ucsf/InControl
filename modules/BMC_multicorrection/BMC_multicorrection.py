@@ -38,8 +38,10 @@ class Control(inLib.Module):
         MOD = np.rot90(-1.0*MOD)
         n_pattern = self.DM.nPixels
         zoom = n_pattern/MOD.shape[0]
+        print(zoom)
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
-        return MOD
+        MOD_product = np.rot90(MOD-MOD.min())
+        return MOD_product
         # done with _alignPupil
 
     def updateImSize(self):
@@ -84,6 +86,7 @@ class Control(inLib.Module):
     def pattern2Segs(self, raw_MOD):
         new_MOD = self._alignPupil(raw_MOD)
         self.DM.setPattern(new_MOD)
+        self.DM.findSeg()
         # end of pattern2Segs
 
 

@@ -40,7 +40,6 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_segments.clicked.connect(self.toDMSegs)
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
-        self._ui.pushButton_setsingleZern.clicked.connect(self.setZern_ampli)
         self._ui.pushButton_evolve.clicked.connect(self.runGradZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.setZern_ampli)
@@ -166,11 +165,29 @@ class UI(inLib.ModuleUI):
 
     def flushZern(self):
         '''
-        flush all the zernike coefficients.
+        flush all the zernike coefficients; set all the z_coeffs as zero.
         '''
         self.z_coeff[:] = 0
+        self.flushTable()
         self._control.clearZern()
         # done with flushZern
+
+    def flushTable(self):
+        '''
+        flush the table of Zernike coefficients and stepsizes.
+        '''
+        zm = self.z_max-4
+
+        for zmode in np.arange(zm):
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+        # done with flushTable
+
+
 
     def clearPattern(self):
         '''
