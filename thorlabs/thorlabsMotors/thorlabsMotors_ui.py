@@ -6,7 +6,7 @@ import time
 
 
 class UI(inLib.DeviceUI):
-    
+
     def __init__(self, control):
         design_path = 'thorlabs.thorlabsMotors.thorlabsMotors_design'
         print 'Thorlabs stage: Initializing UI.'
@@ -66,8 +66,8 @@ class UI(inLib.DeviceUI):
             self._ui.go_pushButton.setText('Wait...')
             self._sawtoothThread.start()
     '''
-    
-        
+
+
     def _on_sawtoothDone(self):
         self._ui.go_pushButton.setText('Go')
         self._sawtoothThread = None
@@ -88,9 +88,12 @@ class UI(inLib.DeviceUI):
     def _stepDown(self):
         #self.aptUser.jogDown()
         self._control.jogDown()
-        
-    def _BLcorrect(self):
-#       
+
+    def _BLcorrect(self, z_start = None):
+        '''
+        backlash correction
+        specify z_start 
+        '''
         self._control.setStage(self.scan_0+0.0090)
         time.sleep(3)
         for ii in xrange(self.sdown+1):

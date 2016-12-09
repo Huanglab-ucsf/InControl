@@ -39,7 +39,10 @@ class APTUserTest(QAxContainer.QAxWidget):
 
     def jogDown(self):
         self.dynamicCall('MoveJog(int,int)', 0,2)
-#
+
+    def setStep(self, zstep):
+        self.dynamicCall('JogStepSize(double)', zstep*0.01)
+
 # Testing
 #
 
