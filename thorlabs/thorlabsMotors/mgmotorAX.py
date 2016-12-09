@@ -47,16 +47,16 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     aptUser = APTUser1()
     #aptUser.show()
-    aptUser2 = APTUser2()
+    aptUser2 = APTUserTest()
     #aptUser2.show()
 
     time.sleep(4)
 
-    aptUser2.moveTo(60)
+    aptUser2.jogUp()
     time.sleep(3)
-    aptUser2.moveTo(120)
+    aptUser2.jogDown()
     time.sleep(3)
-    
+
     sys.exit(app.exec_())
 
 
@@ -91,4 +91,3 @@ if __name__ == "__main__":
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 #
-
