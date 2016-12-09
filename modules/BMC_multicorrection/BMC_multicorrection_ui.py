@@ -42,11 +42,9 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.runGradZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
-        self._ui.lineEdit_zernampli.returnPressed.connect(self.setZern_ampli)
+        self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         # done with initialization
-
-
 
 
     def apply2mirror(self):
@@ -119,25 +117,6 @@ class UI(inLib.ModuleUI):
         # done with setGain
 
 
-    def setZern_ampli(self, zmode = None, ampli = None):
-        '''
-        set single zernike
-        since the zmode starts from defocusing (4th), the row number should subtract 4.
-        display ampli.
-        '''
-        if(zmode is None and ampli is None):
-            zmode = int(self._ui.lineEdit_zmode.text())
-            ampli = float(self._ui.lineEdit_zernampli.text())
-            print("Zernike mode:", zmode, "Amplitude:", ampli)
-
-        item = QtGui.QTableWidgetItem()
-        item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
-        self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
-
-        mask = self._ui.checkBox_mask.isChecked() # use mask or not?
-        self.updateZern(ampli, zmode, mask)
-        # done with setZern
-
     def setZern_step(self, zmode = None, stepsize = None):
         '''
         setZernike steps
@@ -157,13 +136,41 @@ class UI(inLib.ModuleUI):
     def updateZern(self, ampli, zmode = None, mask = False):
         '''
         update the zernike coefficients, it may work for one or more zernike modes.
+        The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
         '''
         if zmode is None:
-            zmode = np.arange(1, len(ampli)+1)
-        self.z_coeff[zmode-1] = ampli
+            '''
+            if neither zmode nor ampli is specified:
+            '''
+            if ampli is None:
+                zmode = int(self._ui.lineEdit_zmode.text())
+                ampli = float(self._ui.lineEdit_zernampli.text())
+                print("Zernike mode:", zmode, "Amplitude:", ampli)
+            elif ampli is not None:
+                zmode = np.arange(1, len(ampli)+1)
+
+        self.z_coeff[zmode-1] = ampli # this is global.
+        if np.isscalar(zmode):
+            self.updateTable_ampli(zmode, ampli) # update the table display
+        else:
+            for nz, am in zip(zmode, ampli):
+                self.updateTable_ampli(nz, am)
+
+        mask = self._ui.checkBox_mask.isChecked() # use mask or not?
         self.syncRawZern(mask)
         self.displayPhase()
         # done with updateZern
+
+        # not done with stepZern
+
+    def updateTable_ampli(self, z_mode, ampli):
+        '''
+        simply update the table display of the zernike modes.
+        '''
+        item = QtGui.QTableWidgetItem()
+        item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
+        self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
+        # done with updateDisplay
 
 
     def flushZern(self):
@@ -224,7 +231,7 @@ class UI(inLib.ModuleUI):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        self.updateZern(z_coeffs) # mask = False, the raw_MOD is updated as well.
+        self.updateZern(z_coeffs)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
@@ -247,29 +254,51 @@ class UI(inLib.ModuleUI):
         zc_input = np.zeros(self.z_max)
         st_input = np.zeros(self.z_max)
         try:
-            zc_input[z_modes-4] = z_coeffs
+            zc_input[z_modes-1] = z_coeffs
         except ValueError:
             print('dimension mismatch for amplitudes.')
             return -1
 
         # assign the steps
         try:
-            zc_input[z_modes-4] = z_steps
+            st_input[z_modes-1] = z_steps
         except ValueError:
             print('dimension mismatch for stepsize.')
             return -2
 
-        S_mat= np.zeros([N_search+1, N_search]) # the first row saves the first derivative, the rest N_search rows save the second.
+        S_vec = np.zeros(N_search)
+        deriv = np.zeros(N_search)
+        S_mat= np.zeros([N_search, N_search]) # the first row saves the first derivative, the rest N_search rows save the second.
         hess = np.zeros([N_search, N_search])
 
         S0 = self.single_Evaluate(zc_input)
-        for iz in z_modes:
+
+        for iz in np.arange(N_search):
             '''
-            iterate through z_modes
+            iterate through z_modes: outer cycle
             '''
+            step_i = st_input[iz]
+            nz = z_modes[iz] # select the modes out
+            zc_input[nz-1] +=step_i
+            S_vec[iz] = self.single_Evaluate(zc_input)
+            # zc_input[nz-1] -=st_input[iz]
+            for jz in np.arange(N_search):
+                '''
+                iterate through z_modes: inner cycle
+                '''
+                step_j = st_input[jz]
+                mz = z_modes[jz]
+                zc_input[mz-1] +=step_j
+                S_mat[iz, jz] = self.single_Evaluate(zc_input)
+                zc_input[mz-1] -=step_j
+            # return the zc_input to its original form
+            zc_input[nz-1] -=step_i
+        # OK, now the whole S_vec and S_mat is computed.
+        [DS, DK] = np.meshgrid(S_vec, S_vec) # meshgrid
+        [sts, stk] = np.meshgrid(st_input, st_input)
+        hess = S_mat-(DS+DK) + S0/(sts*stk)
 
-
-
+        return hess # bingo!!! 
         # done with single_runGradZern
 
     def runGradZern(self, nmodes, nsteps):
