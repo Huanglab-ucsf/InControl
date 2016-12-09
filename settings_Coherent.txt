@@ -9,7 +9,7 @@ devices:
             port: COM3
 
     mirror:
-        active: false 
+        active: false
         manufacturer: bmc
         model: DM_core
         settings:
@@ -73,12 +73,12 @@ devices:
         model: obis
         active: true
         settings:
-            ports: ["COM15","COM14","COM13"] #com15:405; com13:647; com14:488
-            lines: [405, 488, 647]
+            ports: ["COM6"] #com15:405; com13:647; com14:488
+            lines: [488] # 488 only
     camera:
         manufacturer: hamamatsu
         model: orcaflash
-        active: false 
+        active: false
         settings:
             temperature: 20
             exposure_time: 0.4        # in milliseconds
@@ -115,7 +115,7 @@ devices:
     servo:
         manufacturer: thorlabs
         model: thorlabsMotors
-        active: false 
+        active: false
         settings:
             step: 0.0004
     piezo:
