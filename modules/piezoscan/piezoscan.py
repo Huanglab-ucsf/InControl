@@ -156,12 +156,16 @@ class Control(inLib.Module):
             '''
             for ii in xrange(nsteps+N_correct):
                 self._control.servo.jogUp()
+            time.sleep(3)
+
         else:
             self._control.moveTo(z_start+z_correct)
+            time.sleep(2)
         # now, move the piezo back
         for ii in xrange(N_correct):
             self._control.servo.jogDown()
-        # done with bl_correct 
+            time.sleep(0.25)
+        # done with bl_correct
 
 
     def stop(self):

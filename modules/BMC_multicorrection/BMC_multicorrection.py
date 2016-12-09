@@ -164,4 +164,4 @@ class Control(inLib.Module):
         '''
         Reset the position of the Thorlabs stage
         '''
-        
+        self._control.piezoscan.
