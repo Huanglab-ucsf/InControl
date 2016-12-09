@@ -151,3 +151,7 @@ class Control(inLib.Module):
 
     def setGain(self, gain):
         self.gain = gain
+        # done with setGain
+
+
+    

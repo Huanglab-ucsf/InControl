@@ -135,7 +135,7 @@ class UI(inLib.ModuleUI):
         self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
 
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
-        self.updateZern(zmode, ampli, mask)
+        self.updateZern(ampli, zmode, mask)
         # done with setZern
 
     def setZern_step(self, zmode = None, stepsize = None):
@@ -154,13 +154,16 @@ class UI(inLib.ModuleUI):
         # done with setZern_step
 
 
-    def updateZern(self, zmode, ampli, mask = False):
+    def updateZern(self, ampli, zmode = None, mask = False):
         '''
-        update the zernike coefficients
+        update the zernike coefficients, it may work for one or more zernike modes.
         '''
+        if zmode is None:
+            zmode = np.arange(1, len(ampli)+1)
         self.z_coeff[zmode-1] = ampli
         self.syncRawZern(mask)
         self.displayPhase()
+        # done with updateZern
 
 
     def flushZern(self):
@@ -216,22 +219,12 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.draw()
 
 
-    def single_GradZern(self, n_modes):
+    def single_Evaluate(self, z_coeffs):
         '''
-        run gradient algorithm over the selected modes. Use sharpness as a metric.
-        0. set a starting point. if None, use the current zernike settings.
-        1. nModes: a list of zernike modes (4 --- 25)
+        Just apply the zernike coefficients, take the image and evaluate the sharpness
+        z_coeffs: from 1 to z_max.
         '''
-        z_coeff = self.z_coeff
-        z_step = self.z_step
-        for zn in n_modes:
-            '''
-            Evolve the selected Zernike modes with a tiny step
-            '''
-            ampli = z_coeff[zn-1] + z_step[zn-1]
-            self.setZern_ampli(zn, ampli) # so this is not affected by the lineEdit values.
-
-        rm = self.get_rawMOD()
+        self.updateZern(z_coeffs) # mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
@@ -243,11 +236,47 @@ class UI(inLib.ModuleUI):
         OK, the mirror is reset and the metric is applied.
         what's next?
         '''
+
+    def step_Hessian(self, z_modes, z_coeffs, z_steps):
+        '''
+        z_modes: selected modes for optimization. 4 --- zmax
+        z_coeffs: the coefficients of the zernike modes
+        z_steps: the designed steps in each mode. If it is 0 or ignored, then the mode is dropped.
+        '''
+        N_search = len(z_modes) # the dimension of the search space
+        zc_input = np.zeros(self.z_max)
+        st_input = np.zeros(self.z_max)
+        try:
+            zc_input[z_modes-4] = z_coeffs
+        except ValueError:
+            print('dimension mismatch for amplitudes.')
+            return -1
+
+        # assign the steps
+        try:
+            zc_input[z_modes-4] = z_steps
+        except ValueError:
+            print('dimension mismatch for stepsize.')
+            return -2
+
+        S_mat= np.zeros([N_search+1, N_search]) # the first row saves the first derivative, the rest N_search rows save the second.
+        hess = np.zeros([N_search, N_search])
+
+        S0 = self.single_Evaluate(zc_input)
+        for iz in z_modes:
+            '''
+            iterate through z_modes
+            '''
+
+
+
         # done with single_runGradZern
 
     def runGradZern(self, nmodes, nsteps):
         '''
         run GradZernike for multiple steps.
+        This function utilizes the conjugate gradient method
+        (CGM, see numerical recipies).
         '''
         metrics = []
         for xn in np.arange(nsteps):
@@ -255,6 +284,7 @@ class UI(inLib.ModuleUI):
             metrics.append(mt)
 
         return(metrics)
+
 
 
 
