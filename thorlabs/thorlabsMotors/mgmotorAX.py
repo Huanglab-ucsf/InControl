@@ -40,15 +40,12 @@ class APTUserTest(QAxContainer.QAxWidget):
     def jogDown(self):
         self.dynamicCall('MoveJog(int,int)', 0,2)
 
-    def setStep(self, zstep):
-        self.dynamicCall('JogStepSize(double)', zstep*0.01)
-
 # Testing
 #
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    aptUser = APTUser1()
+
     #aptUser.show()
     aptUser2 = APTUserTest()
     #aptUser2.show()
@@ -56,10 +53,9 @@ if __name__ == "__main__":
     time.sleep(4)
 
     aptUser2.jogUp()
-    time.sleep(3)
+    time.sleep(2)
     aptUser2.jogDown()
-    time.sleep(3)
-
+    time.sleep(2)
     sys.exit(app.exec_())
 
 
