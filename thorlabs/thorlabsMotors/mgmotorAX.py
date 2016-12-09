@@ -47,7 +47,7 @@ class APTUserTest(QAxContainer.QAxWidget):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-
+    aptuser = APTUser1()
     #aptUser.show()
     aptUser2 = APTUserTest()
     #aptUser2.show()
@@ -58,8 +58,9 @@ if __name__ == "__main__":
     time.sleep(2)
     aptUser2.jogDown()
     time.sleep(2)
-    aptUser.setStepsize(10)
-
+    aptUser2.setStepsize(100)
+    time.sleep(2)
+    print("Ready!")
     sys.exit(app.exec_())
 
 
