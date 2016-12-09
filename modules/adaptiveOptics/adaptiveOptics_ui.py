@@ -12,7 +12,7 @@ import time
 from libs import scipy_gaussfitter
 
 class UI(inLib.ModuleUI):
-    
+
     def __init__(self, control, ui_control):
         design_path = 'modules.adaptiveOptics.adaptiveOptics_design'
         inLib.ModuleUI.__init__(self, control, ui_control, design_path)
@@ -23,7 +23,7 @@ class UI(inLib.ModuleUI):
         self._ui.buttonGroupGuess.addButton(self._ui.radioButtonFromFile)
         self._ui.pushButtonFit.clicked.connect(self.fitPF)
         self._ui.pushButtonPhase.clicked.connect(self.retrievePF)
-        
+
         # self._ui.
 
         self._ui.doubleSpinBoxRange.setValue(self._control._settings['range'])
@@ -286,7 +286,7 @@ class UI(inLib.ModuleUI):
             self._ui.tabWidgetPF.setEnabled(True)
             self._ui.pushButton_modulateZernike.setEnabled(False)
             self._displayPhase(PF)
-        self.use_zernike = False 
+        self.use_zernike = False
 
 
     def modulate(self): # pushButtonModulate triggering
@@ -336,7 +336,7 @@ class UI(inLib.ModuleUI):
             self._ui_control.slm.updateModulationDisplay()
 
     def oneRun(self):
-        # added by Dan to perform one-Run experiment        
+        # added by Dan to perform one-Run experiment
         self._control.one_Run(4)
 
 
@@ -356,7 +356,7 @@ class Modulation:
 
 
 class FitResultsDialog(QtGui.QDialog):
-    
+
     def __init__(self, PF, parent=None):
         QtGui.QDialog.__init__(self, parent)
         self.PF = PF
@@ -383,7 +383,7 @@ class Scanner(QtCore.QThread):
 
     def __init__(self, control, range_, nSlices, nFrames, center_xy, fname, maskRadius, maskCenter):
         QtCore.QThread.__init__(self)
-        
+
         self.control = control
         self.range_ = range_
         self.nSlices = nSlices
@@ -399,7 +399,7 @@ class Scanner(QtCore.QThread):
                                 self.maskRadius, self.maskCenter)
 
 class RunningSharpness(QtCore.QThread):
-                                               
+
     def __init__(self, control, im_size, maskRadius, maskCenter, pixelSize, diffLimit, plotWidget,
                  numToVary = 100, varyZern=False, wait_time = 0.1):
         '''
@@ -424,7 +424,7 @@ class RunningSharpness(QtCore.QThread):
         Emits signal 'nextModulation(int)' when ready to add new modulation...
             nextModulation takes parameter that counts upward from 0
         Emits signal 'doneAdvancingZern' when done
-        
+
 
         '''
         QtCore.QThread.__init__(self)
@@ -439,7 +439,7 @@ class RunningSharpness(QtCore.QThread):
         self._varyZern = varyZern
         self.numZernsToVary = numToVary
         self._zerns = 0
-                                               
+
 
         nx,ny = im_size
 
@@ -489,4 +489,3 @@ class RunningSharpness(QtCore.QThread):
                         self.plotWidget.draw()
                         self._on = False
                         self.emit(QtCore.SIGNAL('doneAdvancingZern'))
-

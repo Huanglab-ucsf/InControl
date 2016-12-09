@@ -1,3 +1,9 @@
+'''
+This is adapted from the module "adaptiveOptics".
+'''
+
+
+
 import inLib
 import numpy as np
 import os
@@ -154,4 +160,8 @@ class Control(inLib.Module):
         # done with setGain
 
 
-    
+    def positionReset(self, dz, nsteps):
+        '''
+        Reset the position of the Thorlabs stage
+        '''
+        

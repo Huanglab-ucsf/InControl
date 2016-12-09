@@ -157,18 +157,18 @@ class Ui_Form(object):
         self.doubleSpinBox_zernAmpMin.setMaximum(10.0)
         self.doubleSpinBox_zernAmpMin.setObjectName(_fromUtf8("doubleSpinBox_zernAmpMin"))
         self.gridLayout_4.addWidget(self.doubleSpinBox_zernAmpMin, 17, 2, 1, 1)
-        
+
         """
         Below is a block of button setting for one-run
-        
+
         """
         self.pushButton_oneRun = QtGui.QPushButton(self.groupBox)
         self.pushButton_oneRun.setText(QtGui.QApplication.translate("Form", "One Run!", None, QtGui.QApplication.UnicodeUTF8))
         self.pushButton_oneRun.setObjectName(_fromUtf8("pushButton_oneRun"))
-        self.gridLayout_4.addWidget(self.pushButton_oneRun, 22, 0, 1, 3)        
-        
-        
-        
+        self.gridLayout_4.addWidget(self.pushButton_oneRun, 22, 0, 1, 3)
+
+
+
         self.doubleSpinBox_zernAmpMax = QtGui.QDoubleSpinBox(self.groupBox)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -396,8 +396,8 @@ class Ui_Form(object):
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pushButtonModulate.sizePolicy().hasHeightForWidth())
-        
-        # useful button: modulate        
+
+        # useful button: modulate
         self.pushButtonModulate.setSizePolicy(sizePolicy)
         self.pushButtonModulate.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.pushButtonModulate.setText(QtGui.QApplication.translate("Form", "Modulate", None, QtGui.QApplication.UnicodeUTF8))

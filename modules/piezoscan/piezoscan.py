@@ -38,7 +38,7 @@ class Control(inLib.Module):
     def calcScanParams(self, start, end, nSteps):
         '''
         Calculates the step size of a scan.
-        
+
         :Parameters:
             *start*: float
                 Start of scan in micrometers, relative to current position.
@@ -129,7 +129,7 @@ class Control(inLib.Module):
             if self.active:
                 self._control.piezo.moveTo(3, zs[i])
                 time.sleep(2*frame_length)
-                for j in xrange(nFrames):           
+                for j in xrange(nFrames):
                     slicesFrames[j] = self._control.camera.getMostRecentImageNumpy()
                     time.sleep(frame_length)
                 data[i] = np.mean(slicesFrames, axis=0)
@@ -141,12 +141,28 @@ class Control(inLib.Module):
             np.save(filename, data)
             self.active = False
         return data
-        
-    def bl_correct(self):
-        for ii in xrange(41):
-            self._control.servo.jogUp()
-        for ii in xrange(10):
+
+    def bl_correct(self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None):
+        '''
+        Backlash correct function. Updated on 12/09/2016.
+        nsteps: the planned scan steps in the forward direction
+        stepsize: the input stepsize
+        z_start: supposed start point (in the forward scan)
+        '''
+        N_correct = int(z_correct/stepsize)
+        if z_start is None:
+            '''
+            If the start point coordinate is not specified
+            '''
+            for ii in xrange(nsteps+N_correct):
+                self._control.servo.jogUp()
+        else:
+            self._control.moveTo(z_start+z_correct)
+        # now, move the piezo back
+        for ii in xrange(N_correct):
             self._control.servo.jogDown()
+        # done with bl_correct 
+
 
     def stop(self):
         self.active = False
