@@ -40,7 +40,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_segments.clicked.connect(self.toDMSegs)
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
-        self._ui.pushButton_evolve.clicked.connect(self.runGradZern)
+        self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
@@ -77,7 +77,10 @@ class UI(inLib.ModuleUI):
                 metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
             else:
                 metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
-
+            return metric
+        else:
+            return 0
+        # done with calc_image_metric
 
     def resetMirror(self):
         '''
@@ -298,21 +301,14 @@ class UI(inLib.ModuleUI):
         [sts, stk] = np.meshgrid(st_input, st_input)
         hess = S_mat-(DS+DK) + S0/(sts*stk)
 
-        return hess # bingo!!! 
+        return hess # bingo!!!
         # done with single_runGradZern
 
-    def runGradZern(self, nmodes, nsteps):
+    def evolve(self):
         '''
-        run GradZernike for multiple steps.
-        This function utilizes the conjugate gradient method
-        (CGM, see numerical recipies).
+        To be filled up later. evolution of the zernikes.
         '''
-        metrics = []
-        for xn in np.arange(nsteps):
-            mt = self.single_GradZern(nmodes)
-            metrics.append(mt)
-
-        return(metrics)
+        pass 
 
 
 

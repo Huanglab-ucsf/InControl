@@ -40,6 +40,8 @@ class APTUserTest(QAxContainer.QAxWidget):
     def jogDown(self):
         self.dynamicCall('MoveJog(int,int)', 0,2)
 
+    def setStepsize(self, dsteps):
+        self.dynamicCall('SetMotorParams(long, long, long)', 0, dsteps, 2)
 # Testing
 #
 
@@ -56,6 +58,8 @@ if __name__ == "__main__":
     time.sleep(2)
     aptUser2.jogDown()
     time.sleep(2)
+    aptUser.setStepsize(10)
+
     sys.exit(app.exec_())
 
 

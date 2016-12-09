@@ -30,6 +30,8 @@ class Control(inLib.Module):
         self.DM = DM(nPixels = dims[0]) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
         self.gain = 1.0
+        self.laser_port = self._control.laser.laser_lines[0]
+        print(self.laser_port)
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
@@ -59,6 +61,15 @@ class Control(inLib.Module):
         self.dims = self._control.camera.getDimensions()
         # endof updateImSize
 
+    def acquireSnap(self):
+        '''
+        Simply, acquire a snapshot without
+        This is not functioning yet.
+        '''
+        snap = self._control.camera.getMostRecentImageNumpy()
+        return snap
+        # not functioning yet
+
 
     def acquirePSF(self, range_, nSlices, nFrames, center_xy=True, filename=None,
                    mask_size = 40, mask_center = (-1,-1)):
@@ -66,6 +77,7 @@ class Control(inLib.Module):
         '''
         Acquires a PSF stack. The PSF is returned but also stored internally.
         '''
+        self.laserSwitch(True)
         self.filename = filename
 
         # Some parameters
@@ -85,6 +97,7 @@ class Control(inLib.Module):
         if filename:
             np.save(filename+"_raw", scan_psf)
             np.save(filename, PSF)
+        self.laserSwitch(False)
         return PSF
         # end of acquiring PSF
 
@@ -160,8 +173,16 @@ class Control(inLib.Module):
         # done with setGain
 
 
-    def positionReset(self, dz, nsteps):
+    def positionReset(self, nsteps, stepsize, z_correct, z_start):
         '''
         Reset the position of the Thorlabs stage
         '''
-        self._control.piezoscan.
+        self._control.piezoscan.bl_correct(nsteps, stepsize =dz, z_correct, z_start)
+        # this can only be controled from the UI panel.
+
+    def laserSwitch(self, on):
+        '''
+        switch on or off the laser
+        '''
+        self._control.laser.setLaserOnOff(self.laser_port, on):
+        # done with laserSwitch
