@@ -74,7 +74,7 @@ class UI(inLib.DeviceUI):
         '''
         z_start = float(self._ui.lineEdit_BL.text())
         dstep = self.dstep
-        self._control.setStage(self.z_start+)
+        self._control.setStage(self.z_start+self.blrange)
         time.sleep(3)
         ndown = int(self.blrange/dstep)+1
         for ii in xrange(ndown):
