@@ -22,11 +22,11 @@ except AttributeError:
     def _translate(context, text, disambig):
         return QtGui.QApplication.translate(context, text, disambig)
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(604, 379)
-        self.gridLayoutWidget = QtGui.QWidget(Dialog)
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName(_fromUtf8("Form"))
+        Form.resize(604, 379)
+        self.gridLayoutWidget = QtGui.QWidget(Form)
         self.gridLayoutWidget.setGeometry(QtCore.QRect(60, 59, 283, 131))
         self.gridLayoutWidget.setObjectName(_fromUtf8("gridLayoutWidget"))
         self.gridLayout = QtGui.QGridLayout(self.gridLayoutWidget)
@@ -83,7 +83,7 @@ class Ui_Dialog(object):
         self.pushButton_relative.setSizePolicy(sizePolicy)
         self.pushButton_relative.setObjectName(_fromUtf8("pushButton_relative"))
         self.gridLayout.addWidget(self.pushButton_relative, 2, 3, 1, 1)
-        self.verticalLayoutWidget = QtGui.QWidget(Dialog)
+        self.verticalLayoutWidget = QtGui.QWidget(Form)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(370, 60, 91, 201))
         self.verticalLayoutWidget.setObjectName(_fromUtf8("verticalLayoutWidget"))
         self.verticalLayout = QtGui.QVBoxLayout(self.verticalLayoutWidget)
@@ -112,7 +112,7 @@ class Ui_Dialog(object):
         self.pushButton_down.setSizePolicy(sizePolicy)
         self.pushButton_down.setObjectName(_fromUtf8("pushButton_down"))
         self.verticalLayout.addWidget(self.pushButton_down)
-        self.horizontalLayoutWidget = QtGui.QWidget(Dialog)
+        self.horizontalLayoutWidget = QtGui.QWidget(Form)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(60, 200, 281, 80))
         self.horizontalLayoutWidget.setObjectName(_fromUtf8("horizontalLayoutWidget"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget)
@@ -139,21 +139,27 @@ class Ui_Dialog(object):
         self.pushButton_BL.setSizePolicy(sizePolicy)
         self.pushButton_BL.setObjectName(_fromUtf8("pushButton_BL"))
         self.horizontalLayout.addWidget(self.pushButton_BL)
+        self.lcd_step = QtGui.QLCDNumber(Form)
+        self.lcd_step.setGeometry(QtCore.QRect(60, 290, 131, 61))
+        self.lcd_step.setSmallDecimalPoint(True)
+        self.lcd_step.setProperty("value", 0.1)
+        self.lcd_step.setProperty("intValue", 0)
+        self.lcd_step.setObjectName(_fromUtf8("lcd_step"))
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
-        self.label_position.setText(_translate("Dialog", "Absolute", None))
-        self.label_stepsize.setText(_translate("Dialog", "Stepsize", None))
-        self.pushButton_stepsize.setText(_translate("Dialog", "Stepsize", None))
-        self.pushButton_absolute.setText(_translate("Dialog", "Position", None))
-        self.label_relative.setText(_translate("Dialog", "Relative", None))
-        self.pushButton_relative.setText(_translate("Dialog", "Relative", None))
-        self.pushButton_up.setText(_translate("Dialog", "up", None))
-        self.pushButton_home.setText(_translate("Dialog", "Home", None))
-        self.pushButton_down.setText(_translate("Dialog", "down", None))
-        self.label_BL.setText(_translate("Dialog", "Backlash_begin", None))
-        self.pushButton_BL.setText(_translate("Dialog", "BL_correct", None))
+    def retranslateUi(self, Form):
+        Form.setWindowTitle(_translate("Form", "Dialog", None))
+        self.label_position.setText(_translate("Form", "Absolute", None))
+        self.label_stepsize.setText(_translate("Form", "Stepsize", None))
+        self.pushButton_stepsize.setText(_translate("Form", "Stepsize", None))
+        self.pushButton_absolute.setText(_translate("Form", "Position", None))
+        self.label_relative.setText(_translate("Form", "Relative", None))
+        self.pushButton_relative.setText(_translate("Form", "Relative", None))
+        self.pushButton_up.setText(_translate("Form", "up", None))
+        self.pushButton_home.setText(_translate("Form", "Home", None))
+        self.pushButton_down.setText(_translate("Form", "down", None))
+        self.label_BL.setText(_translate("Form", "Backlash_begin", None))
+        self.pushButton_BL.setText(_translate("Form", "BL_correct", None))
 
