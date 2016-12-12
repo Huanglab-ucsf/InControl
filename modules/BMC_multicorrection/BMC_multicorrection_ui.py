@@ -64,6 +64,9 @@ class UI(inLib.ModuleUI):
         image_filename = str(self._ui.lineEdit_filename.text())
         self.image = self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=image_filename,
                        mask_size = 40, mask_center = (-1,-1)) # acquired image
+        #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
+
+        self._control.positionReset(nSlices, dz, z_correct = 3.0, z_start = None) # reset the position
         # done with acquireImage
 
 
@@ -247,7 +250,7 @@ class UI(inLib.ModuleUI):
         what's next?
         '''
 
-    def step_Hessian(self, z_modes, z_coeffs, z_steps):
+    def step_Hessian(self, z_modes, z_coeffs, z_steps, diff_threshold = 0.01):
         '''
         z_modes: selected modes for optimization. 4 --- zmax
         z_coeffs: the coefficients of the zernike modes
@@ -284,8 +287,20 @@ class UI(inLib.ModuleUI):
             nz = z_modes[iz] # select the modes out
             zc_input[nz-1] +=step_i
             S_vec[iz] = self.single_Evaluate(zc_input)
-            # zc_input[nz-1] -=st_input[iz]
-            for jz in np.arange(N_search):
+            # zc_input[nz-1] -=step_i
+
+        # Vec_ind = np.where(S_vec > diff_threshold) # select those the difference exceeds certain threshold
+        # S_vec = S_vec[Vec_ind] #
+        # print("Effective modes:", z_modes[S_vec])
+        # Neff = len(S_vec)
+        # S_mat = np.zeros([Neff, Neff])
+
+        # zc_input[nz-1] -=st_input[iz]
+        # for iz in np.arange(Neff):
+            # iterate through outer cycle
+            # nz = z_modes[Vec_
+            # zc_input[nz-1] +=step_i
+            for jz in np.arange(iz, N_search): # this gives the upper right triangle values
                 '''
                 iterate through z_modes: inner cycle
                 '''
@@ -293,22 +308,24 @@ class UI(inLib.ModuleUI):
                 mz = z_modes[jz]
                 zc_input[mz-1] +=step_j
                 S_mat[iz, jz] = self.single_Evaluate(zc_input)
+                S_mat[jz, iz] = S_mat[iz, jz] # symmetrize
                 zc_input[mz-1] -=step_j
             # return the zc_input to its original form
             zc_input[nz-1] -=step_i
         # OK, now the whole S_vec and S_mat is computed.
+
         [DS, DK] = np.meshgrid(S_vec, S_vec) # meshgrid
         [sts, stk] = np.meshgrid(st_input, st_input)
         hess = S_mat-(DS+DK) + S0/(sts*stk)
 
-        return hess # bingo!!!
+        return hess # bingo!!! But actually, this is not a very complete set.
         # done with single_runGradZern
 
     def evolve(self):
         '''
         To be filled up later. evolution of the zernikes.
         '''
-        pass 
+        pass
 
 
 

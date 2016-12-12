@@ -176,6 +176,7 @@ class Control(inLib.Module):
     def positionReset(self, nsteps, stepsize, z_correct, z_start):
         '''
         Reset the position of the Thorlabs stage
+        #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
         '''
         self._control.piezoscan.bl_correct(nsteps, stepsize =dz, z_correct, z_start)
         # this can only be controled from the UI panel.
