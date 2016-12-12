@@ -34,6 +34,9 @@ class APTUserTest(QAxContainer.QAxWidget):
     def moveTo(self, pos):
         self.dynamicCall('MoveAbsoluteEx(int, double, double, bool)', 0, pos, 0.0, False)
 
+    def moveBy(self, rpos):
+        self.dynamicCall('MoveRelativeEx(int, double, double, bool)', 0, rpos, 0.0, False)
+
     def jogUp(self):
         self.dynamicCall('MoveJog(int,int)', 0,1)
 
@@ -42,6 +45,9 @@ class APTUserTest(QAxContainer.QAxWidget):
 
     def setStepsize(self, dsteps):
         self.dynamicCall('SetMotorParams(long, long, long)', 0, dsteps, 2)
+
+    def stopControl(self):
+        self.dynamicCall('StopCtrl()')
 # Testing
 #
 

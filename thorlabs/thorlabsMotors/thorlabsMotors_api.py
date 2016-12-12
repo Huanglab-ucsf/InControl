@@ -26,12 +26,19 @@ class API():
         self.servo.moveTo(pos)
 #        self.servo.show()
 
+    def shiftStage(self, rpos):
+        self.servo.moveBy(rpos)
+
     def jogUp(self):
         self.servo.jogUp()
 
     def jogDown(self):
         self.servo.jogDown()
 
+    def setStepsize(self, dstep):
+        self.servo.setStepsize(dstep)
+
+
     def shutDown(self):
-        pass
+        self.servo.stopControl()
         #self.stage.close()

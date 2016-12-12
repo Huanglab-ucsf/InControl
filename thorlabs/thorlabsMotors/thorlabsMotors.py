@@ -17,10 +17,18 @@ class Control(inLib.Device):
     def jogDown(self):
         self._api.jogDown()
 
+    def shiftStage(self, rpos):
+        self._api.shiftStage(rpos)
 
     def setStage(self, pos):
         self._api.setStage(pos)
 
+    def setStep(self, pos):
+        '''
+        This should be tested for the real step size
+        '''
+        dpos = int(pos*10)
+        self._api.setStepsize(dpos)
+
     def shutDown(self):
         self._api.shutDown()
-
