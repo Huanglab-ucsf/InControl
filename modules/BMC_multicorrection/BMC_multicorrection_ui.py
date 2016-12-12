@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+# let me debug this through. 
 
 from PyQt4 import QtGui,QtCore
 import inLib
@@ -250,7 +250,10 @@ class UI(inLib.ModuleUI):
         what's next?
         '''
 
-    def step_Hessian(self, z_modes, z_coeffs, z_steps, diff_threshold = 0.01):
+
+
+
+    def step_Hessian(self, z_modes, z_coeffs, z_steps):
         '''
         z_modes: selected modes for optimization. 4 --- zmax
         z_coeffs: the coefficients of the zernike modes
