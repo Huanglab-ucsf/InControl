@@ -90,7 +90,6 @@ class Control(inLib.Module):
         # Some parameters
         start = range_/2.0
         end = -range_/2.0
-        self._dz = abs(range_/(nSlices-1.0))
 
         # Scan the PSF:
         scan_psf = self._control.piezoscan.scan(start, end, nSlices, nFrames, filename)
@@ -180,13 +179,29 @@ class Control(inLib.Module):
         self.gain = gain
         # done with setGain
 
+    def setScanstep(self, dz):
+        '''
+        set the scan steps as dz.
+        '''
+        self._control.servo.setstep(dz)
+        self._dz = dz
 
-    def positionReset(self, nsteps, stepsize, z_correct, z_start):
+
+    def positionReset(self,z_correct, z_start):
         '''
         Reset the position of the Thorlabs stage
         #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
         '''
-        self._control.piezoscan.bl_correct(nsteps, stepsize, z_correct, z_start)
+        dstep = self._dz
+        self._control.servo.setStage(z_start+z_correct)
+        time.sleep(3)
+        ndown = int(z_correct/dstep)+1
+        for ii in xrange(ndown):
+            self._control.servo.jogDown()
+            time.sleep(0.25)
+
+
+
         # this can only be controled from the UI panel.
 
     def laserSwitch(self, on):

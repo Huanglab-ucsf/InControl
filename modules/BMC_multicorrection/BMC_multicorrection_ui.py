@@ -44,9 +44,11 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_setsingleZern.clicked.connect(self.updateZern)
+        self._ui.pushButton_BL.clicked.connect(self.BL_correct)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
+        self._ui.lineEdit_dz.returnPressed.connect(self.setdz)
 
         # done with initialization
 
@@ -61,16 +63,13 @@ class UI(inLib.ModuleUI):
         """
         acquire PSF or other images
         """
-        dz = float(self._ui.lineEdit_dz.text()) # set the steps
-        nSlices = self._ui.spinbox_Nsteps.value()
+        self.nSlices = self._ui.spinbox_Nsteps.value()
         nFrames = 2
         range_ = (nSlices-1)*dz
         image_filename = str(self._ui.lineEdit_filename.text())
-        self.image = self._control.acquirePSF(range_, nSlices, nFrames, center_xy=True, filename=image_filename,
+        self.image = self._control.acquirePSF(range_, self.nSlices, nFrames, center_xy=True, filename=image_filename,
                        mask_size = 40, mask_center = (-1,-1)) # acquired image
-        #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
-
-        self._control.positionReset(nSlices, dz, z_correct = 3.0, z_start = None) # reset the position
+        self.BL_correct()# reset the position
         # done with acquireImage
 
 
@@ -261,9 +260,23 @@ class UI(inLib.ModuleUI):
         '''
         self._ui.mpl_metrics.figure.axes[0].plot(np.array(self.metrics), cmap='RdBu')
         self._ui.mpl_metrics.draw()
+        # done with displayMetrics
+
+    def setScanstep(self):
+        '''
+        setScanstep via thorlabs motor.
+        '''
+        dz = float(self._ui.lineEdit_dz.text())
+        self._control.setScanstep(dz)
+        self.dz = dz # here we have a redundant dz
 
 
-
+    def BL_correct(self):
+        '''
+        Backlash correction
+        '''
+        self._control.positionReset(z_correct = 0.10, z_start)
+        # done with BL_correct
 
     def evolve(self):
         '''
