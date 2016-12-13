@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>733</width>
+    <height>585</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox_7">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>201</width>
+     <height>241</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Camera Settings</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="6" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>Exposure Time (s):</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1">
+     <widget class="QLineEdit" name="exposuretime_lineEdit">
+      <property name="text">
+       <string>0.01</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_22">
+        <property name="text">
+         <string>x,y shape:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="lineEdit_yshape">
+        <property name="text">
+         <string>768</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_23">
+        <property name="text">
+         <string>x_0, y_0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="lineEdit_y0">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEdit_xshape">
+        <property name="text">
+         <string>768</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="lineEdit_x0">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QPushButton" name="pushButton_preview">
+      <property name="text">
+       <string>Preview</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QCheckBox" name="checkBox_autoscale">
+      <property name="text">
+       <string>Autoscale</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QCheckBox" name="checkBox_showTarget">
+      <property name="text">
+       <string>Show target</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QPushButton" name="pushButton_setROI">
+      <property name="text">
+       <string>Set ROI</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="labelDisplay">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>10</y>
+     <width>512</width>
+     <height>512</height>
+    </rect>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_xy">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>530</y>
+     <width>131</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>x,y: -,-</string>
+   </property>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>250</y>
+     <width>201</width>
+     <height>171</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Save Image</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_fn">
+      <property name="text">
+       <string>Filename: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEdit_fileName"/>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pushButton_saveImage">
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QSpinBox" name="spinBox_fileNameIndex"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QPushButton" name="pushButton_recordMovie">
+      <property name="text">
+       <string>Record Movie</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>Disk time:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="lineEdit_toDiskTime"/>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushButton_stopRecord">
+      <property name="text">
+       <string>Stop Movie</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="widget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>430</y>
+     <width>201</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Min: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="labelMin">
+      <property name="text">
+       <string>--</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Max:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLabel" name="labelMax">
+      <property name="text">
+       <string>--</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Mean: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLabel" name="labelMean">
+      <property name="text">
+       <string>--</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Median: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="labelMedian">
+      <property name="text">
+       <string>--</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>Ims Recorded: </string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QLabel" name="label_nImsRec">
+      <property name="text">
+       <string>--</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>lineEdit_xshape</tabstop>
+  <tabstop>lineEdit_yshape</tabstop>
+  <tabstop>lineEdit_x0</tabstop>
+  <tabstop>lineEdit_y0</tabstop>
+  <tabstop>pushButton_preview</tabstop>
+  <tabstop>exposuretime_lineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

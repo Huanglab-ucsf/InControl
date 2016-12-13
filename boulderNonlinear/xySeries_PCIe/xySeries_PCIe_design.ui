@@ -1,0 +1,856 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>722</width>
+    <height>547</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>SLM</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Geometry</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <item row="5" column="1" colspan="2">
+         <widget class="QCheckBox" name="checkBoxCalibration">
+          <property name="text">
+           <string>Calibration reticle</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Center x:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCx">
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <double>511.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>255.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Diameter:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxDiameter">
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <double>511.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>421.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Center y:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCy">
+          <property name="decimals">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <double>511.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>250.500000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCSTilt">
+          <property name="minimum">
+           <double>-90.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>90.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.010000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxCSTiltDir">
+          <property name="maximum">
+           <double>360.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Coverslip tilt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>CS tilt direction</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxSli4Pi">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="title">
+        <string>Single lens 4Pi</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Wavelength:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Focal length:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxDMF">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>-10.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>10.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>d(focus,mirror):</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxZ0">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>-20.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>20.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>2.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_10">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>d(molecule,mirror):</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxFocalLength">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>500.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>5000.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>3333.329999999999927</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxNA">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>2.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>1.270000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_8">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Numerical aperture:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxRefractiveIndex">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>1.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>2.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>1.330000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_7">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Refractive index:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxWavelength">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>0.200000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>0.900000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.100000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.680000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Mirror V Tilt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Mirror H Tilt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxMirrorVTilt">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>-99.989999999999995</double>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxMirrorHTilt">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="minimum">
+           <double>-99.989999999999995</double>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="2">
+         <widget class="QLabel" name="labelMirrorCorrection">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>- drop file -</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="0">
+         <widget class="QCheckBox" name="checkBoxMirrorCorrection">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Mirror correction</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QGroupBox" name="groupBoxZernike">
+       <property name="title">
+        <string>Zernike set</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="checkBoxHTilt">
+          <property name="text">
+           <string>H Tilt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="checkBoxDefocus">
+          <property name="text">
+           <string>Defocus</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="checkBox0Astigmatism">
+          <property name="text">
+           <string>0° Astigmatism</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QCheckBox" name="checkBoxHComa">
+          <property name="text">
+           <string>H Coma</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QCheckBox" name="checkBox3rdSpherical">
+          <property name="text">
+           <string>3rd Spherical</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxHTilt">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxDefocus">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox0Astigmatism">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxHComa">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox3rdSpherical">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="16" column="1">
+         <widget class="QCheckBox" name="checkBoxMore">
+          <property name="text">
+           <string>More:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="18" column="1" colspan="2">
+         <widget class="QLineEdit" name="lineEditMore"/>
+        </item>
+        <item row="4" column="1">
+         <widget class="QCheckBox" name="checkBox45Astigmatism">
+          <property name="text">
+           <string>45° Astigmatism</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBox45Astigmatism">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QCheckBox" name="checkBoxVComa">
+          <property name="text">
+           <string>V Coma</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxVComa">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="checkBoxVTilt">
+          <property name="text">
+           <string>V Tilt</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxVTilt">
+          <property name="minimum">
+           <double>-100.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <widget class="QCheckBox" name="checkBoxTreX">
+          <property name="text">
+           <string>Trefoil X</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1">
+         <widget class="QCheckBox" name="checkBoxTreY">
+          <property name="text">
+           <string>Trefoil Y</string>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="1">
+         <widget class="QCheckBox" name="checkBoxTetX">
+          <property name="text">
+           <string>Tetrafoil X</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="1">
+         <widget class="QCheckBox" name="checkBoxTetY">
+          <property name="text">
+           <string>Tetrafoil Y</string>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="1">
+         <widget class="QCheckBox" name="checkBox45Ast2">
+          <property name="text">
+           <string>45° Astigmatism 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="1">
+         <widget class="QCheckBox" name="checkBox0Ast2">
+          <property name="text">
+           <string>0° Astigmatism 2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxTreX">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxTreY">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxTetX">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxTetY">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxAst452">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item row="15" column="2">
+         <widget class="QDoubleSpinBox" name="doubleSpinBoxAst02">
+          <property name="minimum">
+           <double>-99.000000000000000</double>
+          </property>
+          <property name="singleStep">
+           <double>0.050000000000000</double>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBoxFromFile">
+       <property name="minimumSize">
+        <size>
+         <width>170</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="title">
+        <string>From file</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayoutFromFile">
+        <item>
+         <widget class="QLabel" name="labelDropFile">
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
+          <property name="text">
+           <string>- drop files here -</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QGroupBox" name="groupBox_5">
+       <property name="title">
+        <string>Image</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0" colspan="3">
+         <widget class="QLabel" name="labelDisplay">
+          <property name="minimumSize">
+           <size>
+            <width>256</width>
+            <height>256</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>256</width>
+            <height>256</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="checkBoxModulate">
+          <property name="text">
+           <string>Modulate</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pushButtonSave">
+          <property name="text">
+           <string>Save to file</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QPushButton" name="pushButton_invert">
+          <property name="text">
+           <string>Invert</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="pushButton_flipud">
+          <property name="text">
+           <string>Flip Up-Down</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QPushButton" name="pushButton_fliplr">
+          <property name="text">
+           <string>Flip Left-Right</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QPushButton" name="pushButton_rot90">
+          <property name="text">
+           <string>Rotate 90</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="3">
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Adjust SLM Modulation's Position</string>
+          </property>
+          <widget class="QPushButton" name="pushButton_left">
+           <property name="geometry">
+            <rect>
+             <x>90</x>
+             <y>40</y>
+             <width>31</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>&lt;</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButton_right">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>40</y>
+             <width>31</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>&gt;</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButton_up">
+           <property name="geometry">
+            <rect>
+             <x>120</x>
+             <y>20</y>
+             <width>31</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>/\</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="pushButton_down">
+           <property name="geometry">
+            <rect>
+             <x>120</x>
+             <y>60</y>
+             <width>31</width>
+             <height>23</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>\/</string>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
