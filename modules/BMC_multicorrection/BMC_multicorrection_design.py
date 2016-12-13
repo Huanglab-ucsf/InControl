@@ -7,6 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+from matplotlibwidget import MatplotlibWidget
+
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -93,16 +95,16 @@ class Ui_Form(object):
         self.tab_display.setObjectName(_fromUtf8("tab_display"))
         self.tab_image_phase = QtGui.QWidget()
         self.tab_image_phase.setObjectName(_fromUtf8("tab_image_phase"))
-        self.mpl_image = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_image = MatplotlibWidget(self.tab_image_phase)
         self.mpl_image.setGeometry(QtCore.QRect(10, 30, 271, 271))
         self.mpl_image.setObjectName(_fromUtf8("mpl_image"))
-        self.mpl_phase = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_phase =MatplotlibWidget(self.tab_image_phase)
         self.mpl_phase.setGeometry(QtCore.QRect(280, 30, 281, 271))
         self.mpl_phase.setObjectName(_fromUtf8("mpl_phase"))
         self.tab_display.addTab(self.tab_image_phase, _fromUtf8(""))
         self.tab_metric = QtGui.QWidget()
         self.tab_metric.setObjectName(_fromUtf8("tab_metric"))
-        self.mpl_metrics = QtGui.QGraphicsView(self.tab_metric)
+        self.mpl_metrics = MatplotlibWidget(self.tab_metric)
         self.mpl_metrics.setGeometry(QtCore.QRect(10, 60, 551, 251))
         self.mpl_metrics.setObjectName(_fromUtf8("mpl_metrics"))
         self.pushButton_metric = QtGui.QPushButton(self.tab_metric)
@@ -440,4 +442,3 @@ class Ui_Form(object):
         self.pushButton_BL.setText(_translate("Form", "Backlash correct", None))
         self.label_start.setText(_translate("Form", "Starting position (micron)", None))
         self.lineEdit_starting.setText(_translate("Form", "0.1500", None))
-

@@ -183,7 +183,7 @@ class Control(inLib.Module):
         '''
         set the scan steps as dz.
         '''
-        self._control.servo.setstep(dz)
+        self._control.servo.setStep(dz)
         self._dz = dz
 
 
@@ -195,7 +195,7 @@ class Control(inLib.Module):
         dstep = self._dz
         self._control.servo.setStage(z_start+z_correct)
         time.sleep(3)
-        ndown = int(z_correct/dstep)+1
+        ndown = int(z_correct/dstep)
         for ii in xrange(ndown):
             self._control.servo.jogDown()
             time.sleep(0.25)

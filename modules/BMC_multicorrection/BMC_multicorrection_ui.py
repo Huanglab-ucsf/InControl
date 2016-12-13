@@ -27,13 +27,9 @@ class UI(inLib.ModuleUI):
         self.image = None
         self.radius = 128
         self.metrics = []
+
         '''
-        Below is the initial value group
-        '''
-        self._ui.lineEdit_filename.setText('test.npy')
-        self._ui.lineEdit_dz.setText(str("0.30"))
-        '''
-        Below is the pushButton and lineEdits links group
+        Below is the connection group
         '''
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
@@ -43,14 +39,15 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
-        self._ui.pushButton_setsingleZern.clicked.connect(self.updateZern)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
-        self._ui.lineEdit_dz.returnPressed.connect(self.setdz)
+        self._ui.lineEdit_dz.returnPressed.connect(self.setScanstep)
 
         # done with initialization
+        # a couple of initialization
+        self.setScanstep()
 
 
     def apply2mirror(self):
@@ -65,7 +62,7 @@ class UI(inLib.ModuleUI):
         """
         self.nSlices = self._ui.spinbox_Nsteps.value()
         nFrames = 2
-        range_ = (nSlices-1)*dz
+        range_ = (self.nSlices-1)*self.dz
         image_filename = str(self._ui.lineEdit_filename.text())
         self.image = self._control.acquirePSF(range_, self.nSlices, nFrames, center_xy=True, filename=image_filename,
                        mask_size = 40, mask_center = (-1,-1)) # acquired image
@@ -142,7 +139,7 @@ class UI(inLib.ModuleUI):
         # done with setZern_step
 
 
-    def updateZern(self, ampli=None, zmode = None, mask = False):
+    def updateZern(self, ampli=None, zmode = None):
         '''
         update the zernike coefficients, it may work for one or more zernike modes.
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
@@ -156,6 +153,7 @@ class UI(inLib.ModuleUI):
                 ampli = float(self._ui.lineEdit_zernampli.text())
                 print("Zernike mode:", zmode, "Amplitude:", ampli)
             elif ampli is not None:
+                print(ampli)
                 zmode = np.arange(1, len(ampli)+1)
 
         self.z_coeff[zmode-1] = ampli # this is global.
@@ -178,7 +176,7 @@ class UI(inLib.ModuleUI):
         '''
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
-        self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
+        self._ui.table_Zcoeffs.setItem(z_mode-4, 0, item)
         # done with updateDisplay
 
 
@@ -235,12 +233,13 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.draw()
 
 
-    def single_Evaluate(self, z_coeffs):
+    def single_Evaluate(self):
         '''
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        self.updateZern(z_coeffs)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
+        ampli = self.z_coeff
+        self.updateZern(ampli)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
@@ -275,8 +274,8 @@ class UI(inLib.ModuleUI):
         '''
         Backlash correction
         '''
-        z_start  = float(self._ui.lineEdit_starting)
-        self._control.positionReset(z_correct = 0.10, z_start)
+        z_start  = float(self._ui.lineEdit_starting.text())
+        self._control.positionReset(0.01, z_start)
         # done with BL_correct
 
     def evolve(self):
