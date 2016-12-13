@@ -2,8 +2,7 @@
 
 # Form implementation generated from reading ui file 'obis_design.ui'
 #
-# Created: Thu Aug 02 16:48:19 2012
-#      by: PyQt4 UI code generator 4.8.6
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,18 +11,26 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName(_fromUtf8("Form"))
-        Form.resize(606, 299)
+        Form.resize(699, 299)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
-        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Laser Control", None, QtGui.QApplication.UnicodeUTF8))
         self.horizontalLayout = QtGui.QHBoxLayout(Form)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.OBIS401 = QtGui.QGroupBox(Form)
@@ -164,17 +171,14 @@ class Ui_Form(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.OBIS401.setPalette(palette)
-        self.OBIS401.setTitle(QtGui.QApplication.translate("Form", "OBIS 401", None, QtGui.QApplication.UnicodeUTF8))
         self.OBIS401.setObjectName(_fromUtf8("OBIS401"))
         self.gridLayout = QtGui.QGridLayout(self.OBIS401)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.On401 = QtGui.QCheckBox(self.OBIS401)
-        self.On401.setText(QtGui.QApplication.translate("Form", "Laser On", None, QtGui.QApplication.UnicodeUTF8))
         self.On401.setObjectName(_fromUtf8("On401"))
         self.gridLayout.addWidget(self.On401, 3, 0, 1, 1)
         self.Pow401 = QtGui.QLabel(self.OBIS401)
         self.Pow401.setMinimumSize(QtCore.QSize(100, 0))
-        self.Pow401.setText(QtGui.QApplication.translate("Form", "Power: ", None, QtGui.QApplication.UnicodeUTF8))
         self.Pow401.setObjectName(_fromUtf8("Pow401"))
         self.gridLayout.addWidget(self.Pow401, 3, 1, 1, 1)
         self.Slider401 = QtGui.QSlider(self.OBIS401)
@@ -316,11 +320,11 @@ class Ui_Form(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.Slider401.setPalette(palette)
         self.Slider401.setAutoFillBackground(False)
+        self.Slider401.setMaximum(40)
         self.Slider401.setOrientation(QtCore.Qt.Vertical)
         self.Slider401.setObjectName(_fromUtf8("Slider401"))
         self.gridLayout.addWidget(self.Slider401, 2, 0, 1, 1)
         self.checkBox_digMod401 = QtGui.QCheckBox(self.OBIS401)
-        self.checkBox_digMod401.setText(QtGui.QApplication.translate("Form", "Digital Modulation", None, QtGui.QApplication.UnicodeUTF8))
         self.checkBox_digMod401.setObjectName(_fromUtf8("checkBox_digMod401"))
         self.gridLayout.addWidget(self.checkBox_digMod401, 4, 0, 1, 2)
         self.horizontalLayout.addWidget(self.OBIS401)
@@ -462,13 +466,11 @@ class Ui_Form(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.OBIS488.setPalette(palette)
-        self.OBIS488.setTitle(QtGui.QApplication.translate("Form", "OBIS 488", None, QtGui.QApplication.UnicodeUTF8))
         self.OBIS488.setObjectName(_fromUtf8("OBIS488"))
         self.gridLayout_2 = QtGui.QGridLayout(self.OBIS488)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
         self.Pow488 = QtGui.QLabel(self.OBIS488)
         self.Pow488.setMinimumSize(QtCore.QSize(100, 0))
-        self.Pow488.setText(QtGui.QApplication.translate("Form", "Power: ", None, QtGui.QApplication.UnicodeUTF8))
         self.Pow488.setObjectName(_fromUtf8("Pow488"))
         self.gridLayout_2.addWidget(self.Pow488, 1, 1, 1, 1)
         self.Slider488 = QtGui.QSlider(self.OBIS488)
@@ -610,15 +612,14 @@ class Ui_Form(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.Slider488.setPalette(palette)
         self.Slider488.setAutoFillBackground(False)
+        self.Slider488.setMaximum(40)
         self.Slider488.setOrientation(QtCore.Qt.Vertical)
         self.Slider488.setObjectName(_fromUtf8("Slider488"))
         self.gridLayout_2.addWidget(self.Slider488, 0, 0, 1, 1)
         self.On488 = QtGui.QCheckBox(self.OBIS488)
-        self.On488.setText(QtGui.QApplication.translate("Form", "Laser On", None, QtGui.QApplication.UnicodeUTF8))
         self.On488.setObjectName(_fromUtf8("On488"))
         self.gridLayout_2.addWidget(self.On488, 1, 0, 1, 1)
         self.checkBox_digMod488 = QtGui.QCheckBox(self.OBIS488)
-        self.checkBox_digMod488.setText(QtGui.QApplication.translate("Form", "Digital Modulation", None, QtGui.QApplication.UnicodeUTF8))
         self.checkBox_digMod488.setObjectName(_fromUtf8("checkBox_digMod488"))
         self.gridLayout_2.addWidget(self.checkBox_digMod488, 2, 0, 1, 2)
         self.horizontalLayout.addWidget(self.OBIS488)
@@ -760,7 +761,6 @@ class Ui_Form(object):
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.OBIS642.setPalette(palette)
-        self.OBIS642.setTitle(QtGui.QApplication.translate("Form", "OBIS 642", None, QtGui.QApplication.UnicodeUTF8))
         self.OBIS642.setObjectName(_fromUtf8("OBIS642"))
         self.gridLayout_3 = QtGui.QGridLayout(self.OBIS642)
         self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
@@ -903,20 +903,18 @@ class Ui_Form(object):
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
         self.Slider642.setPalette(palette)
         self.Slider642.setAutoFillBackground(False)
+        self.Slider642.setMaximum(40)
         self.Slider642.setOrientation(QtCore.Qt.Vertical)
         self.Slider642.setObjectName(_fromUtf8("Slider642"))
         self.gridLayout_3.addWidget(self.Slider642, 0, 0, 1, 1)
         self.On642 = QtGui.QCheckBox(self.OBIS642)
-        self.On642.setText(QtGui.QApplication.translate("Form", "Laser On", None, QtGui.QApplication.UnicodeUTF8))
         self.On642.setObjectName(_fromUtf8("On642"))
         self.gridLayout_3.addWidget(self.On642, 1, 0, 1, 1)
         self.Pow647 = QtGui.QLabel(self.OBIS642)
         self.Pow647.setMinimumSize(QtCore.QSize(100, 0))
-        self.Pow647.setText(QtGui.QApplication.translate("Form", "Power: ", None, QtGui.QApplication.UnicodeUTF8))
         self.Pow647.setObjectName(_fromUtf8("Pow647"))
         self.gridLayout_3.addWidget(self.Pow647, 1, 1, 1, 1)
         self.checkBox_digMod642 = QtGui.QCheckBox(self.OBIS642)
-        self.checkBox_digMod642.setText(QtGui.QApplication.translate("Form", "Digital Modulation", None, QtGui.QApplication.UnicodeUTF8))
         self.checkBox_digMod642.setObjectName(_fromUtf8("checkBox_digMod642"))
         self.gridLayout_3.addWidget(self.checkBox_digMod642, 2, 0, 1, 2)
         self.horizontalLayout.addWidget(self.OBIS642)
@@ -925,5 +923,17 @@ class Ui_Form(object):
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
-        pass
+        Form.setWindowTitle(_translate("Form", "Laser Control", None))
+        self.OBIS401.setTitle(_translate("Form", "OBIS 401", None))
+        self.On401.setText(_translate("Form", "Laser On", None))
+        self.Pow401.setText(_translate("Form", "Power: ", None))
+        self.checkBox_digMod401.setText(_translate("Form", "Digital Modulation", None))
+        self.OBIS488.setTitle(_translate("Form", "OBIS 488", None))
+        self.Pow488.setText(_translate("Form", "Power: ", None))
+        self.On488.setText(_translate("Form", "Laser On", None))
+        self.checkBox_digMod488.setText(_translate("Form", "Digital Modulation", None))
+        self.OBIS642.setTitle(_translate("Form", "OBIS 642", None))
+        self.On642.setText(_translate("Form", "Laser On", None))
+        self.Pow647.setText(_translate("Form", "Power: ", None))
+        self.checkBox_digMod642.setText(_translate("Form", "Digital Modulation", None))
 
