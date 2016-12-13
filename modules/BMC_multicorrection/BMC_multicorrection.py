@@ -30,7 +30,7 @@ class Control(inLib.Module):
         self.DM = DM(nPixels = dims[0]) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
         self.gain = 1.0
-        self.laser_port = self._control.lasers.laser_lines[0]
+        self.laser_port = self._control.laser.laser_lines[0]
         print(self.laser_port)
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
@@ -178,12 +178,12 @@ class Control(inLib.Module):
         Reset the position of the Thorlabs stage
         #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
         '''
-        self._control.piezoscan.bl_correct(nsteps, stepsize, z_correct, z_start)
+        self._control.piezoscan.bl_correct(nsteps, stepsize =dz, z_correct, z_start)
         # this can only be controled from the UI panel.
 
     def laserSwitch(self, on):
         '''
         switch on or off the laser
         '''
-        self._control.lasers.setLaserOnOff(self.laser_port, on)
+        self._control.laser.setLaserOnOff(self.laser_port)
         # done with laserSwitch
