@@ -40,6 +40,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
+        self._ui.pushButton.stepZern.clicked.connect(self.stepZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
@@ -138,8 +139,24 @@ class UI(inLib.ModuleUI):
         self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
         # done with setZern_step
 
+    def stepZern(self, zmode = None, stepsize = None, forward = 1):
+        '''
+        step the zernike mode zmode by stepsize.
+        '''
+        z_mode = int(self._ui.lineEdit_zmode.text())
+        stepsize = float(self._ui.lineEdit_stepsize.text())
+        if (stepsize is None):
 
-    def updateZern(self, ampli=None, zmode = None):
+        self.setZern_step(z_mode, stepsize)
+        zcoeff = self.z_coeff
+        zcoeff[z_mode-1] += forward*stepsize
+        self.updateZern(z_mode, zcoeff[z_mode-1])
+        # this is really awkward.
+
+
+
+
+    def updateZern(self, zmode = None, ampli = None):
         '''
         update the zernike coefficients, it may work for one or more zernike modes.
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
@@ -152,7 +169,7 @@ class UI(inLib.ModuleUI):
                 zmode = int(self._ui.lineEdit_zmode.text())
                 ampli = float(self._ui.lineEdit_zernampli.text())
                 print("Zernike mode:", zmode, "Amplitude:", ampli)
-            elif ampli is not None:
+            else:
                 print(ampli)
                 zmode = np.arange(1, len(ampli)+1)
 
