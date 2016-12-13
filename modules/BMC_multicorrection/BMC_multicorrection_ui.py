@@ -42,10 +42,11 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
+        self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
-        self._ui.lineEdit_metric.returnPressed.connect(self.single_Evaluate)
+
         # done with initialization
 
 
@@ -141,7 +142,7 @@ class UI(inLib.ModuleUI):
         # done with setZern_step
 
 
-    def updateZern(self, ampli, zmode = None, mask = False):
+    def updateZern(self, ampli=None, zmode = None, mask = False):
         '''
         update the zernike coefficients, it may work for one or more zernike modes.
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
