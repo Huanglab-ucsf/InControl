@@ -29,7 +29,6 @@ class Control(inLib.Device):
         This should be tested for the real step size
         pos: the real step
         '''
-
         self._api.setStepsize(pos)
 
     def shutDown(self):
