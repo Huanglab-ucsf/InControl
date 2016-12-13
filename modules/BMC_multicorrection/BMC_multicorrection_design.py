@@ -331,7 +331,7 @@ class Ui_Form(object):
         self.pushButton_acquire.setText(_translate("Form", "Acquire stack", None))
         self.pushButton_snapshot.setText(_translate("Form", "Snapshot", None))
         self.tab_display.setTabText(self.tab_display.indexOf(self.tab_image_phase), _translate("Form", "Image and phase", None))
-        self.pushButton_metric.setText(_translate("Form", "PushButton", None))
+        self.pushButton_metric.setText(_translate("Form", "Get_Metric", None))
         self.tab_display.setTabText(self.tab_display.indexOf(self.tab_metric), _translate("Form", "Metric", None))
         self.tab_display.setTabText(self.tab_display.indexOf(self.tab_Optimize), _translate("Form", "Optimization", None))
         item = self.table_Zcoeffs.verticalHeaderItem(0)

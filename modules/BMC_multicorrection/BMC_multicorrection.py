@@ -105,6 +105,7 @@ class Control(inLib.Module):
             np.save(filename+"_raw", scan_psf)
             np.save(filename, PSF)
         self.laserSwitch(False)
+        print("Laser off! ")
         return PSF
         # end of acquiring PSF
 

@@ -43,6 +43,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
+        self._ui.pushButton_setsingleZern.clicked.connect(self.updateZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
