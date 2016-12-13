@@ -275,6 +275,7 @@ class UI(inLib.ModuleUI):
         '''
         Backlash correction
         '''
+        z_start  = float(self._ui.lineEdit_starting)
         self._control.positionReset(z_correct = 0.10, z_start)
         # done with BL_correct
 
