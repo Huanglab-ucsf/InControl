@@ -27,10 +27,10 @@ class Control(inLib.Device):
     def setStep(self, pos):
         '''
         This should be tested for the real step size
+        pos: the real step
         '''
-        dpos = int(pos*10)
-        print(dpos)
-        self._api.setStepsize(dpos)
+
+        self._api.setStepsize(pos)
 
     def shutDown(self):
         self._api.shutDown()

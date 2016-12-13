@@ -43,7 +43,9 @@ class APTUserTest(QAxContainer.QAxWidget):
     def jogDown(self):
         self.dynamicCall('MoveJog(int,int)', 0,2)
 
-    def setStepsize(self, dsteps):
+    def setStepsize(self, zsteps):
+        dsteps = int(20.0/zsteps)
+        dsteps = np.min([100000, dsteps])
         self.dynamicCall('SetMotorParams(long, long, long)', 0, dsteps, 2)
 
     def stopControl(self):
