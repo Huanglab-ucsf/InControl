@@ -40,7 +40,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
-        self._ui.pushButton.stepZern.clicked.connect(self.stepZern)
+        self._ui.pushButton_stepZern.clicked.connect(self.stepZern)
         self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
         self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
@@ -144,8 +144,7 @@ class UI(inLib.ModuleUI):
         step the zernike mode zmode by stepsize.
         '''
         z_mode = int(self._ui.lineEdit_zmode.text())
-        stepsize = float(self._ui.lineEdit_stepsize.text())
-        if (stepsize is None):
+        stepsize = float(self._ui.lineEdit_zernstep.text())
 
         self.setZern_step(z_mode, stepsize)
         zcoeff = self.z_coeff
@@ -204,6 +203,7 @@ class UI(inLib.ModuleUI):
         self.z_coeff[:] = 0
         self.flushTable()
         self._control.clearZern()
+        self.clearPattern()
         # done with flushZern
 
     def flushTable(self):
@@ -255,8 +255,7 @@ class UI(inLib.ModuleUI):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        ampli = self.z_coeff
-        self.updateZern(ampli)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
+        self.updateZern(ampli=self.z_coeff)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
