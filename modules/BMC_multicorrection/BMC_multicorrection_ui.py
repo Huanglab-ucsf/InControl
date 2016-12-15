@@ -8,7 +8,8 @@ import copy
 import time
 import libtim.zern as lzern
 import AO_algos.Image_metrics as ao_metric
-
+from BMC_threadfuncs import BL_correction
+from zern_funcs import zm_list
 
 
 class UI(inLib.ModuleUI):
@@ -22,11 +23,11 @@ class UI(inLib.ModuleUI):
         inLib.ModuleUI.__init__(self, control, ui_control,  'modules.BMC_multicorrection.BMC_multicorrection_design')
         self.raw_MOD = np.zeros(self._control.dims)
         self.z_max = self._control._settings['zmax']
-        self.z_coeff = np.zeros(self.z_max)
-        self.z_step = np.zeros(self.z_max)
+        self.z_comps = zm_list(z_max = self.z_max, z_start = 4)
         self.image = None
         self.radius = 128
         self.metrics = []
+        self.z_correct = 0.01
 
         '''
         Below is the connection group
@@ -106,7 +107,8 @@ class UI(inLib.ModuleUI):
         create a raw_MOD.
         DM is not updated!!!
         '''
-        self.raw_MOD = lzern.calc_zernike(self.z_coeff, self.radius, mask = usemask, zern_data = {})
+        z_coeff = self.z_comps.sync_coeffs()
+        self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
 
 
     def get_rawMOD(self):
@@ -155,7 +157,7 @@ class UI(inLib.ModuleUI):
         stepsize = float(self._ui.lineEdit_zernstep.text())
 
         self.setZern_step(z_mode, stepsize)
-        zcoeff = self.z_coeff
+        zcoeff = z_coeff
         zcoeff[z_mode-1] += forward*stepsize
         self.updateZern(z_mode, zcoeff[z_mode-1])
         # this is really awkward.
@@ -180,7 +182,7 @@ class UI(inLib.ModuleUI):
                 print(ampli)
                 zmode = np.arange(1, len(ampli)+1)
 
-        self.z_coeff[zmode-1] = ampli # this is global.
+        z_coeff[zmode-1] = ampli # this is global.
         if np.isscalar(zmode):
             self.updateTable_ampli(zmode, ampli) # update the table display
         else:
@@ -208,7 +210,7 @@ class UI(inLib.ModuleUI):
         '''
         flush all the zernike coefficients; set all the z_coeffs as zero.
         '''
-        self.z_coeff[:] = 0
+        z_coeff[:] = 0
         self.flushTable()
         self._control.clearZern()
         self.clearPattern()
@@ -263,7 +265,7 @@ class UI(inLib.ModuleUI):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        self.updateZern(ampli=self.z_coeff)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
+        self.updateZern(ampli=z_coeff)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
@@ -293,52 +295,25 @@ class UI(inLib.ModuleUI):
         self._control.setScanstep(dz)
         self.dz = dz # here we have a redundant dz
 
-
     def BL_correct(self):
         '''
-        Backlash correction
+        Backlash correction, threaded on 12/15.
         '''
         z_start  = float(self._ui.lineEdit_starting.text())
-        self._control.positionReset(0.01, z_start)
-        # done with BL_correct
+        BL = BL_correction(self.z_correct, z_start)
+        BL.finished.connect(self._position_ready)
+        self._ui.pushButton_BL.setEnabled(False)
+        BL.start()
+        # done with threaded BL_correct
+
+    def _position_ready(self):
+        '''
+        Set the position ready.
+        '''
+        self._ui.pushButton_BL.setEnabled(True)
 
     def evolve(self):
         '''
         To be filled up later. evolution of the zernikes.
         '''
         pass
-
-
-
-
-
-
-class Scanner(QtCore.QThread):
-
-    def __init__(self, control, range_, nSlices, nFrames, center_xy, fname, maskRadius, maskCenter):
-        QtCore.QThread.__init__(self)
-
-        self.control = control
-        self.range_ = range_
-        self.nSlices = nSlices
-        self.nFrames = nFrames
-        self.center_xy = center_xy
-        self.fname = fname
-        self.maskRadius = maskRadius
-        self.maskCenter = maskCenter
-
-    def run(self):
-        self.control.acquirePSF(self.range_, self.nSlices, self.nFrames,
-                                self.center_xy, self.fname,
-                                self.maskRadius, self.maskCenter)
-
-
-class BL_correction(QtCore.QThread):
-    '''
-    Backlash correction
-    '''
-    def __init__(self, control, z_correct, z_range, z_step):
-        QtCore.QThread.__init__(self)
-        self.control = control
-        self.z_correct = z_correct
-        self.z_range = z_range
