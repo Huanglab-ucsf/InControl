@@ -79,7 +79,7 @@ class Control(inLib.Module):
 
 
     def acquirePSF(self, range_, nSlices, nFrames, center_xy=True, filename=None,
-                   mask_size = 40, mask_center = (-1,-1)):
+                   mask_size = 40, mask_center = (128,128)):
 
         '''
         Acquires a PSF stack. The PSF is returned but also stored internally.
@@ -104,7 +104,6 @@ class Control(inLib.Module):
             np.save(filename+"_raw", scan_psf)
             np.save(filename, PSF)
         self.laserSwitch(False)
-        print("Laser off! ")
         return PSF
         # end of acquiring PSF
 

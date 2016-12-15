@@ -33,6 +33,7 @@ class UI(inLib.ModuleUI):
         '''
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
+        self._ui.pushButton_snapshot.clicked.connect(self.acquireSnap)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)
         self._ui.pushButton_segments.clicked.connect(self.toDMSegs)
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
@@ -69,6 +70,13 @@ class UI(inLib.ModuleUI):
                        mask_size = 40, mask_center = (-1,-1)) # acquired image
         self.BL_correct()# reset the position
         # done with acquireImage
+
+    def acquireSnap(self):
+        '''
+        acquire a snapshot
+        '''
+        snap = self._control.acquireSnap()
+        return snap
 
 
     def calc_image_metric(self):
@@ -323,3 +331,14 @@ class Scanner(QtCore.QThread):
         self.control.acquirePSF(self.range_, self.nSlices, self.nFrames,
                                 self.center_xy, self.fname,
                                 self.maskRadius, self.maskCenter)
+
+
+class BL_correction(QtCore.QThread):
+    '''
+    Backlash correction
+    '''
+    def __init__(self, control, z_correct, z_range, z_step):
+        QtCore.QThread.__init__(self)
+        self.control = control
+        self.z_correct = z_correct
+        self.z_range = z_range
