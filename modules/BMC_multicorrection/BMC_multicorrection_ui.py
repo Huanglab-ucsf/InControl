@@ -49,13 +49,11 @@ class UI(inLib.ModuleUI):
 
         # done with initialization
         # a couple of initialization
-        for iz in np.arange(self.z_comps.NL):
-            zm_check = zmode_status(self.z_comps.grab_mode(iz).zmode) # zmode
-            self._ui.verticalLayout_activeZ.insertWidget(iz,modulation.checkbox)
-        # modulation = Modulation(len(self._modulations), self)
-
-
-
+        for iz in np.arange(self.z_max-3):
+            zm = self.z_comps.grab_mode(iz)
+            zm_check = zmode_status(zm.zmode) # zmode
+            self._ui.verticalLayout_activeZ.insertWidget(iz, zmode_status.checkbox)
+            self.z_comps.switch(zm_check, True)
 
         self.setScanstep()
 

@@ -8,9 +8,7 @@ import numpy as np
 import libtim.zern as lzern
 from scipy.ndimage import interpolation
 
-
 # ---------------Below is a simulation of deformable mirror
-
 class DM(object):
 
     def __init__(self, nseg = 12, nPixels = 256, pattern=None, mask = False):
@@ -117,7 +115,6 @@ The following codes are just for testing the function
 
 def main():
     pass
-
 
 if __name__ =="__main__":
     main()

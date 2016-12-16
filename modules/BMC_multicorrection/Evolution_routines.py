@@ -107,17 +107,6 @@ class conjugate_gradient():
             S_vec[iz] = self.single_Evaluate(zc_input)
             # zc_input[nz-1] -=step_i
 
-        # Vec_ind = np.where(S_vec > diff_threshold) # select those the difference exceeds certain threshold
-        # S_vec = S_vec[Vec_ind] #
-        # print("Effective modes:", z_modes[S_vec])
-        # Neff = len(S_vec)
-        # S_mat = np.zeros([Neff, Neff])
-
-        # zc_input[nz-1] -=st_input[iz]
-        # for iz in np.arange(Neff):
-            # iterate through outer cycle
-            # nz = z_modes[Vec_
-            # zc_input[nz-1] +=step_i
             for jz in np.arange(iz, N_search): # this gives the upper right triangle values
                 '''
                 iterate through z_modes: inner cycle
