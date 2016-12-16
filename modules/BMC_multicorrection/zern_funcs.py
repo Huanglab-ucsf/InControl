@@ -56,7 +56,7 @@ class zm_list(object):
         self.zlist = []
         self.start_mode = z_start
         self.max_mode = z_max
-        self.NL = z_max-n_start+1
+        self.NL = z_max-z_start+1
         self.active = np.zeros(self.NL).astype('bool') # by default: all zero , the indices should-1
 
         for iz in np.arange(self.NL):
@@ -90,4 +90,22 @@ class zm_list(object):
             zm = self.zlist[nac].zmode()
             z_coeffs[zm-1] = val
 
-        return sync_coeffs # this is a coefficient list that can be used for other zernikes. 
+        return sync_coeffs # this is a coefficient list that can be used for other zernikes.
+
+    def flush_coeffs(self):
+        for zm in self.zlist:
+            zm.ampli = 0.0
+        # done with flush_coeffs
+
+
+# test the code
+def main():
+    ZM = zm_list(z_max = 10, z_start = 4)
+    ZM.grab_mode(6).step = 0.20
+    ZM.grab_mode(6).stepup()
+
+    ZM.grab_mode(6).stepup()
+    print(ZM.grab_mode(6).ampli)
+
+if __name__ == '__main__':
+    main()

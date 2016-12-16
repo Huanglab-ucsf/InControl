@@ -24,7 +24,6 @@ class UI(inLib.ModuleUI):
         self.raw_MOD = np.zeros(self._control.dims)
         self.z_max = self._control._settings['zmax']
         self.z_comps = zm_list(z_max = self.z_max, z_start = 4)
-        self.image = None
         self.radius = 128
         self.metrics = []
         self.z_correct = 0.01
@@ -67,10 +66,8 @@ class UI(inLib.ModuleUI):
         nFrames = 2
         range_ = (self.nSlices-1)*self.dz
         image_filename = str(self._ui.lineEdit_filename.text())
-        self.image = self._control.acquirePSF(range_, self.nSlices, nFrames, center_xy=True, filename=image_filename,
-                       mask_size = 40, mask_center = (-1,-1)) # acquired image
-        self.BL_correct()# reset the position
-        # done with acquireImage
+        image = self._control.acquirePSF(range_, self.nSlices, nFrames, center_xy=True, filename=image_filename, mask_size = 60, mask_center = (self.radius,self.radius)) # acquired image
+        # done with
 
     def acquireSnap(self):
         '''
@@ -80,19 +77,16 @@ class UI(inLib.ModuleUI):
         return snap
 
 
-    def calc_image_metric(self):
+    def calc_image_metric(self, image):
         '''
         calculate image metrics (second moment)
         '''
-        if self.image is not None:
-            image = self.image
-            if image.shape[0] >1:
-                metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
-            else:
-                metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
-            return metric
+        if image.shape[0] >1:
+            metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
         else:
-            return 0
+            metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
+        return metric
+
         # done with calc_image_metric
 
     def resetMirror(self):
@@ -143,13 +137,13 @@ class UI(inLib.ModuleUI):
             stepsize = float(self._ui.lineEdit_zernstep.text())
             print("Zernike mode:", zmode, "stepsize: ", stepsize)
 
-
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
         self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+        self.z_comps.grab_mode(zmode).step = stepsize # setter
         # done with setZern_step
 
-    def stepZern(self, zmode = None, stepsize = None, forward = 1):
+    def stepZern(self, zmode = None, stepsize = None, forward = True):
         '''
         step the zernike mode zmode by stepsize.
         '''
@@ -157,13 +151,12 @@ class UI(inLib.ModuleUI):
         stepsize = float(self._ui.lineEdit_zernstep.text())
 
         self.setZern_step(z_mode, stepsize)
-        zcoeff = z_coeff
-        zcoeff[z_mode-1] += forward*stepsize
-        self.updateZern(z_mode, zcoeff[z_mode-1])
+        if forward:
+            self.z_comps.grab_mode(zmode).stepup()
+        else:
+            self.z_comps.grab_mode(zmode).stepdown()
+
         # this is really awkward.
-
-
-
 
     def updateZern(self, zmode = None, ampli = None):
         '''
@@ -174,20 +167,24 @@ class UI(inLib.ModuleUI):
             '''
             if neither zmode nor ampli is specified:
             '''
+            zmode = int(self._ui.lineEdit_zmode.text())
             if ampli is None:
-                zmode = int(self._ui.lineEdit_zmode.text())
                 ampli = float(self._ui.lineEdit_zernampli.text())
                 print("Zernike mode:", zmode, "Amplitude:", ampli)
             else:
                 print(ampli)
                 zmode = np.arange(1, len(ampli)+1)
 
-        z_coeff[zmode-1] = ampli # this is global.
         if np.isscalar(zmode):
             self.updateTable_ampli(zmode, ampli) # update the table display
+            self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
         else:
+            '''
+            set the amplitude one by one
+            '''
             for nz, am in zip(zmode, ampli):
                 self.updateTable_ampli(nz, am)
+                self.z_comps.grab_mode(nz).ampli = am
 
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
         self.syncRawZern(mask)
@@ -210,7 +207,7 @@ class UI(inLib.ModuleUI):
         '''
         flush all the zernike coefficients; set all the z_coeffs as zero.
         '''
-        z_coeff[:] = 0
+        self.z_comps.flush_coeffs()
         self.flushTable()
         self._control.clearZern()
         self.clearPattern()
@@ -265,13 +262,14 @@ class UI(inLib.ModuleUI):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
+        z_coeff = self.z_comps.sync_coeffs()
         self.updateZern(ampli=z_coeff)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
-        self.acquireImage()
+        snap = self.acquireSnap()
         self.resetMirror()
-        mt = self.calc_image_metric()
+        mt = self.calc_image_metric(snap)
         self.metrics.append(mt)
         return mt
         '''
