@@ -10,7 +10,7 @@ import libtim.zern as lzern
 import AO_algos.Image_metrics as ao_metric
 from BMC_threadfuncs import BL_correction
 from zern_funcs import zm_list
-
+from functools import partial
 
 class UI(inLib.ModuleUI):
 
@@ -52,10 +52,10 @@ class UI(inLib.ModuleUI):
         for iz in np.arange(self.z_max-3):
             print(iz+4)
             zm = self.z_comps.grab_mode(iz+4)
-
             zm_check = zmode_status(zm.zmode, self) # zmode
-            self._ui.verticalLayout_activeZ.insertWidget(iz, zmode_status.checkbox)
-            self.z_comps.switch(zm_check, True)
+            print(zm.zmode)
+            self._ui.verticalLayout_activeZ.insertWidget(iz, zm_check.checkbox)
+            self.z_comps.switch(zm_check.index, True)
 
         self.setScanstep()
 
@@ -336,6 +336,7 @@ class UI(inLib.ModuleUI):
 class zmode_status:
     def __init__(self, index, ui):
         self.index = index
+        print("mode:",self.index)
         self.checkbox = QtGui.QCheckBox(str(self.index))
-        self.checkbox.stateChanged.connect(ui._switch_zern(self.index, self.checkbox.isChecked()))
+        self.checkbox.stateChanged.connect(partial(ui._switch_zern, self.index, self.checkbox.isChecked()))
         self.checkbox.toggle()

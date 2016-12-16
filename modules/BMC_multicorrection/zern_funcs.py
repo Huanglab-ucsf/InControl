@@ -60,7 +60,7 @@ class zm_list(object):
         self.active = np.zeros(self.NL).astype('bool') # by default: all zero , the indices should-1
 
         for iz in np.arange(self.NL):
-            new_mode = zern_mode(z_mode=iz, ampli = 0)
+            new_mode = zern_mode(z_mode=iz+z_start, ampli = 0)
             self.zlist.append(new_mode)
         # done initialization
 
@@ -70,7 +70,7 @@ class zm_list(object):
         '''
         if z_mode > self.max_mode or z_mode < self.start_mode:
             raise ValueError("Oops! The mode is out of range.")
-        self.zlist[z_mode-self.start] = status
+        self.zlist[z_mode-self.start_mode] = status
         # done with the switch
 
     def grab_mode(self, z_mode):
