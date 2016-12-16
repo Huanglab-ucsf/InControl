@@ -50,8 +50,10 @@ class UI(inLib.ModuleUI):
         # done with initialization
         # a couple of initialization
         for iz in np.arange(self.z_max-3):
-            zm = self.z_comps.grab_mode(iz+3)
-            zm_check = zmode_status(zm.zmode) # zmode
+            print(iz+4)
+            zm = self.z_comps.grab_mode(iz+4)
+
+            zm_check = zmode_status(zm.zmode, self) # zmode
             self._ui.verticalLayout_activeZ.insertWidget(iz, zmode_status.checkbox)
             self.z_comps.switch(zm_check, True)
 
