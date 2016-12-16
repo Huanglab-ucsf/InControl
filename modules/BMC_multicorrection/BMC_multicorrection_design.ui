@@ -675,7 +675,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Set</string>
+        <string>Step</string>
        </property>
       </widget>
      </item>

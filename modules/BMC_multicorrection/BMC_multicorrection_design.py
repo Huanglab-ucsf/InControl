@@ -8,7 +8,6 @@
 
 from PyQt4 import QtCore, QtGui
 from matplotlibwidget import MatplotlibWidget
-
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -605,7 +604,7 @@ class Ui_Form(object):
         self.label_gain.setText(_translate("Form", "Gain", None))
         self.checkBox_mask.setText(_translate("Form", "Mask", None))
         self.label_zernstep.setText(_translate("Form", "stepsize", None))
-        self.pushButton_stepZern.setText(_translate("Form", "Set", None))
+        self.pushButton_stepZern.setText(_translate("Form", "Step", None))
         self.pushButton_flush.setText(_translate("Form", "Flush", None))
         self.pushButton_evolve.setText(_translate("Form", "Evolve", None))
         self.label_masksize.setText(_translate("Form", "r_mask", None))
