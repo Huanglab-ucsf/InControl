@@ -312,6 +312,14 @@ class UI(inLib.ModuleUI):
         BL.start()
         # done with threaded BL_correct
 
+    def _switch_zern(self, zmode, status):
+        '''
+        switch on or off the zernike mode.
+        '''
+        self.z_comps.switch(zmode, status)
+
+
+
     def _position_ready(self):
         '''
         Set the position ready.
@@ -329,5 +337,5 @@ class zmode_status:
     def __init__(self, index, ui):
         self.index = index
         self.checkbox = QtGui.QCheckBox(str(self.index))
-        self.checkbox.stateChanged.connect(ui._modulation_toggled)
+        self.checkbox.stateChanged.connect(ui._switch_zern(self.index, self.checkbox.isChecked()))
         self.checkbox.toggle()
