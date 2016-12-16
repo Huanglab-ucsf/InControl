@@ -40,10 +40,7 @@ class pupil_geometry:
         self.theta = np.arctan2(self.y_pxl, self.x_pxl)
         if r_mask is not None:
             self.mask = self.r_pxl < r_mask
-
-
-
-
+        # done initialization
 
 def psf_processing(raw_scan, raw_center, r_mask = 40):
     """
