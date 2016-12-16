@@ -18,6 +18,9 @@ def fftImage(image, use_pyfftw=True):
 
 
 def window(ndim, pixelSize, diffLimit):
+    '''
+    Q: what is diffLimit?
+    '''
     x,y = np.meshgrid(np.arange(-1*ndim/2,ndim/2),
                       np.arange(-1*ndim/2,ndim/2))
     r = np.sqrt(x**2 + y**2)
