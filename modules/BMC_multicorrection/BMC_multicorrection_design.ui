@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>968</width>
-    <height>698</height>
+    <width>1152</width>
+    <height>739</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -126,7 +126,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_image_phase">
      <attribute name="title">
@@ -161,10 +161,23 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>41</y>
-        <width>571</width>
+        <y>60</y>
+        <width>541</width>
         <height>251</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_metric">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>16</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Metric</string>
       </property>
      </widget>
     </widget>
@@ -308,12 +321,222 @@
     </column>
     <item row="0" column="0">
      <property name="text">
-      <string/>
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="0" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="1" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="1" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="2" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="2" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="3" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="3" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="4" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="4" column="1">
+     <property name="text">
+      <string>0.1</string>
      </property>
     </item>
     <item row="5" column="0">
      <property name="text">
-      <string>15</string>
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="5" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="6" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="6" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="7" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="7" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="8" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="8" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="9" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="9" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="10" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="10" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="11" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="11" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="12" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="12" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="13" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="13" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="14" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="14" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="15" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="15" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="16" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="16" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="17" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="17" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="18" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="18" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="19" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="19" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="20" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="20" column="1">
+     <property name="text">
+      <string>0.1</string>
+     </property>
+    </item>
+    <item row="21" column="0">
+     <property name="text">
+      <string>0.</string>
+     </property>
+    </item>
+    <item row="21" column="1">
+     <property name="text">
+      <string>0.1</string>
      </property>
     </item>
    </widget>
@@ -367,7 +590,11 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_gain"/>
+      <widget class="QLineEdit" name="lineEdit_gain">
+       <property name="text">
+        <string>-5</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="1">
       <widget class="QLabel" name="label_gain">
@@ -397,6 +624,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="text">
+        <string>4</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="0">
@@ -420,6 +650,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="text">
+        <string>0.0</string>
+       </property>
       </widget>
      </item>
      <item row="2" column="1">
@@ -442,6 +675,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="text">
+        <string>0.10</string>
        </property>
       </widget>
      </item>
@@ -548,13 +784,24 @@
      </item>
     </layout>
    </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>970</x>
+      <y>40</y>
+      <width>131</width>
+      <height>641</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_activeZ"/>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>968</width>
+     <width>1152</width>
      <height>25</height>
     </rect>
    </property>
