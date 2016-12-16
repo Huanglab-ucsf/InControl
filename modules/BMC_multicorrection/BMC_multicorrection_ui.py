@@ -108,6 +108,7 @@ class UI(inLib.ModuleUI):
         create a raw_MOD.
         DM is not updated!!!
         '''
+        self._switch_zern()
         z_coeff = self.z_comps.sync_coeffs()
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
 
@@ -316,12 +317,15 @@ class UI(inLib.ModuleUI):
         BL.start()
         # done with threaded BL_correct
 
-    def _switch_zern(self, zmode, status):
+    def _switch_zern(self):
         '''
         switch on or off the zernike mode.
         '''
-        self.z_comps.switch(zmode, status)
-
+        for zms in self._ui.verticalLayout_activeZ:
+            status = zms.checkbox.isChecked()
+            zmode = zms.index
+            self.z_comps.switch(zmode, status)
+        # done with _switch_zern
 
 
     def _position_ready(self):
@@ -342,5 +346,4 @@ class zmode_status:
         self.index = index
         print("mode:",self.index)
         self.checkbox = QtGui.QCheckBox(str(self.index))
-        self.checkbox.stateChanged.connect(partial(ui._switch_zern, self.index, self.checkbox.isChecked()))
         self.checkbox.toggle()
