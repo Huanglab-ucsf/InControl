@@ -70,7 +70,7 @@ class zm_list(object):
         '''
         if z_mode > self.max_mode or z_mode < self.start_mode:
             raise ValueError("Oops! The mode is out of range.")
-        self.zlist[z_mode-self.start_mode] = status
+        self.active[z_mode-self.start_mode] = status
         # done with the switch
 
     def grab_mode(self, z_mode):

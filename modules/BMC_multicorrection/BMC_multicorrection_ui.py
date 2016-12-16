@@ -27,6 +27,7 @@ class UI(inLib.ModuleUI):
         self.radius = 128
         self.metrics = []
         self.z_correct = 0.01
+        dz = 0.0003
 
         '''
         Below is the connection group
@@ -41,23 +42,21 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
-        self._ui.pushButton_stepZern.clicked.connect(self.stepZern)
-        self._ui.lineEdit_zernstep.returnPressed.connect(self.setZern_step)
-        self._ui.lineEdit_zernampli.returnPressed.connect(self.updateZern)
+        self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
+        self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
+        self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         self._ui.lineEdit_dz.returnPressed.connect(self.setScanstep)
 
         # done with initialization
         # a couple of initialization
         for iz in np.arange(self.z_max-3):
-            print(iz+4)
             zm = self.z_comps.grab_mode(iz+4)
             zm_check = zmode_status(zm.zmode, self) # zmode
-            print(zm.zmode)
             self._ui.verticalLayout_activeZ.insertWidget(iz, zm_check.checkbox)
             self.z_comps.switch(zm_check.index, True)
 
-        self.setScanstep()
+        self.setScanstep(dz)
 
 
     def apply2mirror(self):
@@ -145,24 +144,30 @@ class UI(inLib.ModuleUI):
             stepsize = float(self._ui.lineEdit_zernstep.text())
             print("Zernike mode:", zmode, "stepsize: ", stepsize)
 
+
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
         self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
-        self.z_comps.grab_mode(zmode).step = stepsize # setter
+        zm = self.z_comps.grab_mode(zmode)
+        print(zm)
+        zm.step = stepsize
         # done with setZern_step
 
-    def stepZern(self, zmode = None, stepsize = None, forward = True):
+    def stepZern(self, zmode = None, forward = True):
         '''
         step the zernike mode zmode by stepsize.
         '''
-        z_mode = int(self._ui.lineEdit_zmode.text())
-        stepsize = float(self._ui.lineEdit_zernstep.text())
+        if (zmode is None):
+            zmode = int(self._ui.lineEdit_zmode.text())
+            print("Step mode:", zmode)
 
-        self.setZern_step(z_mode, stepsize)
         if forward:
             self.z_comps.grab_mode(zmode).stepup()
         else:
             self.z_comps.grab_mode(zmode).stepdown()
+
+        ampli = self.z_comps.grab_mode(zmode).ampli
+        self.updateTable_ampli(zmode)
 
         # this is really awkward.
 
@@ -172,9 +177,6 @@ class UI(inLib.ModuleUI):
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
         '''
         if zmode is None:
-            '''
-            if neither zmode nor ampli is specified:
-            '''
             zmode = int(self._ui.lineEdit_zmode.text())
             if ampli is None:
                 ampli = float(self._ui.lineEdit_zernampli.text())
@@ -184,15 +186,15 @@ class UI(inLib.ModuleUI):
                 zmode = np.arange(1, len(ampli)+1)
 
         if np.isscalar(zmode):
-            self.updateTable_ampli(zmode, ampli) # update the table display
             self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
+            self.updateTable_ampli(zmode) # update the table display
         else:
             '''
             set the amplitude one by one
             '''
             for nz, am in zip(zmode, ampli):
-                self.updateTable_ampli(nz, am)
                 self.z_comps.grab_mode(nz).ampli = am
+                self.updateTable_ampli(nz)
 
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
         self.syncRawZern(mask)
@@ -201,10 +203,11 @@ class UI(inLib.ModuleUI):
 
         # not done with stepZern
 
-    def updateTable_ampli(self, z_mode, ampli):
+    def updateTable_ampli(self, z_mode):
         '''
         simply update the table display of the zernike modes.
         '''
+        ampli = self.z_comps.grab_mode(z_mode).ampli
         item = QtGui.QTableWidgetItem()
         item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
         self._ui.table_Zcoeffs.setItem(z_mode-4, 0, item)
@@ -293,11 +296,12 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_metrics.draw()
         # done with displayMetrics
 
-    def setScanstep(self):
+    def setScanstep(self, dz = None):
         '''
         setScanstep via thorlabs motor.
         '''
-        dz = float(self._ui.lineEdit_dz.text())
+        if(dz is None):
+            dz = float(self._ui.lineEdit_dz.text())
         self._control.setScanstep(dz)
         self.dz = dz # here we have a redundant dz
 
@@ -305,7 +309,7 @@ class UI(inLib.ModuleUI):
         '''
         Backlash correction, threaded on 12/15.
         '''
-        z_start  = float(self._ui.lineEdit_starting.text())
+        z_start  = float(self._ui.lineEdit_start.text())
         BL = BL_correction(self.z_correct, z_start)
         BL.finished.connect(self._position_ready)
         self._ui.pushButton_BL.setEnabled(False)
