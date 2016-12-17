@@ -27,6 +27,8 @@ class UI(inLib.ModuleUI):
         self.radius = 128
         self.metrics = []
         self.z_correct = 0.01
+        self.zm_status = []
+        self.BL = None
         dz = 0.0003
 
         '''
@@ -46,7 +48,7 @@ class UI(inLib.ModuleUI):
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
-        self._ui.lineEdit_dz.returnPressed.connect(self.setScanstep)
+        self._ui.lineEdit_dz.returnPressed.connect(partial(self.setScanstep, None))
 
         # done with initialization
         # a couple of initialization
@@ -54,6 +56,7 @@ class UI(inLib.ModuleUI):
             zm = self.z_comps.grab_mode(iz+4)
             zm_check = zmode_status(zm.zmode, self) # zmode
             self._ui.verticalLayout_activeZ.insertWidget(iz, zm_check.checkbox)
+            self.zm_status.append(zm_check)
             self.z_comps.switch(zm_check.index, True)
 
         self.setScanstep(dz)
@@ -81,6 +84,7 @@ class UI(inLib.ModuleUI):
         acquire a snapshot
         '''
         snap = self._control.acquireSnap()
+        print("Snapshot acquired!")
         return snap
 
 
@@ -88,7 +92,7 @@ class UI(inLib.ModuleUI):
         '''
         calculate image metrics (second moment)
         '''
-        if image.shape[0] >1:
+        if len(image.shape) == 3:
             metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
         else:
             metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
@@ -274,8 +278,8 @@ class UI(inLib.ModuleUI):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        z_coeff = self.z_comps.sync_coeffs()
-        self.updateZern(ampli=z_coeff)# # this is amplitude only-mask = False, the raw_MOD is updated as well.
+        self.syncRawZern()
+        # amplitude only-mask = False, the raw_MOD is updated as well.
         self.displayPhase() # display on the figure
         self.toDMSegs() # this only modulates
         self.apply2mirror()
@@ -311,17 +315,17 @@ class UI(inLib.ModuleUI):
         Backlash correction, threaded on 12/15.
         '''
         z_start  = float(self._ui.lineEdit_start.text())
-        BL = BL_correction(self.z_correct, z_start)
-        BL.finished.connect(self._position_ready)
+        self.BL = BL_correction(self._control, self.z_correct, z_start)
+        self.BL.finished.connect(self._position_ready)
         self._ui.pushButton_BL.setEnabled(False)
-        BL.start()
+        self.BL.start()
         # done with threaded BL_correct
 
     def _switch_zern(self):
         '''
         switch on or off the zernike mode.
         '''
-        for zms in self._ui.verticalLayout_activeZ:
+        for zms in self.zm_status:
             status = zms.checkbox.isChecked()
             zmode = zms.index
             self.z_comps.switch(zmode, status)
@@ -339,6 +343,10 @@ class UI(inLib.ModuleUI):
         To be filled up later. evolution of the zernikes.
         '''
         pass
+
+    def shutDown(self):
+        if self.BL:
+            self.BL.wait()
 
 
 class zmode_status:

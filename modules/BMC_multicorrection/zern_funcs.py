@@ -83,14 +83,14 @@ class zm_list(object):
 
     def sync_coeffs(self):
         z_coeffs = np.zeros(self.max_mode) # a complete coefficient list
-        activated = np.where(self.active == True)
+        activated = np.where(self.active == True)[0]
 
-        while nac in activated:
-            val = self.zlist[nac].ampli()
-            zm = self.zlist[nac].zmode()
+        for nac in activated:
+            val = self.zlist[nac].ampli
+            zm = self.zlist[nac].zmode
             z_coeffs[zm-1] = val
 
-        return sync_coeffs # this is a coefficient list that can be used for other zernikes.
+        return z_coeffs # this is a coefficient list that can be used for other zernikes.
 
     def flush_coeffs(self):
         for zm in self.zlist:

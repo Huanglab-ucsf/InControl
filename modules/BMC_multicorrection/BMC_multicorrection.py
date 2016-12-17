@@ -74,6 +74,7 @@ class Control(inLib.Module):
         This is not functioning yet.
         '''
         snap = self._control.camera.getMostRecentImageNumpy()
+        print(snap.shape)
         return snap
         # not functioning yet
 
@@ -192,6 +193,7 @@ class Control(inLib.Module):
         #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
         '''
         dstep = self._dz
+        print("The scan step:", dstep)
         self._control.servo.setStage(z_start+z_correct)
         time.sleep(3)
         ndown = int(z_correct/dstep)

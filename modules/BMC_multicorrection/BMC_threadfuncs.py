@@ -37,6 +37,7 @@ class BL_correction(QtCore.QThread):
         self.control = control
         self.z_correct = z_correct
         self.z_start = z_start
+        print("Initialized!", self.z_correct, self.z_start)
 
 
     def run(self):
