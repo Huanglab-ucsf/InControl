@@ -738,10 +738,18 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QLineEdit" name="lineEdit_mask"/>
+      <widget class="QLineEdit" name="lineEdit_mask">
+       <property name="text">
+        <string>50</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_dz"/>
+      <widget class="QLineEdit" name="lineEdit_dz">
+       <property name="text">
+        <string>0.0003</string>
+       </property>
+      </widget>
      </item>
      <item row="3" column="0">
       <widget class="QSpinBox" name="spinbox_Nsteps">
@@ -767,7 +775,11 @@
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLineEdit" name="lineEdit_filename"/>
+      <widget class="QLineEdit" name="lineEdit_filename">
+       <property name="text">
+        <string>test.npy</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="1">
       <widget class="QLabel" name="label_stepsize">
@@ -781,7 +793,7 @@
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text">
-        <string>dz</string>
+        <string>dz(mm)</string>
        </property>
       </widget>
      </item>
