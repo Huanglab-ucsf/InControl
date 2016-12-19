@@ -85,7 +85,8 @@ class UI(inLib.ModuleUI):
         '''
         acquire a snapshot
         '''
-        snap = self._control.acquireSnap()
+        snap = self._control.acquireSnap(n_mean = 1)
+        print(snap.shape)
         print("Snapshot acquired!")
         self.displayImage(snap)
         return snap
@@ -110,12 +111,13 @@ class UI(inLib.ModuleUI):
         self._control.advanceWithPipe()
         # done with reset Mirror
 
-    def syncRawZern(self, usemask = False):
+    def syncRawZern(self):
         '''
         create a raw_MOD.
         DM is not updated!!!
         '''
         # self._switch_zern()
+        usemask = self._ui.checkBox_mask.isChecked() # use mask or not?
         z_coeff = self.z_comps.sync_coeffs()
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
 
@@ -175,6 +177,10 @@ class UI(inLib.ModuleUI):
             self.z_comps.grab_mode(zmode).stepdown()
         self.updateTable_ampli(zmode)
 
+        self._switch_zern()
+        self.syncRawZern()
+        self.displayPhase()
+
         # this is really awkward.
 
     def updateZern(self, zmode = None, ampli = None):
@@ -201,10 +207,10 @@ class UI(inLib.ModuleUI):
             for nz, am in zip(zmode, ampli):
                 self.z_comps.grab_mode(nz).ampli = am
                 self.updateTable_ampli(nz)
-        mask = self._ui.checkBox_mask.isChecked() # use mask or not?
+
 
         self._switch_zern()
-        self.syncRawZern(mask)
+        self.syncRawZern()
         self.displayPhase()
         # done with updateZern
 
@@ -282,11 +288,11 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_metrics.draw()
             # done with displayMetrics
 
-    def displayImage(self, image):
+    def displayImage(self, snapIm):
         '''
         display the last image
         '''
-        self._ui.mpl_image.figure.axes[0].imshow(image, cmap = 'Greys_r')
+        self._ui.mpl_image.figure.axes[0].imshow(snapIm, cmap = 'Greys_r')
         self._ui.mpl_metrics.draw()
         # done with displayImage
 
