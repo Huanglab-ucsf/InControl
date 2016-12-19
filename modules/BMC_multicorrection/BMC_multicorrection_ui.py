@@ -11,6 +11,8 @@ import AO_algos.Image_metrics as ao_metric
 from BMC_threadfuncs import BL_correction
 from zern_funcs import zm_list
 from functools import partial
+from Evolution_routines import Pattern_evolution
+
 
 class UI(inLib.ModuleUI):
 
@@ -29,6 +31,7 @@ class UI(inLib.ModuleUI):
         self.z_correct = 0.01
         self.zm_status = []
         self.BL = None
+        self.Evolution = Pattern_evolution(self)
         dz = 0.0003
 
         '''
@@ -42,7 +45,6 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
-        self._ui.pushButton_metric.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
@@ -85,6 +87,7 @@ class UI(inLib.ModuleUI):
         '''
         snap = self._control.acquireSnap()
         print("Snapshot acquired!")
+        self.displayImage(snap)
         return snap
 
 
@@ -112,7 +115,7 @@ class UI(inLib.ModuleUI):
         create a raw_MOD.
         DM is not updated!!!
         '''
-        self._switch_zern()
+        # self._switch_zern()
         z_coeff = self.z_comps.sync_coeffs()
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
 
@@ -170,8 +173,6 @@ class UI(inLib.ModuleUI):
             self.z_comps.grab_mode(zmode).stepup()
         else:
             self.z_comps.grab_mode(zmode).stepdown()
-
-        ampli = self.z_comps.grab_mode(zmode).ampli
         self.updateTable_ampli(zmode)
 
         # this is really awkward.
@@ -200,8 +201,9 @@ class UI(inLib.ModuleUI):
             for nz, am in zip(zmode, ampli):
                 self.z_comps.grab_mode(nz).ampli = am
                 self.updateTable_ampli(nz)
-
         mask = self._ui.checkBox_mask.isChecked() # use mask or not?
+
+        self._switch_zern()
         self.syncRawZern(mask)
         self.displayPhase()
         # done with updateZern
@@ -272,34 +274,39 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.figure.axes[0].matshow(segs, cmap ='RdBu')
         self._ui.mpl_phase.draw()
 
-
-    def single_Evaluate(self):
-        '''
-        Just apply the zernike coefficients, take the image and evaluate the sharpness
-        z_coeffs: from 1 to z_max.
-        '''
-        self.syncRawZern()
-        # amplitude only-mask = False, the raw_MOD is updated as well.
-        self.displayPhase() # display on the figure
-        self.toDMSegs() # this only modulates
-        self.apply2mirror()
-        snap = self.acquireSnap()
-        self.resetMirror()
-        mt = self.calc_image_metric(snap)
-        self.metrics.append(mt)
-        return mt
-        '''
-        OK, the mirror is reset and the metric is applied.
-        what's next?
-        '''
-
     def displayMetrics(self):
         '''
         display metrics
         '''
         self._ui.mpl_metrics.figure.axes[0].plot(np.array(self.metrics), cmap='RdBu')
         self._ui.mpl_metrics.draw()
-        # done with displayMetrics
+            # done with displayMetrics
+
+    def displayImage(self, image):
+        '''
+        display the last image
+        '''
+        self._ui.mpl_image.figure.axes[0].imshow(image, cmap = 'Greys_r')
+        self._ui.mpl_metrics.draw()
+        # done with displayImage
+
+    # def single_Evaluate(self, n_mean = 1):
+    #     '''
+    #     Just apply the zernike coefficients, take the image and evaluate the sharpness
+    #     z_coeffs: from 1 to z_max.
+    #     '''
+    #     self.syncRawZern()
+    #     # amplitude only-mask = False, the raw_MOD is updated as well.
+    #     self.displayPhase() # display on the figure
+    #     self.toDMSegs() # this only modulates
+    #     self.apply2mirror()
+    #     snap = self._control.acquireSnap(n_mean)
+    #     self.resetMirror()
+    #     mt = self.calc_image_metric(snap)
+    #     self.metrics.append(mt)
+    #     return mt
+        # done with single_Evaluate
+
 
     def setScanstep(self, dz = None):
         '''
@@ -325,12 +332,15 @@ class UI(inLib.ModuleUI):
         '''
         switch on or off the zernike mode.
         '''
+        active_list = []
         for zms in self.zm_status:
             status = zms.checkbox.isChecked()
             zmode = zms.index
             self.z_comps.switch(zmode, status)
-        # done with _switch_zern
 
+        act_ind = self.z_comps.get_active()
+        return act_ind
+        # done with _switch_zern
 
     def _position_ready(self):
         '''
@@ -341,8 +351,11 @@ class UI(inLib.ModuleUI):
     def evolve(self):
         '''
         To be filled up later. evolution of the zernikes.
+        0. Select the active modes and their coefficients
         '''
-        pass
+        act_ind = self._switch_zern()
+        start_coeffs = self.z_comps.sync_coeffs()
+        self.Evolution.Evolve(act_ind, start_coeffs)
 
     def shutDown(self):
         if self.BL:

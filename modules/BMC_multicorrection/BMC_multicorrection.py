@@ -68,13 +68,22 @@ class Control(inLib.Module):
         self.dims = self._control.camera.getDimensions()
         # endof updateImSize
 
-    def acquireSnap(self):
+    def acquireSnap(self, n_mean):
         '''
         Simply, acquire a snapshot without
         This is not functioning yet.
         '''
-        snap = self._control.camera.getMostRecentImageNumpy()
+        self.laserSwitch(True)
+        if n_mean >1:
+            snap = []
+            for nm in range(n_mean):
+                snap.append(self._control.camera.getMostRecentImageNumpy()) #single_Evaluate
+            snap = np.array(snap).mean(axis = 0)
+        else:
+            snap = self._control.camera.getMostRecentImageNumpy()
+            
         print(snap.shape)
+        self.laserSwitch(False)
         return snap
         # not functioning yet
 

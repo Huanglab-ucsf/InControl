@@ -97,6 +97,14 @@ class zm_list(object):
             zm.ampli = 0.0
         # done with flush_coeffs
 
+    def get_active(self):
+        '''
+        return the indices of active modes
+        '''
+        act_ind = np.where(self.active)[0]+self.start_mode
+        return act_ind
+
+
 
 # test the code
 def main():

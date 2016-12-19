@@ -4,12 +4,13 @@ Evolution routines for aberration correction
 
 import numpy as np
 import scipy as sp
+from AO_algos import simplex
 
+class Pattern_evolution(object):
+    '''
+    Pattern evolution, load the ui into the
+    '''
 
-class Simplex():
-    '''
-    Simplex method
-    '''
     def __init__(self, ui_control):
         '''
         init function 0
@@ -19,20 +20,45 @@ class Simplex():
         self.coeffs = None
 
 
+    def single_Evaluate(self, n_mean = 1):
+        '''
+        Just apply the zernike coefficients, take the image and evaluate the sharpness
+        z_coeffs: from 1 to z_max.
+        '''
+        self.ui.syncRawZern()
+        # amplitude only-mask = False, the raw_MOD is updated as well.
+        self.ui.displayPhase() # display on the figure
+        self.ui.toDMSegs() # this only modulates
+        self.ui.apply2mirror()
+        if n_mean >1:
+            snap = []
+            for nm in range(n_mean):
+                snap.append(self.ui.acquireSnap()) #single_Evaluate
+            snap = np.array(snap).mean(axis = 0)
+        else:
+            snap = self.ui.acquireSnap()
+
+        self.ui.resetMirror()
+        mt = self.ui.calc_image_metric(snap)
+        self.ui.metrics.append(mt)
+        return mt
+        # done with single_Evaluate
+
+
     def calc_simplex(self, z_directions, coeff_0, stepsize):
         '''
         Evaluate the simplex
         '''
         simplex = []
         z_coeffs = coeffs_0
-        simplex.append(self.ui.single_Evaluate(coeffs_0))
+        simplex.append(self.single_Evaluate())
         self.edges = np.zeros()
         for zi in z_directions:
             '''
             This should be refined: How to select the effective modes?
             '''
             z_coeffs[zi] += stepsize[zi]
-            simplex.append(self.ui.single_Evaluate(z_coeffs)) # increase the simplex
+            simplex.append(self.single_Evaluate(z_coeffs)) # increase the simplex
             z_coeffs[zi] -= stepsize[zi]
 
 
@@ -42,7 +68,6 @@ class Simplex():
         self.coeffs = z_coeffs
         self.z_max = z_max
         self.simplex = simplex
-        self.edges =
         return z_max, simplex
 
         # done with calc_simplex
@@ -56,74 +81,23 @@ class Simplex():
         simplex = self.simplex
         z_min = np.argmin(simplex)
         z_max = np.argmax(simplex)
-
-
-
-
-class conjugate_gradient():
-    def __init__(self, control):
         '''
+        Unfinished: need to update the stepsize along the direction of min-max
         '''
-        self._control = control
 
 
-
-    def step_Hessian(self, z_modes, z_coeffs, z_steps):
+    def Evolve(self, zmodes, start_coeffs):
         '''
-        z_modes: selected modes for optimization. 4 --- zmax
-        z_coeffs: the coefficients of the zernike modes
-        z_steps: the designed steps in each mode. If it is 0 or ignored, then the mode is dropped.
+        zmodes: the modes selected for optimization
+        Start_coeffs: The starting coefficients of the evolution
+        0. Update all the coefficients
+        1. Evaluate sharpness
+        2. Update the amplitude one by one, evaluate each sharpness value
+        3. Construct a simplex
+        4. Move along the minimization direction
+        5. go to step 1.
+
         '''
-        N_search = len(z_modes) # the dimension of the search space
-        zc_input = np.zeros(self.z_max)
-        st_input = np.zeros(self.z_max)
-        try:
-            zc_input[z_modes-1] = z_coeffs
-        except ValueError:
-            print('dimension mismatch for amplitudes.')
-            return -1
-
-        # assign the steps
-        try:
-            st_input[z_modes-1] = z_steps
-        except ValueError:
-            print('dimension mismatch for stepsize.')
-            return -2
-
-        S_vec = np.zeros(N_search)
-        deriv = np.zeros(N_search)
-        S_mat= np.zeros([N_search, N_search]) # the first row saves the first derivative, the rest N_search rows save the second.
-        hess = np.zeros([N_search, N_search])
-
-        S0 = self.single_Evaluate(zc_input)
-
-        for iz in np.arange(N_search):
-            '''
-            iterate through z_modes: outer cycle
-            '''
-            step_i = st_input[iz]
-            nz = z_modes[iz] # select the modes out
-            zc_input[nz-1] +=step_i
-            S_vec[iz] = self.single_Evaluate(zc_input)
-            # zc_input[nz-1] -=step_i
-
-            for jz in np.arange(iz, N_search): # this gives the upper right triangle values
-                '''
-                iterate through z_modes: inner cycle
-                '''
-                step_j = st_input[jz]
-                mz = z_modes[jz]
-                zc_input[mz-1] +=step_j
-                S_mat[iz, jz] = self.single_Evaluate(zc_input)
-                S_mat[jz, iz] = S_mat[iz, jz] # symmetrize
-                zc_input[mz-1] -=step_j
-            # return the zc_input to its original form
-            zc_input[nz-1] -=step_i
-        # OK, now the whole S_vec and S_mat is computed.
-
-        [DS, DK] = np.meshgrid(S_vec, S_vec) # meshgrid
-        [sts, stk] = np.meshgrid(st_input, st_input)
-        hess = S_mat-(DS+DK) + S0/(sts*stk)
-
-        return hess # bingo!!! But actually, this is not a very complete set.
-        # done with single_runGradZern
+        self.ui.updateZern(zmodes, start_coeffs)
+        mt = self.single_Evaluate()
+        print("The metric is:", mt)
