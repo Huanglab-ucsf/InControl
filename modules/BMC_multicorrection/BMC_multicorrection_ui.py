@@ -12,6 +12,7 @@ from BMC_threadfuncs import BL_correction
 from zern_funcs import zm_list
 from functools import partial
 from Evolution_routines import Pattern_evolution
+from itertools import product
 
 
 class UI(inLib.ModuleUI):
@@ -59,7 +60,7 @@ class UI(inLib.ModuleUI):
             zm_check = zmode_status(zm.zmode, self) # zmode
             self._ui.verticalLayout_activeZ.insertWidget(iz, zm_check.checkbox)
             self.zm_status.append(zm_check)
-            self.z_comps.switch(zm_check.index, True)
+            self.z_comps.switch(zm_check.index, False)
 
         self.setScanstep(dz)
 
@@ -83,7 +84,7 @@ class UI(inLib.ModuleUI):
 
     def acquireSnap(self):
         '''
-        acquire a snapshot
+        acquire a snapshot, ragardless of whether a pattern is applied or not
         '''
         snap = self._control.acquireSnap(n_mean = 1)
         print(snap.shape)
@@ -101,7 +102,6 @@ class UI(inLib.ModuleUI):
         else:
             metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
         return metric
-
         # done with calc_image_metric
 
     def resetMirror(self):
@@ -118,9 +118,9 @@ class UI(inLib.ModuleUI):
         '''
         # self._switch_zern()
         usemask = self._ui.checkBox_mask.isChecked() # use mask or not?
-        z_coeff = self.z_comps.sync_coeffs()
+        z_coeff = self.z_comps.sync_coeffs() # OK this is to be used only once. Otherwise too inconvenient.
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
-
+        # done with syncRawZern
 
     def get_rawMOD(self):
         rm = np.copy(self.raw_MOD)
@@ -212,7 +212,6 @@ class UI(inLib.ModuleUI):
                 self.z_comps.grab_mode(nz).ampli = am
                 self.updateTable_ampli(nz)
 
-
         self._switch_zern()
         self.syncRawZern()
         self.displayPhase()
@@ -230,7 +229,6 @@ class UI(inLib.ModuleUI):
         self._ui.table_Zcoeffs.setItem(z_mode-4, 0, item)
         # done with updateDisplay
 
-
     def flushZern(self):
         '''
         flush all the zernike coefficients; set all the z_coeffs as zero.
@@ -239,6 +237,7 @@ class UI(inLib.ModuleUI):
         self.flushTable()
         self._control.clearZern()
         self.clearPattern()
+        self.switch_all(False)
         # done with flushZern
 
     def flushTable(self):
@@ -255,8 +254,6 @@ class UI(inLib.ModuleUI):
             item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
             self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
         # done with flushTable
-
-
 
     def clearPattern(self):
         '''
@@ -300,23 +297,6 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_metrics.draw()
         # done with displayImage
 
-    # def single_Evaluate(self, n_mean = 1):
-    #     '''
-    #     Just apply the zernike coefficients, take the image and evaluate the sharpness
-    #     z_coeffs: from 1 to z_max.
-    #     '''
-    #     self.syncRawZern()
-    #     # amplitude only-mask = False, the raw_MOD is updated as well.
-    #     self.displayPhase() # display on the figure
-    #     self.toDMSegs() # this only modulates
-    #     self.apply2mirror()
-    #     snap = self._control.acquireSnap(n_mean)
-    #     self.resetMirror()
-    #     mt = self.calc_image_metric(snap)
-    #     self.metrics.append(mt)
-    #     return mt
-        # done with single_Evaluate
-
 
     def setScanstep(self, dz = None):
         '''
@@ -338,11 +318,21 @@ class UI(inLib.ModuleUI):
         self.BL.start()
         # done with threaded BL_correct
 
+    def switch_all(self, status = False):
+        '''
+        uncheck all the Zernike modes.
+        '''
+        for zms in self.zm_status:
+            zms.checkbox.setChecked(status)
+            zmode = zms.index
+            self.z_comps.switch(zmode, status)
+        # done with switch all
+
+
     def _switch_zern(self):
         '''
         switch on or off the zernike mode.
         '''
-        active_list = []
         for zms in self.zm_status:
             status = zms.checkbox.isChecked()
             zmode = zms.index
@@ -364,12 +354,17 @@ class UI(inLib.ModuleUI):
         0. Select the active modes and their coefficients
         '''
         act_ind = self._switch_zern()
-        start_coeffs = self.z_comps.sync_coeffs()
+        start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
         self.Evolution.Evolve(act_ind, start_coeffs)
+
+    # def sharpness(self):
+    #     mt = self.Evolution.single_Evaluate()
+    #     self.displaySharpness(mt)
 
     def shutDown(self):
         if self.BL:
             self.BL.wait()
+
 
 
 class zmode_status:
@@ -377,4 +372,4 @@ class zmode_status:
         self.index = index
         print("mode:",self.index)
         self.checkbox = QtGui.QCheckBox(str(self.index))
-        self.checkbox.toggle()
+        # self.checkbox.toggle()

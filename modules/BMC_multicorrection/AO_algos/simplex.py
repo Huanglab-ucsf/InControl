@@ -4,34 +4,32 @@ Simplex method
 import numpy as np
 
 
-class simplex(object):
-    def __init__(self, simp_0, paras):
-        '''
-        Initialize the simplex value and step size
-        Inside the simplex, every node should be equivalent.
-        '''
-        self.paras = paras # stepsize is one -element less than the val.
-        self.val = simp_0
+def simplex(values, paras, maximizing = True, gain = 1.0):
+    '''
+    A small program for evaluating simplex and return the superior and inferior indexes
+    gain = 1.0: simple flip
+    '''
+    ind_max, ind_min = (np.argmax(values), np.argmin(values))
+    if maximizing:
+        ind_sup = ind_max # the superior index
+        ind_inf = ind_min # the inferior index
+    else:
+        ind_sup = ind_min
+        ind_inf = ind_max
 
-    def evaluate(self, maximizing = True):
-        '''
-        update the simplex and return a direction
-        If maximizing is True, update in the direction of maximizing the simplex, otherwize Minimize the simplex.
-        '''
-        ind_max, ind_min = (np.argmax(self.val), np.argmin(self.val))
+    paras_sup, paras_inf = (paras[ind_sup], paras[ind_inf])
+    # assume that the update is along a line in the parameter space.
+    para_new = gain*(paras_sup - paras_inf) + paras_sup # update the paras_inf
+    return para_new, ind_inf # return the index of the inferior
+    # done with simplex
 
-        if(maximizing):
-            ind_good = ind_max
-            ind_bad = ind_min
-        else:
-            ind_good = ind_min
-            ind_bad = ind_max
 
-        if(ind_sup >0): # if not the node self
-            self.stepsize[ind_sup-1] *=2 # go further
-        if(ind_inf >0): # if not the node self
-            self.stepsize[ind_inf-1] *=-1 # flip
-        return ind_max, ind_min # superior, inferior
+def main():
+    a = np.random.randn(5)
+    paras = np.random.randn(6,5)
+    para_new = simplex(a, paras)
+    print(para_new)
 
-    def get_steps(self):
-        return self.stepsize
+
+if __name__ == '__main__':
+    main()

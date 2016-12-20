@@ -86,7 +86,7 @@ class Pattern_evolution(object):
         '''
 
 
-    def Evolve(self, zmodes, start_coeffs, use_simplex = True):
+    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Niter = 100):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -102,18 +102,21 @@ class Pattern_evolution(object):
         NZ = len(zmodes) # number of modes
         mt = self.single_Evaluate()
         print("The metric is:", mt)
-        sval_init = [mt]
+        sval = [mt]
         param = np.tile(coeff_init, (NZ+1, 1)) # NZ+1 rows for simplex nodes
         step_size = self.ui.z_comps.get_parameters(zmodes)[1]
-        param[1:] += np.diag(step_size)
+        param[1:] += np.diag(step_size) # set the 1 --- NZ rows of the param matrix
 
         for iz in np.arange(1, NZ):
             self.ui.updateZern(zmodes, param[iz])
             mt = self.single_Evaluate()
-            simp_init.append(mt)
+            sval.append(mt)
 
-        sharp_simp = simplex(simp_0=simp_init, steps = stepsize)
-        ind_max, ind_min = sharp_simp.evaluate()
-        new_stepsize = sharp_simp.get_steps()
-        zmodes[]
-        self.ui.setZern_step(zmodes, new_stepsize[[ind_max, ind_min]])
+        for ncycle in range(Niter):
+            new_param, ind_inf = simplex(sval, param) # maximizing; gain = 1.0
+            param[ind_inf] = new_param
+            self.ui.updateZern(zmodes, new_param)
+            mt = self.single_Evaluate()
+            sval[ind_inf] = mt
+
+        return param # return the final parameter 
