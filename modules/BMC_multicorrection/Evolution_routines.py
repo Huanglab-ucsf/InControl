@@ -16,7 +16,7 @@ class Pattern_evolution(object):
         init function 0
         '''
         self.ui = ui_control
-        self.simplex = []
+        self.simplex = None
         self.coeffs = None
 
 
@@ -86,7 +86,7 @@ class Pattern_evolution(object):
         '''
 
 
-    def Evolve(self, zmodes, start_coeffs):
+    def Evolve(self, zmodes, start_coeffs, use_simplex = True):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -96,8 +96,24 @@ class Pattern_evolution(object):
         3. Construct a simplex
         4. Move along the minimization direction
         5. go to step 1.
-
         '''
-        self.ui.updateZern(zmodes, start_coeffs)
+
+        self.ui.updateZern(zmodes, coeff_init)
+        NZ = len(zmodes) # number of modes
         mt = self.single_Evaluate()
         print("The metric is:", mt)
+        sval_init = [mt]
+        param = np.tile(coeff_init, (NZ+1, 1)) # NZ+1 rows for simplex nodes
+        step_size = self.ui.z_comps.get_parameters(zmodes)[1]
+        param[1:] += np.diag(step_size)
+
+        for iz in np.arange(1, NZ):
+            self.ui.updateZern(zmodes, param[iz])
+            mt = self.single_Evaluate()
+            simp_init.append(mt)
+
+        sharp_simp = simplex(simp_0=simp_init, steps = stepsize)
+        ind_max, ind_min = sharp_simp.evaluate()
+        new_stepsize = sharp_simp.get_steps()
+        zmodes[]
+        self.ui.setZern_step(zmodes, new_stepsize[[ind_max, ind_min]])

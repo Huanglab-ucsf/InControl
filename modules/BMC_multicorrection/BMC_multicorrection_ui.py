@@ -154,13 +154,17 @@ class UI(inLib.ModuleUI):
             stepsize = float(self._ui.lineEdit_zernstep.text())
             print("Zernike mode:", zmode, "stepsize: ", stepsize)
 
-
-        item = QtGui.QTableWidgetItem()
-        item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
-        self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
-        zm = self.z_comps.grab_mode(zmode)
-        print(zm)
-        zm.step = stepsize
+        if(zmode.isscalar()):
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+            self.z_comps.grab_mode(zmode).step = stepsize
+        else:
+            for iz, zs in zip(zmode,stepsize):
+                item = QtGui.QTableWidgetItem()
+                item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+                self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
+                self.z_comps.grab_mode(iz).step = zs
         # done with setZern_step
 
     def stepZern(self, zmode = None, forward = True):

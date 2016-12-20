@@ -104,6 +104,20 @@ class zm_list(object):
         act_ind = np.where(self.active)[0]+self.start_mode
         return act_ind
 
+    def get_parameters(self, z_select):
+        '''
+        return the coefficient of the selected modes; if the coefficient is not active, set it to 0.
+        '''
+        z_coeffs = []
+        z_steps = []
+        for iz in z_select:
+            index = iz-self.start_mode
+            z_node = self.grab_mode(iz)
+            z_coeffs.append(z_node.ampli)
+            z_steps.append(z_node.step)
+
+        return np.array(z_coeffs), np.array(z_steps)
+
 
 
 # test the code
