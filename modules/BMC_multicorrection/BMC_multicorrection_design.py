@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-
+from matplotlibwidget import MatplotlibWidget
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -93,16 +93,16 @@ class Ui_Form(object):
         self.tab_display.setObjectName(_fromUtf8("tab_display"))
         self.tab_image_phase = QtGui.QWidget()
         self.tab_image_phase.setObjectName(_fromUtf8("tab_image_phase"))
-        self.mpl_image = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_image = MatplotlibWidget(self.tab_image_phase)
         self.mpl_image.setGeometry(QtCore.QRect(10, 30, 271, 271))
         self.mpl_image.setObjectName(_fromUtf8("mpl_image"))
-        self.mpl_phase = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_phase = MatplotlibWidget(self.tab_image_phase)
         self.mpl_phase.setGeometry(QtCore.QRect(280, 30, 281, 271))
         self.mpl_phase.setObjectName(_fromUtf8("mpl_phase"))
         self.tab_display.addTab(self.tab_image_phase, _fromUtf8(""))
         self.tab_metric = QtGui.QWidget()
         self.tab_metric.setObjectName(_fromUtf8("tab_metric"))
-        self.mpl_metrics = QtGui.QGraphicsView(self.tab_metric)
+        self.mpl_metrics = MatplotlibWidget(self.tab_metric)
         self.mpl_metrics.setGeometry(QtCore.QRect(20, 70, 541, 241))
         self.mpl_metrics.setObjectName(_fromUtf8("mpl_metrics"))
         self.horizontalLayoutWidget_2 = QtGui.QWidget(self.tab_metric)
@@ -649,4 +649,3 @@ class Ui_Form(object):
         self.lineEdit_start.setText(_translate("Form", "0.2500", None))
         self.pushButton_BL.setText(_translate("Form", "BL_correction", None))
         self.radioButton_laser.setText(_translate("Form", "Laser on", None))
-

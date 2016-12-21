@@ -106,9 +106,9 @@ class UI(inLib.ModuleUI):
         calculate image metrics (second moment)
         '''
         if len(image.shape) == 3:
-            metric = ao_metric.secondMomentOnStack(image, pixelSize= 0.0965, diffLimit=800)
+            metric = ao_metric.secondMomentOnStack(image, pixelSize= 96.5, diffLimit=800)
         else:
-            metric = ao_metric.secondMoment(image, pixelSize=0.0965, diffLimit= 800)
+            metric = ao_metric.secondMoment(image, pixelSize=96.5, diffLimit= 800)
         return metric
         # done with calc_image_metric
 
@@ -293,7 +293,7 @@ class UI(inLib.ModuleUI):
         '''
         display metrics
         '''
-        self._ui.mpl_metrics.figure.axes[0].plot(np.array(self.metrics), cmap='RdBu')
+        self._ui.mpl_metrics.figure.axes[0].plot(np.array(self.metrics), '-gx', linewidth = 2)
         self._ui.mpl_metrics.draw()
             # done with displayMetrics
 
@@ -378,7 +378,7 @@ class UI(inLib.ModuleUI):
         '''
         laser switch
         '''
-        status = self.radioButton_laser.isChecked()
+        status = self._ui.radioButton_laser.isChecked()
         self._control.laserSwitch(status)
         # end laser switch
 

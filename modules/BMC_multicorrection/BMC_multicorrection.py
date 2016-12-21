@@ -83,8 +83,7 @@ class Control(inLib.Module):
             dim = self._control.camera.getDimensions()
             snap = self._control.camera.getMostRecentImageNumpy()
 
-        print(snap.shape)
-        return snap
+        return snap.astype('float64')
         # not functioning yet
 
 
