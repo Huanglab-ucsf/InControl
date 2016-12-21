@@ -4,7 +4,7 @@ Simplex method
 import numpy as np
 
 
-def simplex(values, paras, maximizing = True, gain = 1.0):
+def simplex_assess(values, paras, maximizing = True, gain = 1.0):
     '''
     A small program for evaluating simplex and return the superior and inferior indexes
     gain = 1.0: simple flip
@@ -23,6 +23,7 @@ def simplex(values, paras, maximizing = True, gain = 1.0):
     return para_new, ind_inf # return the index of the inferior
     # done with simplex
 
+# test script
 
 def main():
     a = np.random.randn(5)

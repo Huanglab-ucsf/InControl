@@ -4,7 +4,8 @@ Evolution routines for aberration correction
 
 import numpy as np
 import scipy as sp
-from AO_algos import simplex
+from AO_algos.simplex import simplex_assess
+
 
 class Pattern_evolution(object):
     '''
@@ -45,33 +46,6 @@ class Pattern_evolution(object):
         # done with single_Evaluate
 
 
-    def calc_simplex(self, z_directions, coeff_0, stepsize):
-        '''
-        Evaluate the simplex
-        '''
-        simplex = []
-        z_coeffs = coeffs_0
-        simplex.append(self.single_Evaluate())
-        self.edges = np.zeros()
-        for zi in z_directions:
-            '''
-            This should be refined: How to select the effective modes?
-            '''
-            z_coeffs[zi] += stepsize[zi]
-            simplex.append(self.single_Evaluate(z_coeffs)) # increase the simplex
-            z_coeffs[zi] -= stepsize[zi]
-
-
-        z_max = np.argmax(simplex) # find the maximum corner of the simplex
-        z_coeffs[zi] -= stepsize[zi] # update the simplex by flipping
-
-        self.coeffs = z_coeffs
-        self.z_max = z_max
-        self.simplex = simplex
-        return z_max, simplex
-
-        # done with calc_simplex
-
 
     def update_coefficient(self, a_exp):
         '''
@@ -86,7 +60,7 @@ class Pattern_evolution(object):
         '''
 
 
-    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Niter = 100):
+    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Niter = 15):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -98,12 +72,12 @@ class Pattern_evolution(object):
         5. go to step 1.
         '''
 
-        self.ui.updateZern(zmodes, coeff_init)
+        self.ui.updateZern(zmodes, start_coeffs)
         NZ = len(zmodes) # number of modes
         mt = self.single_Evaluate()
         print("The metric is:", mt)
         sval = [mt]
-        param = np.tile(coeff_init, (NZ+1, 1)) # NZ+1 rows for simplex nodes
+        param = np.tile(start_coeffs, (NZ+1, 1)) # NZ+1 rows for simplex nodes
         step_size = self.ui.z_comps.get_parameters(zmodes)[1]
         param[1:] += np.diag(step_size) # set the 1 --- NZ rows of the param matrix
 
@@ -113,10 +87,10 @@ class Pattern_evolution(object):
             sval.append(mt)
 
         for ncycle in range(Niter):
-            new_param, ind_inf = simplex(sval, param) # maximizing; gain = 1.0
+            new_param, ind_inf = simplex_assess(sval, param) # maximizing; gain = 1.0
             param[ind_inf] = new_param
             self.ui.updateZern(zmodes, new_param)
             mt = self.single_Evaluate()
             sval[ind_inf] = mt
 
-        return param # return the final parameter 
+        return param # return the final parameter
