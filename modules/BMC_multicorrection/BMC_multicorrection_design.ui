@@ -126,7 +126,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_image_phase">
      <attribute name="title">
@@ -161,11 +161,32 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>30</y>
+        <y>70</y>
         <width>541</width>
-        <height>281</height>
+        <height>241</height>
        </rect>
       </property>
+     </widget>
+     <widget class="QWidget" name="horizontalLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>531</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_metrics">
+       <item>
+        <widget class="QLCDNumber" name="lcdNumber"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="lcdNumber_2"/>
+       </item>
+       <item>
+        <widget class="QLCDNumber" name="lcdNumber_3"/>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_Optimize">
@@ -669,13 +690,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QCheckBox" name="checkBox_mask">
-       <property name="text">
-        <string>Mask</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="2">
       <widget class="QPushButton" name="pushButton_evolve">
        <property name="sizePolicy">
@@ -712,6 +726,26 @@
        </property>
        <property name="text">
         <string>Uncheck_all</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QCheckBox" name="checkBox_mask">
+       <property name="text">
+        <string>Mask</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QPushButton" name="pushButton_singleEval">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Metrics</string>
        </property>
       </widget>
      </item>
@@ -864,7 +898,7 @@
      <item>
       <widget class="QRadioButton" name="radioButton_laser">
        <property name="text">
-        <string>RadioButton</string>
+        <string>Laser on</string>
        </property>
       </widget>
      </item>

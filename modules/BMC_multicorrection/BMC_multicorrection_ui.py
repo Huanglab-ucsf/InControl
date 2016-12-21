@@ -33,6 +33,7 @@ class UI(inLib.ModuleUI):
         self.zm_status = []
         self.BL = None
         self.Evolution = Pattern_evolution(self)
+        self.selected_mode = 4
         dz = 0.0003
 
         '''
@@ -47,11 +48,16 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
+        self._ui.pushButton_singleEval.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
+        self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
+        self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, False ))
+        self._ui.radioButton_laser.toggled.connect(self.laserSwitch)
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         self._ui.lineEdit_dz.returnPressed.connect(partial(self.setScanstep, None))
+        self._ui.table_Zcoeffs.itemPressed.connect(self.testTable)
 
         # done with initialization
         # a couple of initialization
@@ -63,6 +69,11 @@ class UI(inLib.ModuleUI):
             self.z_comps.switch(zm_check.index, False)
 
         self.setScanstep(dz)
+        # done with initialization
+# -----------------------------Below are some test functions (unfinished)
+    def testTable(self):
+        print("Hahaha!")
+#--------------------------------End of test functions
 
 
     def apply2mirror(self):
@@ -87,11 +98,8 @@ class UI(inLib.ModuleUI):
         acquire a snapshot, ragardless of whether a pattern is applied or not
         '''
         snap = self._control.acquireSnap(n_mean = 1)
-        print(snap.shape)
-        print("Snapshot acquired!")
         self.displayImage(snap)
         return snap
-
 
     def calc_image_metric(self, image):
         '''
@@ -294,7 +302,7 @@ class UI(inLib.ModuleUI):
         display the last image
         '''
         self._ui.mpl_image.figure.axes[0].imshow(snapIm, cmap = 'Greys_r')
-        self._ui.mpl_metrics.draw()
+        self._ui.mpl_image.draw()
         # done with displayImage
 
 
@@ -347,6 +355,15 @@ class UI(inLib.ModuleUI):
         Set the position ready.
         '''
         self._ui.pushButton_BL.setEnabled(True)
+        # report postion is ready.
+
+    def single_Evaluate(self):
+        '''
+        Evaluate single coefficients
+        '''
+        self.Evolution.single_Evaluate(n_mean = 1)
+        self.displayMetrics()
+        # done with single_Evaluate
 
     def evolve(self):
         '''
@@ -356,6 +373,15 @@ class UI(inLib.ModuleUI):
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
         self.Evolution.Evolve(act_ind, start_coeffs)
+
+    def laserSwitch(self):
+        '''
+        laser switch
+        '''
+        status = self.radioButton_laser.isChecked()
+        self._control.laserSwitch(status)
+        # end laser switch
+
 
     # def sharpness(self):
     #     mt = self.Evolution.single_Evaluate()
