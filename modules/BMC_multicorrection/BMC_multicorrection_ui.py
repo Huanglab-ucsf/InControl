@@ -373,7 +373,6 @@ class UI(inLib.ModuleUI):
         '''
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
-        self.Evolution.Evolve(act_ind, start_coeffs)
         self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs)
         self.EV_thread.finished.connect(self._evolution_ready)
         self._ui.pushButton_evolve.setEnabled(False)
