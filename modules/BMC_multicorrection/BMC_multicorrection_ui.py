@@ -48,11 +48,11 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
-        self._ui.pushButton_BL.clicked.connect(self.BL_thread_thread_correct)
+        self._ui.pushButton_BL.clicked.connect(self.BL_correct)
         self._ui.pushButton_singleEval.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
-        self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, False ))
+        self._ui.pushButton_uncheckall.clicked.connect(partial(self.switch_all, False))
         self._ui.radioButton_laser.toggled.connect(self.laserSwitch)
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
@@ -163,7 +163,7 @@ class UI(inLib.ModuleUI):
             stepsize = float(self._ui.lineEdit_zernstep.text())
             print("Zernike mode:", zmode, "stepsize: ", stepsize)
 
-        if(zmode.isscalar()):
+        if(np.isscalar(zmode)):
             item = QtGui.QTableWidgetItem()
             item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
             self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
