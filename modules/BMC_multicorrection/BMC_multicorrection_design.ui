@@ -690,19 +690,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
-      <widget class="QPushButton" name="pushButton_evolve">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Evolve</string>
-       </property>
-      </widget>
-     </item>
      <item row="5" column="0">
       <widget class="QPushButton" name="pushButton_checkall">
        <property name="sizePolicy">
@@ -725,7 +712,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Uncheck_all</string>
+        <string>Uncheck</string>
        </property>
       </widget>
      </item>
@@ -733,6 +720,19 @@
       <widget class="QCheckBox" name="checkBox_mask">
        <property name="text">
         <string>Mask</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QPushButton" name="pushButton_evolve">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Evolve</string>
        </property>
       </widget>
      </item>
