@@ -48,7 +48,7 @@ class Optimize_pupil(QtCore.QThread):
     '''
     Optimize the pupil
     '''
-    def __init__(self, ev_control, zmodes, start_coeffs, Niter = 15):
+    def __init__(self, ev_control, zmodes, start_coeffs, Niter = 10):
         QtCore.QThread.__init__(self)
         self.ev_control = ev_control
         self.zmodes = zmodes

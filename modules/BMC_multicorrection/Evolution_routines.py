@@ -28,7 +28,6 @@ class Pattern_evolution(object):
         '''
         self.ui.syncRawZern()
         # amplitude only-mask = False, the raw_MOD is updated as well.
-        self.ui.displayPhase() # display on the figure
         self.ui.toDMSegs() # this only modulates
         self.ui.apply2mirror()
         if n_mean >1:
@@ -88,6 +87,7 @@ class Pattern_evolution(object):
 
         for ncycle in range(Niter):
             new_param, ind_inf = simplex_assess(sval, param) # maximizing; gain = 1.0
+            print("new parameter:", new_param)
             param[ind_inf] = new_param
             self.ui.updateZern(zmodes, new_param)
             mt = self.single_Evaluate()

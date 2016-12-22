@@ -139,10 +139,7 @@ class UI(inLib.ModuleUI):
 
     def toDMSegs(self):
         '''
-        synthesize patterns.
-        0. pass all the zernike coefficients to self.control.DM for zernike synthesis.
-        1. create a pattern as self.control.raw_MOD
-        2. display on the panel.
+        synthesize patterns to 12 * 12 segments
         '''
         self._control.pattern2Segs(self.raw_MOD)
         self.displaySegs()
@@ -391,16 +388,12 @@ class UI(inLib.ModuleUI):
         # end laser switch
 
 
-    # def sharpness(self):
-    #     mt = self.Evolution.single_Evaluate()
-    #     self.displaySharpness(mt)
-
     def shutDown(self):
         if self.BL_thread:
             self.BL_thread.wait()
         if self.EV_thread:
             self.EV_thread.wait()
-
+        # shutdown
 
 
 class zmode_status:
