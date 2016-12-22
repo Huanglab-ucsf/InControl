@@ -8,7 +8,7 @@ import copy
 import time
 import libtim.zern as lzern
 import AO_algos.Image_metrics as ao_metric
-from BMC_threadfuncs import BL_correction
+from BMC_threadfuncs import BL_correction, Optimize_pupil
 from zern_funcs import zm_list
 from functools import partial
 from Evolution_routines import Pattern_evolution
@@ -31,7 +31,8 @@ class UI(inLib.ModuleUI):
         self.metrics = []
         self.z_correct = 0.01
         self.zm_status = []
-        self.BL = None
+        self.BL_thread = None
+        self.EV_thread = None
         self.Evolution = Pattern_evolution(self)
         self.selected_mode = 4
         dz = 0.0003
@@ -47,7 +48,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
-        self._ui.pushButton_BL.clicked.connect(self.BL_correct)
+        self._ui.pushButton_BL.clicked.connect(self.BL_thread_thread_correct)
         self._ui.pushButton_singleEval.clicked.connect(self.single_Evaluate)
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
@@ -320,10 +321,10 @@ class UI(inLib.ModuleUI):
         Backlash correction, threaded on 12/15.
         '''
         z_start  = float(self._ui.lineEdit_start.text())
-        self.BL = BL_correction(self._control, self.z_correct, z_start)
-        self.BL.finished.connect(self._position_ready)
+        self.BL_thread = BL_correction(self._control, self.z_correct, z_start)
+        self.BL_thread.finished.connect(self._position_ready)
         self._ui.pushButton_BL.setEnabled(False)
-        self.BL.start()
+        self.BL_thread.start()
         # done with threaded BL_correct
 
     def switch_all(self, status = False):
@@ -355,6 +356,9 @@ class UI(inLib.ModuleUI):
         Set the position ready.
         '''
         self._ui.pushButton_BL.setEnabled(True)
+
+    def _evolution_ready(self):
+        self._ui.pushButton_evolve.setEnabled(True)
         # report postion is ready.
 
     def single_Evaluate(self):
@@ -373,6 +377,10 @@ class UI(inLib.ModuleUI):
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
         self.Evolution.Evolve(act_ind, start_coeffs)
+        self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs)
+        self.EV_thread.finished.connect(self._evolution_ready)
+        self._ui.pushButton_evolve.setEnabled(False)
+        self.EV_thread.start()
 
     def laserSwitch(self):
         '''
@@ -388,8 +396,10 @@ class UI(inLib.ModuleUI):
     #     self.displaySharpness(mt)
 
     def shutDown(self):
-        if self.BL:
-            self.BL.wait()
+        if self.BL_thread:
+            self.BL_thread.wait()
+        if self.EV_thread:
+            self.EV_thread.wait()
 
 
 
