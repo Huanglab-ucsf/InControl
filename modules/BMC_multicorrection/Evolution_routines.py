@@ -1,5 +1,6 @@
 '''
 Evolution routines for aberration correction
+Last update: 01/03/2017 by Dan.
 '''
 
 import numpy as np
@@ -38,7 +39,7 @@ class Pattern_evolution(object):
         else:
             snap = self.ui.acquireSnap()
 
-        self.ui.resetMirror()
+        self.ui.resetMirror() # great, reset mirror is already included.
         mt = self.ui.calc_image_metric(snap)
         self.ui.metrics.append(mt)
         return mt
@@ -77,7 +78,6 @@ class Pattern_evolution(object):
         sval = [mt]
         param = np.tile(start_coeffs, (NZ+1, 1)).astype('float64') # NZ+1 rows for simplex nodes
         step_size = self.ui.z_comps.get_parameters(zmodes)[1]
-        print(np.diag(step_size))
         param[1:] = param[1:] + np.diag(step_size) # set the 1 --- NZ rows of the param matrix
         print("Parameters:", param)
 
@@ -88,7 +88,10 @@ class Pattern_evolution(object):
         print("simplex value:", sval)
 
         for ncycle in range(Niter):
-            new_param, ind_sup, ind_inf = simplex_assess(sval, param) # maximizing; gain = 1.0
+            '''
+            Update for the Niter iterations.
+            '''
+            new_param, ind_sup, ind_inf = simplex_assess(sval, param, gain = 1.5) # maximizing; gain = 1.0
             print("new parameter:", new_param)
             param[ind_inf] = new_param
             self.ui.updateZern(zmodes, new_param)

@@ -1,5 +1,5 @@
 '''
-Created by Dan on 11/18/2016, the gradient method.
+Created by Dan on 01/03/2017, the gradient method.
 '''
 
 import numpy as np
@@ -65,3 +65,9 @@ def step_Hessian(self, z_modes, z_coeffs, z_steps):
 
     return hess # bingo!!! But actually, this is not a very complete set.
     # done with single_runGradZern
+
+
+def conjugate_gradient(hess, grad, u0):
+    '''
+    conjugate gradient method, from numerical recipies.
+    '''

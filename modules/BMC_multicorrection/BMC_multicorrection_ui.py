@@ -34,12 +34,9 @@ class UI(inLib.ModuleUI):
         self.BL_thread = None
         self.EV_thread = None
         self.Evolution = Pattern_evolution(self)
-        self.selected_mode = 4
         dz = 0.0003
 
-        '''
-        Below is the connection group
-        '''
+#     Below is the connection group
         self._ui.pushButton_apply2mirror.clicked.connect(self.apply2mirror)
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
         self._ui.pushButton_snapshot.clicked.connect(self.acquireSnap)
@@ -53,6 +50,8 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
         self._ui.pushButton_uncheckall.clicked.connect(partial(self.switch_all, False))
+        self._ui.pushButton_ampall.clicked.connect(partial(self.updateZern, -1, None))
+        self._ui.pushButton_stpall.clicked.connect(partial(self.setZern_step, -1, None))
         self._ui.radioButton_laser.toggled.connect(self.laserSwitch)
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
@@ -155,11 +154,19 @@ class UI(inLib.ModuleUI):
         '''
         setZernike steps
         '''
-        if(zmode is None and stepsize is None):
-            zmode = int(self._ui.lineEdit_zmode.text())
+        if(stepsize is None):
             stepsize = float(self._ui.lineEdit_zernstep.text())
-            print("Zernike mode:", zmode, "stepsize: ", stepsize)
 
+        if(zmode is None):
+            zmode = int(self._ui.lineEdit_zmode.text())
+        elif(zmode == -1):
+            for iz in np.arange(4,self.z_max):
+                item = QtGui.QTableWidgetItem()
+                item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+                self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
+                self.z_comps.grab_mode(iz).step = stepsize
+
+        # set single z_steps
         if(np.isscalar(zmode)):
             item = QtGui.QTableWidgetItem()
             item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
@@ -355,6 +362,9 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_BL.setEnabled(True)
 
     def _evolution_ready(self):
+        '''
+        Set the evolution ready.
+        '''
         self._ui.pushButton_evolve.setEnabled(True)
         # report postion is ready.
 
