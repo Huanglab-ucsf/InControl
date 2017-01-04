@@ -81,7 +81,7 @@ class Pattern_evolution(object):
         param[1:] = param[1:] + np.diag(step_size) # set the 1 --- NZ rows of the param matrix
         print("Parameters:", param)
 
-        for iz in np.arange(1, NZ):
+        for iz in np.arange(1, NZ+1):
             self.ui.updateZern(zmodes, param[iz])
             mt = self.single_Evaluate()
             sval.append(mt)

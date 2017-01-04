@@ -126,7 +126,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_image_phase">
      <attribute name="title">
@@ -334,7 +334,7 @@
     </item>
     <item row="0" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="1" column="0">
@@ -344,7 +344,7 @@
     </item>
     <item row="1" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="2" column="0">
@@ -354,7 +354,7 @@
     </item>
     <item row="2" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="3" column="0">
@@ -364,7 +364,7 @@
     </item>
     <item row="3" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="4" column="0">
@@ -374,7 +374,7 @@
     </item>
     <item row="4" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="5" column="0">
@@ -384,7 +384,7 @@
     </item>
     <item row="5" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="6" column="0">
@@ -394,7 +394,7 @@
     </item>
     <item row="6" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="7" column="0">
@@ -404,7 +404,7 @@
     </item>
     <item row="7" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="8" column="0">
@@ -414,7 +414,7 @@
     </item>
     <item row="8" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="9" column="0">
@@ -424,7 +424,7 @@
     </item>
     <item row="9" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="10" column="0">
@@ -434,7 +434,7 @@
     </item>
     <item row="10" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="11" column="0">
@@ -444,7 +444,7 @@
     </item>
     <item row="11" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="12" column="0">
@@ -454,7 +454,7 @@
     </item>
     <item row="12" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="13" column="0">
@@ -464,7 +464,7 @@
     </item>
     <item row="13" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="14" column="0">
@@ -474,7 +474,7 @@
     </item>
     <item row="14" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="15" column="0">
@@ -484,7 +484,7 @@
     </item>
     <item row="15" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="16" column="0">
@@ -494,7 +494,7 @@
     </item>
     <item row="16" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="17" column="0">
@@ -504,7 +504,7 @@
     </item>
     <item row="17" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="18" column="0">
@@ -514,7 +514,7 @@
     </item>
     <item row="18" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="19" column="0">
@@ -524,7 +524,7 @@
     </item>
     <item row="19" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="20" column="0">
@@ -534,7 +534,7 @@
     </item>
     <item row="20" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
     <item row="21" column="0">
@@ -544,7 +544,7 @@
     </item>
     <item row="21" column="1">
      <property name="text">
-      <string>0.1</string>
+      <string>0.2</string>
      </property>
     </item>
    </widget>
@@ -554,7 +554,7 @@
       <x>610</x>
       <y>380</y>
       <width>341</width>
-      <height>221</height>
+      <height>261</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_zernset">
@@ -664,7 +664,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QPushButton" name="pushButton_stepZern">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -677,7 +677,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QPushButton" name="pushButton_flush">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -690,7 +690,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QPushButton" name="pushButton_checkall">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -703,7 +703,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <widget class="QPushButton" name="pushButton_uncheckall">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -723,7 +723,7 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="2">
+     <item row="6" column="2">
       <widget class="QPushButton" name="pushButton_evolve">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -736,7 +736,7 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="2">
+     <item row="5" column="2">
       <widget class="QPushButton" name="pushButton_singleEval">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -746,6 +746,32 @@
        </property>
        <property name="text">
         <string>Metrics</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QPushButton" name="pushButton_ampall">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Amp_setall</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="pushButton_stpall">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Step_setall</string>
        </property>
       </widget>
      </item>
