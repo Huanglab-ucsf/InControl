@@ -94,9 +94,11 @@ class Pattern_evolution(object):
             new_param, ind_sup, ind_inf = simplex_assess(sval, param, gain = 0.8) # maximizing; gain = 1.0
             print("new parameter:", new_param)
             param[ind_inf] = new_param
-            self.ui.updateZern(zmodes, new_param)
-            mt = self.single_Evaluate()
-            sval[ind_inf] = mt
+            for iz in np.arange(1, NZ+1):
+                self.ui.updateZern(zmodes, param[iz])
+                mt = self.single_Evaluate()
+                sval[iz] = mt
+
             print("new simplex:", sval)
 
         return param # return the final parameter
