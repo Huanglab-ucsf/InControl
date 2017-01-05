@@ -92,7 +92,7 @@ class Pattern_evolution(object):
             Update for the Niter iterations.
             '''
             new_param, ind_sup, ind_inf = simplex_assess(sval, param, gain = 0.8) # maximizing; gain = 1.0
-            print("new parameter:", new_param)
+            print("Max, min:", ind_sup, ind_inf)
             param[ind_inf] = new_param
             for iz in np.arange(1, NZ+1):
                 self.ui.updateZern(zmodes, param[iz])
