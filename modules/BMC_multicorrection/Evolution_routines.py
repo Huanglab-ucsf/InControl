@@ -45,19 +45,29 @@ class Pattern_evolution(object):
         return mt
         # done with single_Evaluate
 
+    def singlemode_tristep(self, zmode, start_coeff, stepsize):
+        '''
+        evaluate single mode
+        '''
+        metric = []
+        self.ui.updateZern(zmode, start_coeff-stepsize)
+        mt = self.single_Evaluate()
+        metric.append(mt)
+        self.ui.stepZern(zmode, forward = True)
+        mt = self.single_Evaluate()
+        metric.append(mt)
+        self.ui.stepZern(zmode, forward = True)
+        mt = self.single_Evaluate()
+        metric.append(mt)
+        ab_met = np.abs(np.diff(np.array(metric)))
+        # [start_coeff-stepsize start_coeff+stepsize]
 
+        new_coeff = np.abs(np.diff(metric)).sum() # numerator of the weight
+        '''
+        This is not finished yet.
+        '''
 
-    def update_coefficient(self, a_exp):
-        '''
-        Find the maximum and minimum of the simplex, and move the maximum node along the direction of the max-min axis
-        a_ext: the relative length of the step (the fraction of max-min length)
-        '''
-        simplex = self.simplex
-        z_min = np.argmin(simplex)
-        z_max = np.argmax(simplex)
-        '''
-        Unfinished: need to update the stepsize along the direction of min-max
-        '''
+        return new_coeff
 
 
     def Evolve(self, zmodes, start_coeffs, use_simplex = True, Niter = 10):

@@ -47,6 +47,7 @@ class BL_correction(QtCore.QThread):
 class Optimize_pupil(QtCore.QThread):
     '''
     Optimize the pupil
+    This one should be adaptable to the single-mode optimization! 
     '''
     def __init__(self, ev_control, zmodes, start_coeffs, Niter = 10):
         QtCore.QThread.__init__(self)

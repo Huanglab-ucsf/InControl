@@ -46,7 +46,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
-        self._ui.pushButton_singleEval.clicked.connect(self.single_Evaluate)
+        self._ui.pushButton_singleEval.clicked.connect(partial(self.single_Evaluate, 1))
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
         self._ui.pushButton_uncheckall.clicked.connect(partial(self.switch_all, False))
@@ -368,11 +368,13 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.setEnabled(True)
         # report postion is ready.
 
-    def single_Evaluate(self):
+    def single_Evaluate(self, rep = 1):
         '''
-        Evaluate single coefficients
+        Evaluate single coefficients, do nothing to the pattern, just take the snapshot and evaluate.
         '''
-        self.Evolution.single_Evaluate(n_mean = 1)
+        snap = self.acquireSnap()
+        mt = self.ui.calc_image_metric(snap)
+        print("Metric:", mt)
         self.displayMetrics()
         # done with single_Evaluate
 
