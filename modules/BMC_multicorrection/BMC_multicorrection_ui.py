@@ -373,7 +373,7 @@ class UI(inLib.ModuleUI):
         Evaluate single coefficients, do nothing to the pattern, just take the snapshot and evaluate.
         '''
         snap = self.acquireSnap()
-        mt = self.ui.calc_image_metric(snap)
+        mt = self.calc_image_metric(snap)
         print("Metric:", mt)
         self.displayMetrics()
         # done with single_Evaluate
