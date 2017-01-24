@@ -84,7 +84,8 @@ class Pattern_evolution(object):
         for ii in np.arange(NZ):
             zm = zmodes[ii]
             coef0 = start_coeffs[ii]
-            new_para = self.singlemode_Nstep(zm, coef0, stepsize = 0.5, Nmeasure)
+            stepsize = self.ui.z_comps.grab_mode(zm).step
+            new_para = self.singlemode_Nstep(zm, coef0, stepsize, Nmeasure)
             new_coeffs[ii] = new_para
             self.ui.updateZern(zm, new_para)
 
