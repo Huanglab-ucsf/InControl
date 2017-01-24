@@ -45,32 +45,29 @@ class Pattern_evolution(object):
         return mt
         # done with single_Evaluate
 
-    def singlemode_tristep(self, zmode, start_coeff, stepsize):
+    def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=5):
         '''
         evaluate single mode
         '''
-        metric = []
-        self.ui.updateZern(zmode, start_coeff-stepsize)
-        mt = self.single_Evaluate()
-        metric.append(mt)
-        self.ui.stepZern(zmode, forward = True)
-        mt = self.single_Evaluate()
-        metric.append(mt)
-        self.ui.stepZern(zmode, forward = True)
-        mt = self.single_Evaluate()
-        metric.append(mt)
-        ab_met = np.abs(np.diff(np.array(metric)))
-        # [start_coeff-stepsize start_coeff+stepsize]
+        HN = int(N/2)
+        metric = np.zeros(N)
+        coef_array = (np.arange(N)-HN)*stepsize + start_coeff
+        for ii in np.arange(N):
+            self.ui.updateZern(zmode, coef_array[ii])
+            mt[ii] = self.single_Evaluate()
 
-        new_coeff = np.abs(np.diff(metric)).sum() # numerator of the weight
-        '''
-        This is not finished yet.
-        '''
-
+        max_ind = np.argmax(mt)
+        if(max_ind == 0 or max_ind == N-1):
+            new_coeff = coef_array[max_ind]
+        else:
+            p2 = np.polyfit(coef_array,mt, deg = 2)  # parabolic fit
+            if p2[0]<0:
+                new_coeff = -0.5*p2[1]/p2[0]
+            else:
+                new_coeff = coef_array[max_ind]
         return new_coeff
 
-
-    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Niter = 10):
+    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Nmeasure = 5):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -81,34 +78,14 @@ class Pattern_evolution(object):
         4. Move along the minimization direction
         5. go to step 1.
         '''
-
+        new_coeffs = np.copy(start_coeffs)
         self.ui.updateZern(zmodes, start_coeffs)
         NZ = len(zmodes) # number of modes
-        mt = self.single_Evaluate()
-        sval = [mt]
-        param = np.tile(start_coeffs, (NZ+1, 1)).astype('float64') # NZ+1 rows for simplex nodes
-        step_size = self.ui.z_comps.get_parameters(zmodes)[1]
-        param[1:] = param[1:] + np.diag(step_size) # set the 1 --- NZ rows of the param matrix
-        print("Parameters:", param)
+        for ii in np.arange(NZ):
+            zm = zmodes[ii]
+            coef0 = start_coeffs[ii]
+            new_para = self.singlemode_Nstep(zm, coef0, stepsize = 0.5, Nmeasure)
+            new_coeffs[ii] = new_para
+            self.ui.updateZern(zm, new_para)
 
-        for iz in np.arange(1, NZ+1):
-            self.ui.updateZern(zmodes, param[iz])
-            mt = self.single_Evaluate()
-            sval.append(mt)
-        print("simplex value:", sval)
-
-        for ncycle in range(Niter):
-            '''
-            Update for the Niter iterations.
-            '''
-            new_param, ind_sup, ind_inf = simplex_assess(sval, param, gain = 0.8) # maximizing; gain = 1.0
-            print("Max, min:", ind_sup, ind_inf)
-            param[ind_inf] = new_param
-            for iz in np.arange(NZ+1):
-                self.ui.updateZern(zmodes, param[iz])
-                mt = self.single_Evaluate()
-                sval[iz] = mt
-
-            print("new simplex:", sval)
-
-        return param # return the final parameter
+        return new_coeffs # return the final parameter
