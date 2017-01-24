@@ -50,7 +50,7 @@ class Pattern_evolution(object):
         evaluate single mode
         '''
         HN = int(N/2)
-        metric = np.zeros(N)
+        mt = np.zeros(N)
         coef_array = (np.arange(N)-HN)*stepsize + start_coeff
         for ii in np.arange(N):
             self.ui.updateZern(zmode, coef_array[ii])
