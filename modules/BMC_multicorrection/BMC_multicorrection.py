@@ -53,7 +53,7 @@ class Control(inLib.Module):
         MOD = np.rot90(-1.0*MOD)
         n_pattern = self.DM.nPixels
         zoom = n_pattern/MOD.shape[0]
-        print(zoom)
+        print("Zoom ratio:", zoom)
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
         MOD_product = np.rot90(MOD-MOD.min())
         return MOD_product

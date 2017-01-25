@@ -84,8 +84,8 @@ devices:
             exposure_time: 0.4        # in milliseconds
             delay_time: 50           # in milliseconds
             ad_channel: 0
-            #roi: [1,256,1,256]
-            roi: [920,1176,860,1116]
+            #roi: [1,128,1,128]
+            roi: [980,1108,980,1108]
             binning: [1,1]
     ccd:
         manufacturer: imagingSource

@@ -22,7 +22,7 @@ class Pattern_evolution(object):
         self.coeffs = None
 
 
-    def single_Evaluate(self, n_mean = 1):
+    def single_Evaluate(self, n_mean=2):
         '''
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
@@ -31,21 +31,16 @@ class Pattern_evolution(object):
         # amplitude only-mask = False, the raw_MOD is updated as well.
         self.ui.toDMSegs() # this only modulates
         self.ui.apply2mirror()
-        if n_mean >1:
-            snap = []
-            for nm in range(n_mean):
-                snap.append(self.ui.acquireSnap()) #single_Evaluate
-            snap = np.array(snap).mean(axis = 0)
-        else:
-            snap = self.ui.acquireSnap()
+        self.ui.acquireSnap(n_mean) # omit one frame
+
+        snap = self.ui.acquireSnap(n_mean)
 
         self.ui.resetMirror() # great, reset mirror is already included.
-        mt = self.ui.calc_image_metric(snap)
-        self.ui.metrics.append(mt)
+        mt = self.ui.calc_image_metric(snap, mode = 'max')
         return mt
         # done with single_Evaluate
 
-    def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=5):
+    def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=7):
         '''
         evaluate single mode
         '''
@@ -55,6 +50,7 @@ class Pattern_evolution(object):
         for ii in np.arange(N):
             self.ui.updateZern(zmode, coef_array[ii])
             mt[ii] = self.single_Evaluate()
+        self.ui.displayMetrics(mt)
 
         max_ind = np.argmax(mt)
         if(max_ind == 0 or max_ind == N-1):
@@ -67,7 +63,7 @@ class Pattern_evolution(object):
                 new_coeff = coef_array[max_ind]
         return new_coeff
 
-    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Nmeasure = 5):
+    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Nmeasure = 7):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -89,4 +85,4 @@ class Pattern_evolution(object):
             new_coeffs[ii] = new_para
             self.ui.updateZern(zm, new_para)
 
-        return new_coeffs # return the final parameter
+        print("New coefficients:", new_coeffs)

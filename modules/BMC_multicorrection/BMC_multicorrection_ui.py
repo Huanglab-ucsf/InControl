@@ -93,15 +93,15 @@ class UI(inLib.ModuleUI):
         image = self._control.acquirePSF(range_, self.nSlices, nFrames, center_xy=True, filename=image_filename, mask_size = 60, mask_center = (self.radius,self.radius)) # acquired image
         # done with
 
-    def acquireSnap(self):
+    def acquireSnap(self, n_mean):
         '''
         acquire a snapshot, ragardless of whether a pattern is applied or not
         '''
-        snap = self._control.acquireSnap(n_mean = 1)
+        snap = self._control.acquireSnap(n_mean)
         self.displayImage(snap)
         return snap
 
-    def calc_image_metric(self, image):
+    def calc_image_metric(self, image, mode = None):
         '''
         calculate image metrics (second moment)
         '''
@@ -109,6 +109,9 @@ class UI(inLib.ModuleUI):
             metric = ao_metric.secondMomentOnStack(image, pixelSize= 96.5, diffLimit=800)
         else:
             metric = ao_metric.secondMoment(image, pixelSize=96.5, diffLimit= 800)
+        if mode == 'max':
+            metric = np.max(image)
+            print("max_pixel", metric)
         return metric
         # done with calc_image_metric
 
@@ -294,11 +297,11 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.figure.axes[0].matshow(segs, cmap ='RdBu')
         self._ui.mpl_phase.draw()
 
-    def displayMetrics(self):
+    def displayMetrics(self, metrics):
         '''
         display metrics
         '''
-        self._ui.mpl_metrics.figure.axes[0].plot(np.array(self.metrics), '-gx', linewidth = 2)
+        self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
         self._ui.mpl_metrics.draw()
             # done with displayMetrics
 
@@ -375,7 +378,6 @@ class UI(inLib.ModuleUI):
         snap = self.acquireSnap()
         mt = self.calc_image_metric(snap)
         print("Metric:", mt)
-        self.displayMetrics()
         # done with single_Evaluate
 
     def evolve(self):
