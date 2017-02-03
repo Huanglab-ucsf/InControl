@@ -20,7 +20,7 @@ def simplex_assess(values, paras, maximizing = True, gain = 1.0):
     paras_sup, paras_inf = (paras[ind_sup], paras[ind_inf])
     # assume that the update is along a line in the parameter space.
     para_new = gain*(paras_sup - paras_inf) + paras_sup # update the paras_inf
-    return para_new, ind_inf # return the index of the inferior
+    return para_new, ind_sup, ind_inf # return the index of the inferior
     # done with simplex
 
 # test script
@@ -28,7 +28,7 @@ def simplex_assess(values, paras, maximizing = True, gain = 1.0):
 def main():
     a = np.random.randn(5)
     paras = np.random.randn(6,5)
-    para_new = simplex(a, paras)
+    para_new = simplex_assess(a, paras)[0]
     print(para_new)
 
 

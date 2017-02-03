@@ -101,14 +101,14 @@ class UI(inLib.ModuleUI):
         self.displayImage(snap)
         return snap
 
-    def calc_image_metric(self, image, mode = None):
+    def calc_image_metric(self, image, diffLimit=600, mode = None):
         '''
         calculate image metrics (second moment)
         '''
         if len(image.shape) == 3:
-            metric = ao_metric.secondMomentOnStack(image, pixelSize= 96.5, diffLimit=800)
+            metric = ao_metric.secondMomentOnStack(image, 96.5, diffLimit)
         else:
-            metric = ao_metric.secondMoment(image, pixelSize=96.5, diffLimit= 800)
+            metric = ao_metric.secondMoment(image, 96.5, diffLimit)
         if mode == 'max':
             metric = np.max(image)
             print("max_pixel", metric)
@@ -375,7 +375,7 @@ class UI(inLib.ModuleUI):
         '''
         Evaluate single coefficients, do nothing to the pattern, just take the snapshot and evaluate.
         '''
-        snap = self.acquireSnap()
+        snap = self.acquireSnap(rep)
         mt = self.calc_image_metric(snap)
         print("Metric:", mt)
         # done with single_Evaluate

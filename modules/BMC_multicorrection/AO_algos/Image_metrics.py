@@ -7,6 +7,7 @@ import os.path
 import time
 import pyfftw
 import sys
+import matplotlib.pyplot as plt
 
 
 def fftImage(image, use_pyfftw=True):
@@ -28,15 +29,18 @@ def window(ndim, pixelSize, diffLimit):
     res = 1./diffLimit
     return freqs,freqs<res
 
+
 def secondMoment(image, pixelSize, diffLimit):
     """
     This is indeed the frequency-based metric.
     """
     ndim = image.shape[0]
     freqs, win = window(ndim,pixelSize,diffLimit)
-
+    # Checkpoint 02/02/2017
+    print("Valid Frequency Pixels:", image.shape, np.sum(win))
     fI = np.abs(fftImage(image))
     numerator = np.sum(win*fI*(freqs**2))
+    # return numerator
     return numerator/np.sum(fI)
 
 def secondMomentOnStack(images, pixelSize, diffLimit):
