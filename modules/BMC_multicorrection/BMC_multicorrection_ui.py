@@ -101,7 +101,7 @@ class UI(inLib.ModuleUI):
         self.displayImage(snap)
         return snap
 
-    def calc_image_metric(self, image, diffLimit=600, mode = None):
+    def calc_image_metric(self, image, diffLimit=520, mode = 'sharp'):
         '''
         calculate image metrics (second moment)
         '''
@@ -109,6 +109,7 @@ class UI(inLib.ModuleUI):
             metric = ao_metric.secondMomentOnStack(image, 96.5, diffLimit)
         else:
             metric = ao_metric.secondMoment(image, 96.5, diffLimit)
+        print("sharpness:", metric)
         if mode == 'max':
             metric = np.max(image)
             print("max_pixel", metric)
@@ -301,8 +302,10 @@ class UI(inLib.ModuleUI):
         '''
         display metrics
         '''
+        print("metrics to display.")
         self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
         self._ui.mpl_metrics.draw()
+        print("metrics displayed.")
             # done with displayMetrics
 
     def displayImage(self, snapIm):

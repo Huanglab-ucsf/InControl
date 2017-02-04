@@ -52,9 +52,8 @@ class Control(inLib.Module):
         MOD = np.rot90(MOD)
         MOD = np.rot90(-1.0*MOD)
         n_pattern = self.DM.nPixels
-        zoom = n_pattern/MOD.shape[0]
-        print("DM pattern:", n_pattern)
-        print("Zoom ratio:", zoom)
+        zoom = float(n_pattern)/float(MOD.shape[0])
+        
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
         MOD_product = np.rot90(MOD-MOD.min())
         return MOD_product
@@ -119,6 +118,9 @@ class Control(inLib.Module):
 
 
     def pattern2Segs(self, raw_MOD):
+        '''
+        pattern
+        '''
         print(raw_MOD.shape)
         new_MOD = self._alignPupil(raw_MOD)
         self.DM.setPattern(new_MOD)

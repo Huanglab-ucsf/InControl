@@ -57,5 +57,5 @@ class Optimize_pupil(QtCore.QThread):
         self.Nmeasure = Nmeasure
 
     def run(self):
-        self.ev_control.Evolve(self.zmodes,self.start_coeffs, use_simplex = True, Nmeasure = self.Nmeasure)
+        self.ev_control.Evolve(self.zmodes,self.start_coeffs, Nmeasure = self.Nmeasure)
     # done with Optimize_pupil

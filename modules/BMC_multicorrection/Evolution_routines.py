@@ -5,7 +5,9 @@ Last update: 01/03/2017 by Dan.
 
 import numpy as np
 import scipy as sp
+import time
 from AO_algos.simplex import simplex_assess
+
 
 
 class Pattern_evolution(object):
@@ -31,12 +33,11 @@ class Pattern_evolution(object):
         # amplitude only-mask = False, the raw_MOD is updated as well.
         self.ui.toDMSegs() # this only modulates
         self.ui.apply2mirror()
-        self.ui.acquireSnap(n_mean) # omit one frame
-
+        time.sleep(0.05)
         snap = self.ui.acquireSnap(n_mean)
 
         self.ui.resetMirror() # great, reset mirror is already included.
-        mt = self.ui.calc_image_metric(snap, mode = 'max')
+        mt = self.ui.calc_image_metric(snap, mode = 'sharp')
         return mt
         # done with single_Evaluate
 
@@ -63,7 +64,7 @@ class Pattern_evolution(object):
                 new_coeff = coef_array[max_ind]
         return new_coeff
 
-    def Evolve(self, zmodes, start_coeffs, use_simplex = True, Nmeasure = 7):
+    def Evolve(self, zmodes, start_coeffs, Nmeasure = 7):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution

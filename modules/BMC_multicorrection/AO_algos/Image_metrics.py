@@ -37,11 +37,10 @@ def secondMoment(image, pixelSize, diffLimit):
     ndim = image.shape[0]
     freqs, win = window(ndim,pixelSize,diffLimit)
     # Checkpoint 02/02/2017
-    print("Valid Frequency Pixels:", image.shape, np.sum(win))
     fI = np.abs(fftImage(image))
     numerator = np.sum(win*fI*(freqs**2))
     # return numerator
-    return numerator/np.sum(fI)
+    return numerator/np.sum(fI) # no problem with this.
 
 def secondMomentOnStack(images, pixelSize, diffLimit):
     sm = np.zeros((images.shape[0]))
