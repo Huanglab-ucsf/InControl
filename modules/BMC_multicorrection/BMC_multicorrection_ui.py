@@ -58,7 +58,7 @@ class UI(inLib.ModuleUI):
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         self._ui.lineEdit_dz.returnPressed.connect(partial(self.setScanstep, None))
-        self._ui.table_Zcoeffs.itemClicked.connect(self.testTable)
+        self._ui.table_Zcoeffs.currentItemChanged().connect(self.testTable)
 
         # done with initialization
         # a couple of initialization
@@ -74,7 +74,9 @@ class UI(inLib.ModuleUI):
 # -----------------------------Below are some test functions (unfinished)
     def testTable(self):
         crow = self._ui.table_Zcoeffs.currentRow()
+        citem = self._ui.table_Zcoeffs.currentItem()
         print("Current row:", crow)
+        print("Current item", citem)
 #--------------------------------End of test functions
 
 
