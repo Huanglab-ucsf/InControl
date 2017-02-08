@@ -48,6 +48,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
         self._ui.pushButton_singleEval.clicked.connect(partial(self.single_Evaluate, 1))
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
+        self._ui.pushButton_synthesize.clicked.connect(self.syncRawZern)
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
         self._ui.pushButton_uncheckall.clicked.connect(partial(self.switch_all, False))
         self._ui.pushButton_ampall.clicked.connect(partial(self.updateZern, -1, None))
@@ -57,7 +58,7 @@ class UI(inLib.ModuleUI):
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         self._ui.lineEdit_dz.returnPressed.connect(partial(self.setScanstep, None))
-        self._ui.table_Zcoeffs.itemPressed.connect(self.testTable)
+        self._ui.table_Zcoeffs.itemClicked.connect(self.testTable)
 
         # done with initialization
         # a couple of initialization
@@ -72,7 +73,8 @@ class UI(inLib.ModuleUI):
         # done with initialization
 # -----------------------------Below are some test functions (unfinished)
     def testTable(self):
-        print("Hahaha!")
+        crow = self._ui.table_Zcoeffs.currentRow()
+        print("Current row:", crow)
 #--------------------------------End of test functions
 
 
@@ -132,6 +134,7 @@ class UI(inLib.ModuleUI):
         usemask = self._ui.checkBox_mask.isChecked() # use mask or not?
         z_coeff = self.z_comps.sync_coeffs() # OK this is to be used only once. Otherwise too inconvenient.
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
+        self.displayPhase()
         # done with syncRawZern
 
     def get_rawMOD(self):
@@ -200,7 +203,6 @@ class UI(inLib.ModuleUI):
 
         self._switch_zern()
         self.syncRawZern()
-        self.displayPhase()
 
         # this is really awkward.
 
