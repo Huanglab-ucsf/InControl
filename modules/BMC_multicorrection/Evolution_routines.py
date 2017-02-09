@@ -29,13 +29,12 @@ class Pattern_evolution(object):
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
         '''
-        self.ui.syncRawZern()
         # amplitude only-mask = False, the raw_MOD is updated as well.
         self.ui.toDMSegs() # this only modulates
         self.ui.apply2mirror()
         time.sleep(0.05)
         snap = self.ui.acquireSnap(n_mean)
-
+        snap = self.ui.acquireSnap(n_mean)
         self.ui.resetMirror() # great, reset mirror is already included.
         mt = self.ui.calc_image_metric(snap, mode = 'sharp')
         return mt

@@ -58,7 +58,7 @@ class UI(inLib.ModuleUI):
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
         self._ui.lineEdit_gain.returnPressed.connect(self.setGain)
         self._ui.lineEdit_dz.returnPressed.connect(partial(self.setScanstep, None))
-        self._ui.table_Zcoeffs.currentItemChanged().connect(self.testTable)
+        self._ui.table_Zcoeffs.itemClicked.connect(self.testTable)
 
         # done with initialization
         # a couple of initialization
@@ -235,7 +235,6 @@ class UI(inLib.ModuleUI):
 
         self._switch_zern()
         self.syncRawZern()
-        self.displayPhase()
         # done with updateZern
 
         # not done with stepZern
