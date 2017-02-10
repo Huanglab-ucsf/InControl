@@ -53,7 +53,7 @@ class Control(inLib.Module):
         MOD = np.rot90(-1.0*MOD)
         n_pattern = self.DM.nPixels
         zoom = float(n_pattern)/float(MOD.shape[0])
-        
+
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
         MOD_product = np.rot90(MOD-MOD.min())
         return MOD_product
@@ -134,7 +134,9 @@ class Control(inLib.Module):
         """
         # self.pattern2Segs()
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            '''
+            It's OK if there are previously added patterns
+            '''
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()

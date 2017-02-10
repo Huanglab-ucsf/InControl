@@ -79,7 +79,7 @@ class zm_list(object):
         grab the z_mode node in the list
         '''
         if z_mode > self.max_mode or z_mode < self.start_mode:
-            print(self.max_mode. self.start_mode,z_mode)
+            print(self.max_mode, self.start_mode, z_mode)
             raise ValueError("Oops! The mode is out of range.")
         return self.zlist[z_mode - self.start_mode] # return a node.
 

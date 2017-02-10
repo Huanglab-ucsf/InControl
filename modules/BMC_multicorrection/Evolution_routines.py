@@ -24,7 +24,7 @@ class Pattern_evolution(object):
         self.coeffs = None
 
 
-    def single_Evaluate(self, n_mean=2):
+    def single_Evaluate(self, n_mean=3):
         '''
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
@@ -32,10 +32,11 @@ class Pattern_evolution(object):
         # amplitude only-mask = False, the raw_MOD is updated as well.
         self.ui.toDMSegs() # this only modulates
         self.ui.apply2mirror()
-        time.sleep(0.05)
+        self.ui._control.laserSwitch(True)
+        snap = self.ui.acquireSnap(1)
         snap = self.ui.acquireSnap(n_mean)
-        snap = self.ui.acquireSnap(n_mean)
-        self.ui.resetMirror() # great, reset mirror is already included.
+        self.ui._control.laserSwitch(False)
+        # self.ui.resetMirror() removed on 02/09/17.
         mt = self.ui.calc_image_metric(snap, mode = 'sharp')
         return mt
         # done with single_Evaluate
@@ -57,6 +58,7 @@ class Pattern_evolution(object):
             new_coeff = coef_array[max_ind]
         else:
             p2 = np.polyfit(coef_array,mt, deg = 2)  # parabolic fit
+
             if p2[0]<0:
                 new_coeff = -0.5*p2[1]/p2[0]
             else:
