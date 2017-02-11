@@ -30,15 +30,18 @@ class Pattern_evolution(object):
         z_coeffs: from 1 to z_max.
         '''
         # amplitude only-mask = False, the raw_MOD is updated as well.
-        self.ui.toDMSegs() # this only modulates
+        self.ui.toDMSegs(display = False) # this only modulates
         self.ui.apply2mirror()
-        self.ui._control.laserSwitch(True)
+        time.sleep(0.05)
+        mts = np.zeros(n_mean)
         snap = self.ui.acquireSnap(1)
-        snap = self.ui.acquireSnap(n_mean)
-        self.ui._control.laserSwitch(False)
+        for ii in np.arange(n_mean):
+            snap = self.ui.acquireSnap(1)
+            mts[ii] = self.ui.calc_image_metric(snap, mode = 'sharp')
+        # self.ui._control.laserSwitch(False)
         # self.ui.resetMirror() removed on 02/09/17.
-        mt = self.ui.calc_image_metric(snap, mode = 'sharp')
-        return mt
+        mt = np.mean(mts)
+        return mt, snap
         # done with single_Evaluate
 
     def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=7):
@@ -48,9 +51,14 @@ class Pattern_evolution(object):
         HN = int(N/2)
         mt = np.zeros(N)
         coef_array = (np.arange(N)-HN)*stepsize + start_coeff
+        snap_stack = []
         for ii in np.arange(N):
             self.ui.updateZern(zmode, coef_array[ii])
-            mt[ii] = self.single_Evaluate()
+            mt[ii], snap = self.single_Evaluate()
+            snap_stack.append(snap)
+
+        snap_stack = np.array(snap_stack)
+        np.save('D:\Data\Dan\ZM_'+str(zmode), snap_stack)
         self.ui.displayMetrics(mt)
 
         max_ind = np.argmax(mt)

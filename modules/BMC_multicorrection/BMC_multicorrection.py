@@ -29,7 +29,7 @@ class Control(inLib.Module):
         self._PSF = None
         self.DM = DM(nPixels = dims[0]) # Initialize a DM simulation
         self.proc = None # the procedure for running the deformable mirror
-        self.gain = 1.0
+        self.gain = -10.0
         laser_lines = np.array(self._control.lasers.laser_lines)
 
         w401 = np.where(abs(laser_lines - 401) < 10)
@@ -95,7 +95,6 @@ class Control(inLib.Module):
         '''
         self.laserSwitch(True)
         self.filename = filename
-
         # Some parameters
         start = range_/2.0
         end = -range_/2.0

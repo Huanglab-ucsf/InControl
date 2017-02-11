@@ -41,12 +41,12 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_acquire.clicked.connect(self.acquireImage)
         self._ui.pushButton_snapshot.clicked.connect(self.acquireSnap)
         self._ui.pushButton_reset.clicked.connect(self.resetMirror)
-        self._ui.pushButton_segments.clicked.connect(self.toDMSegs)
+        self._ui.pushButton_segments.clicked.connect(partial(self.toDMSegs, True))
         self._ui.pushButton_clear.clicked.connect(self.clearPattern)
         self._ui.pushButton_flush.clicked.connect(self.flushZern)
         self._ui.pushButton_evolve.clicked.connect(self.evolve)
         self._ui.pushButton_BL.clicked.connect(self.BL_correct)
-        self._ui.pushButton_singleEval.clicked.connect(partial(self.single_Evaluate, 1))
+        self._ui.pushButton_singleEval.clicked.connect(partial(self.single_Evaluate, 10))
         self._ui.pushButton_stepZern.clicked.connect(partial(self.stepZern, None, True))
         self._ui.pushButton_synthesize.clicked.connect(self.syncRawZern)
         self._ui.pushButton_checkall.clicked.connect(partial(self.switch_all, True ))
@@ -145,12 +145,13 @@ class UI(inLib.ModuleUI):
         # done with get_rawMOD
 
 
-    def toDMSegs(self):
+    def toDMSegs(self, display = True):
         '''
         synthesize patterns to 12 * 12 segments
         '''
         self._control.pattern2Segs(self.raw_MOD)
-        self.displaySegs()
+        if display:
+            self.displaySegs()
         # done with toDMSegs
 
     def setGain(self):
@@ -377,13 +378,19 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_evolve.setEnabled(True)
         # report postion is ready.
 
-    def single_Evaluate(self, rep = 1):
+    def single_Evaluate(self, rep = 3):
         '''
         Evaluate single coefficients, do nothing to the pattern, just take the snapshot and evaluate.
+        "Metrics" button.
         '''
-        snap = self.acquireSnap(rep)
-        mt = self.calc_image_metric(snap)
-        print("Metric:", mt)
+        mts = np.zeros(rep)
+        for ii in np.arange(rep):
+            snap = self.acquireSnap(1)
+            mts[ii] = self.calc_image_metric(snap)
+        mt = np.mean(mts)
+        sd = np.std(mts)
+        print(mts)
+        print("Metric:", mt, 'SD:', sd)
         # done with single_Evaluate
 
     def evolve(self):
