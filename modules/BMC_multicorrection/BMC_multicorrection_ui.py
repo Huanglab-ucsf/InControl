@@ -22,8 +22,7 @@ class UI(inLib.ModuleUI):
         This is the initialization part of the UI.
         '''
         design_path = 'modules.BMC_multicorrection.BMC_multicorrection_design'
-        print('design_path is:', design_path)
-        inLib.ModuleUI.__init__(self, control, ui_control,  'modules.BMC_multicorrection.BMC_multicorrection_design')
+        inLib.ModuleUI.__init__(self, control, ui_control, design_path)
         self.raw_MOD = np.zeros(self._control.dims)
         self.z_max = self._control._settings['zmax']
         self.z_comps = zm_list(z_max = self.z_max, z_start = 4)
