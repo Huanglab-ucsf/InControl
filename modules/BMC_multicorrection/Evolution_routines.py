@@ -44,7 +44,7 @@ class Pattern_evolution(object):
         return mt, snap
         # done with single_Evaluate
 
-    def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=7):
+    def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=9):
         '''
         evaluate single mode
         '''
@@ -73,7 +73,7 @@ class Pattern_evolution(object):
                 new_coeff = coef_array[max_ind]
         return new_coeff
 
-    def Evolve(self, zmodes, start_coeffs, Nmeasure = 7):
+    def Evolve(self, zmodes, start_coeffs, Nmeasure = 11):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution

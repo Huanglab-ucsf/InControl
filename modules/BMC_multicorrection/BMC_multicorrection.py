@@ -48,6 +48,7 @@ class Control(inLib.Module):
         is horizontal.
         '''
         MOD = -1*raw_MOD
+        print()
         MOD = np.flipud(MOD)
         MOD = np.rot90(MOD)
         MOD = np.rot90(-1.0*MOD)
@@ -55,7 +56,7 @@ class Control(inLib.Module):
         zoom = float(n_pattern)/float(MOD.shape[0])
 
         MOD = interpolation.zoom(MOD,zoom,order=0,mode='nearest')
-        MOD_product = np.rot90(MOD-MOD.min())
+        MOD_product = np.rot90(MOD)
         return MOD_product
         # done with _alignPupil
 
@@ -122,6 +123,7 @@ class Control(inLib.Module):
         '''
         print(raw_MOD.shape)
         new_MOD = self._alignPupil(raw_MOD)
+        print("Pattern extrema:", new_MOD.max(), new_MOD.min())
         self.DM.setPattern(new_MOD)
         self.DM.findSeg()
         # end of pattern2Segs

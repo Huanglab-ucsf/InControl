@@ -11,7 +11,7 @@ from scipy.ndimage import interpolation
 # ---------------Below is a simulation of deformable mirror
 class DM(object):
 
-    def __init__(self, nseg = 12, nPixels = 256, pattern=None, mask = False):
+    def __init__(self, nseg = 12, nPixels = 256, pattern=None, mask = True):
         self.nSegments = nseg
         self.nPixels = nPixels
         self.radius = nPixels/2
@@ -42,6 +42,7 @@ class DM(object):
                 self.DMsegs[ii,jj] = av
 
         DMsegs = np.copy(self.DMsegs) # create a copy of self.segs
+        print(DMsegs.max(), DMsegs.min())
         return DMsegs
 
 

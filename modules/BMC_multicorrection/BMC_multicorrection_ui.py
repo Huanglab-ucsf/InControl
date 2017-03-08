@@ -112,7 +112,6 @@ class UI(inLib.ModuleUI):
             metric = ao_metric.secondMomentOnStack(image, 96.5, diffLimit)
         else:
             metric = ao_metric.secondMoment(image, 96.5, diffLimit)
-        print("sharpness:", metric)
         if mode == 'max':
             metric = np.max(image)
             print("max_pixel", metric)
@@ -134,7 +133,9 @@ class UI(inLib.ModuleUI):
         # self._switch_zern()
         usemask = self._ui.checkBox_mask.isChecked() # use mask or not?
         z_coeff = self.z_comps.sync_coeffs() # OK this is to be used only once. Otherwise too inconvenient.
+        print("zernike coefficients:", z_coeff)
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
+        print("raw extrema:", self.raw_MOD.max(), self.raw_MOD.min())
         self.displayPhase()
         # done with syncRawZern
 

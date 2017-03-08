@@ -49,7 +49,7 @@ class Optimize_pupil(QtCore.QThread):
     Optimize the pupil
     This one should be adaptable to the single-mode optimization!
     '''
-    def __init__(self, ev_control, zmodes, start_coeffs, Nmeasure = 7):
+    def __init__(self, ev_control, zmodes, start_coeffs, Nmeasure = 11):
         QtCore.QThread.__init__(self)
         self.ev_control = ev_control
         self.zmodes = zmodes
