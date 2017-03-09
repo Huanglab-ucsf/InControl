@@ -16,6 +16,9 @@ from itertools import product
 
 
 class UI(inLib.ModuleUI):
+    '''
+    From now on, all the functions will be ordered alphabetically.
+    '''
 
     def __init__(self, control, ui_control):
         '''
@@ -105,6 +108,16 @@ class UI(inLib.ModuleUI):
         self.displayImage(snap)
         return snap
 
+    def BL_correct(self):
+        '''
+        Backlash correction, threaded on 12/15.
+        '''
+        z_start  = float(self._ui.lineEdit_start.text())
+        self.BL_thread = BL_correction(self._control, self.z_correct, z_start)
+        self.BL_thread.finished.connect(self._position_ready)
+        self._ui.pushButton_BL.setEnabled(False)
+        self.BL_thread.start()
+
     def calc_image_metric(self, image, diffLimit=520, mode = 'sharp'):
         '''
         calculate image metrics (second moment)
@@ -117,7 +130,96 @@ class UI(inLib.ModuleUI):
             metric = np.max(image)
             print("max_pixel", metric)
         return metric
-        # done with calc_image_metric
+
+
+    def clearPattern(self):
+        '''
+        Clear current raw pattern.
+        '''
+        self.raw_MOD[:] = 0.0
+        self.displayPhase()
+
+    def displayPhase(self):
+        '''
+        display phase (undiscretized, unrotated) on canvas mpl_phase
+        '''
+        phase = self.raw_MOD # this is the raw phase
+        self._ui.mpl_phase.figure.axes[0].matshow(phase, cmap='RdBu')
+        self._ui.mpl_phase.draw()
+        # done with displayPhase
+
+    def displaySegs(self):
+        '''
+        display segments (discretized) on canvas mpl_phase
+        '''
+        segs = self._control.getDM_segs()
+        self._ui.mpl_phase.figure.axes[0].matshow(segs, cmap ='RdBu')
+        self._ui.mpl_phase.draw()
+
+    def displayMetrics(self, metrics):
+        '''
+        display metrics
+        '''
+        self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
+        self._ui.mpl_metrics.draw()
+            # done with displayMetrics
+
+    def displayImage(self, snapIm):
+        '''
+        display the last image
+        '''
+        self._ui.mpl_image.figure.axes[0].imshow(snapIm, cmap = 'Greys_r')
+        self._ui.mpl_image.draw()
+        # done with displayImage
+
+    def evolve(self):
+        '''
+        To be filled up later. evolution of the zernikes.
+        0. Select the active modes and their coefficients
+        '''
+        act_ind = self._switch_zern()
+        start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
+        flabel = self._ui.lineEdit_evname.text() #
+        Nmeasure = self.spinbox_evsteps.value()
+        self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs, Nmeasure, flabel)
+        self.EV_thread.finished.connect(self._evolution_ready)
+        self._ui.pushButton_evolve.setEnabled(False)
+        self.EV_thread.start()
+
+
+    def flushZern(self):
+        '''
+        flush all the zernike coefficients; set all the z_coeffs as zero.
+        '''
+        self.z_comps.flush_coeffs()
+        self.flushTable()
+        self._control.clearZern()
+        self.clearPattern()
+        self.switch_all(False)
+        # done with flushZern
+
+    def flushTable(self):
+        '''
+        flush the table of Zernike coefficients and stepsizes.
+        '''
+        zm = self.z_max-4
+
+        for zmode in np.arange(zm):
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+        # done with flushTable
+
+    def laserSwitch(self):
+        '''
+        laser switch
+        '''
+        status = self._ui.radioButton_laser.isChecked()
+        self._control.laserSwitch(status)
+        # end laser switch
 
     def resetMirror(self):
         '''
@@ -220,20 +322,21 @@ class UI(inLib.ModuleUI):
         update the zernike coefficients, it may work for one or more zernike modes.
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
         '''
+        # if the zmode is empty, then read zmode from the spinBox.
+        if ampli is None:
+            ampli = float(self._ui.lineEdit_zernampli.text())
+
+
         if zmode is None:
             zmode = self._ui.spinBox_Zmode.value()
-            if ampli is None:
-                ampli = float(self._ui.lineEdit_zernampli.text())
+        elif zmode == -1:
+            zmode = np.arange(4, self.z_max)
+            ampli = np.ones_like(zmode)*ampli
 
         if np.isscalar(zmode):
-            if (zmode == -1):
-                zmode = np.arange(4, self.z_max)
-                ampli = np.ones_like(zmode)*float(self._ui.lineEdit_zernampli.text()) # the previous ampli is no longer valid, if not none
-            else:
-                self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
-                self.updateTable_ampli(zmode) # update the table display
-
-        if np.isscalar(zmode) == False:
+            self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
+            self.updateTable_ampli(zmode) # update the table display
+        else:
             '''
             set the amplitude one by one
             '''
@@ -245,7 +348,6 @@ class UI(inLib.ModuleUI):
         self.syncRawZern()
         # done with updateZern
 
-        # not done with stepZern
 
     def updateTable_ampli(self, z_mode):
         '''
@@ -257,74 +359,6 @@ class UI(inLib.ModuleUI):
         self._ui.table_Zcoeffs.setItem(z_mode-4, 0, item)
         # done with updateDisplay
 
-    def flushZern(self):
-        '''
-        flush all the zernike coefficients; set all the z_coeffs as zero.
-        '''
-        self.z_comps.flush_coeffs()
-        self.flushTable()
-        self._control.clearZern()
-        self.clearPattern()
-        self.switch_all(False)
-        # done with flushZern
-
-    def flushTable(self):
-        '''
-        flush the table of Zernike coefficients and stepsizes.
-        '''
-        zm = self.z_max-4
-
-        for zmode in np.arange(zm):
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-            self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
-            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
-        # done with flushTable
-
-    def clearPattern(self):
-        '''
-        Clear current raw pattern.
-        '''
-        self.raw_MOD[:] = 0.0
-        self.displayPhase()
-
-        # done with clearPattern
-
-    def displayPhase(self):
-        '''
-        display phase (undiscretized, unrotated) on canvas mpl_phase
-        '''
-        phase = self.raw_MOD # this is the raw phase
-        self._ui.mpl_phase.figure.axes[0].matshow(phase, cmap='RdBu')
-        self._ui.mpl_phase.draw()
-        # done with displayPhase
-
-    def displaySegs(self):
-        '''
-        display segments (discretized) on canvas mpl_phase
-        '''
-        segs = self._control.getDM_segs()
-        self._ui.mpl_phase.figure.axes[0].matshow(segs, cmap ='RdBu')
-        self._ui.mpl_phase.draw()
-
-    def displayMetrics(self, metrics):
-        '''
-        display metrics
-        '''
-        print("metrics to display.")
-        self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
-        self._ui.mpl_metrics.draw()
-            # done with displayMetrics
-
-    def displayImage(self, snapIm):
-        '''
-        display the last image
-        '''
-        self._ui.mpl_image.figure.axes[0].imshow(snapIm, cmap = 'Greys_r')
-        self._ui.mpl_image.draw()
-        # done with displayImage
 
 
     def setScanstep(self, dz = None):
@@ -336,15 +370,7 @@ class UI(inLib.ModuleUI):
         self._control.setScanstep(dz)
         self.dz = dz # here we have a redundant dz
 
-    def BL_correct(self):
-        '''
-        Backlash correction, threaded on 12/15.
-        '''
-        z_start  = float(self._ui.lineEdit_start.text())
-        self.BL_thread = BL_correction(self._control, self.z_correct, z_start)
-        self.BL_thread.finished.connect(self._position_ready)
-        self._ui.pushButton_BL.setEnabled(False)
-        self.BL_thread.start()
+
         # done with threaded BL_correct
 
     def switch_all(self, status = False):
@@ -357,7 +383,7 @@ class UI(inLib.ModuleUI):
             self.z_comps.switch(zmode, status)
         # done with switch all
 
-
+    # private functions, not directly called from the UI
     def _switch_zern(self):
         '''
         switch on or off the zernike mode.
@@ -398,28 +424,6 @@ class UI(inLib.ModuleUI):
         print(mts)
         print("Metric:", mt, 'SD:', sd)
         # done with single_Evaluate
-
-    def evolve(self):
-        '''
-        To be filled up later. evolution of the zernikes.
-        0. Select the active modes and their coefficients
-        '''
-        act_ind = self._switch_zern()
-        start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
-        flabel = self._ui.lineEdit_evname.text() #
-        Nmeasure = self._ui.spinBox_evsteps.value()
-        self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs, Nmeasure, flabel)
-        self.EV_thread.finished.connect(self._evolution_ready)
-        self._ui.pushButton_evolve.setEnabled(False)
-        self.EV_thread.start()
-
-    def laserSwitch(self):
-        '''
-        laser switch
-        '''
-        status = self._ui.radioButton_laser.isChecked()
-        self._control.laserSwitch(status)
-        # end laser switch
 
 
     def shutDown(self):
