@@ -136,7 +136,6 @@ class UI(inLib.ModuleUI):
         z_coeff = self.z_comps.sync_coeffs() # OK this is to be used only once. Otherwise too inconvenient.
         print("zernike coefficients:", z_coeff)
         self.raw_MOD = lzern.calc_zernike(z_coeff, self.radius, mask = usemask, zern_data = {})
-        print("raw extrema:", self.raw_MOD.max(), self.raw_MOD.min())
         self.displayPhase()
         # done with syncRawZern
 
@@ -175,7 +174,7 @@ class UI(inLib.ModuleUI):
             stepsize = float(self._ui.lineEdit_zernstep.text())
 
         if(zmode is None):
-            zmode = int(self._ui.lineEdit_zmode.text())
+            zmode = self._ui.spinBox_Zmode.value()
         elif(zmode == -1):
 
             for iz in np.arange(4,self.z_max):
@@ -202,7 +201,7 @@ class UI(inLib.ModuleUI):
         step the zernike mode zmode by stepsize.
         '''
         if (zmode is None):
-            zmode = int(self._ui.lineEdit_zmode.text())
+            zmode = self._ui.spinBox_Zmode.value()
             print("Step mode:", zmode)
 
         if forward:
@@ -222,7 +221,7 @@ class UI(inLib.ModuleUI):
         The zmodes would include the first 4 orders. This is redundant but reduces potential pitfalls.
         '''
         if zmode is None:
-            zmode = int(self._ui.lineEdit_zmode.text())
+            zmode = self._ui.spinBox_Zmode.value()
             if ampli is None:
                 ampli = float(self._ui.lineEdit_zernampli.text())
 
