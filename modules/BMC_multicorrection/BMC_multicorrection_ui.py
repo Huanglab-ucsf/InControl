@@ -180,7 +180,7 @@ class UI(inLib.ModuleUI):
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
         flabel = self._ui.lineEdit_evname.text() #
-        Nmeasure = self.spinbox_evsteps.value()
+        Nmeasure = self._ui.spinBox_evsteps.value()
         self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs, Nmeasure, flabel)
         self.EV_thread.finished.connect(self._evolution_ready)
         self._ui.pushButton_evolve.setEnabled(False)
