@@ -26,7 +26,7 @@
       <x>230</x>
       <y>430</y>
       <width>357</width>
-      <height>131</height>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_mainbuttons">
@@ -124,6 +124,33 @@
      <item row="3" column="0">
       <widget class="QSpinBox" name="spinBox_snaverage"/>
      </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="lineEdit_segfile">
+       <property name="text">
+        <string>dummy.txt</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="label_segfile">
+       <property name="text">
+        <string>seg_file</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QCheckBox" name="checkBox_mask">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Mask</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QTabWidget" name="tab_display">
@@ -203,6 +230,24 @@
      <attribute name="title">
       <string>Optimization</string>
      </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>531</width>
+        <height>121</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QGraphicsView" name="mpl_sharpness"/>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="mpl_signal"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
    <widget class="QTableWidget" name="table_Zcoeffs">
@@ -563,8 +608,8 @@
      <rect>
       <x>610</x>
       <y>380</y>
-      <width>341</width>
-      <height>261</height>
+      <width>348</width>
+      <height>311</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_zernset">
@@ -581,13 +626,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_segfile">
-       <property name="text">
-        <string>seg_file</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_zmode">
        <property name="sizePolicy">
@@ -597,7 +635,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Mode selected</string>
+        <string>Mode</string>
        </property>
       </widget>
      </item>
@@ -618,13 +656,6 @@
       <widget class="QLineEdit" name="lineEdit_gain">
        <property name="text">
         <string>-5</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLineEdit" name="lineEdit_segfile">
-       <property name="text">
-        <string>dummy.txt</string>
        </property>
       </widget>
      </item>
@@ -713,13 +744,6 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
-      <widget class="QCheckBox" name="checkBox_mask">
-       <property name="text">
-        <string>Mask</string>
-       </property>
-      </widget>
-     </item>
      <item row="6" column="2">
       <widget class="QPushButton" name="pushButton_evolve">
        <property name="sizePolicy">
@@ -736,7 +760,7 @@
      <item row="5" column="2">
       <widget class="QPushButton" name="pushButton_singleEval">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -749,7 +773,7 @@
      <item row="4" column="0">
       <widget class="QPushButton" name="pushButton_ampall">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -762,7 +786,7 @@
      <item row="4" column="1">
       <widget class="QPushButton" name="pushButton_stpall">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -787,11 +811,50 @@
      </item>
      <item row="1" column="0">
       <widget class="QSpinBox" name="spinBox_Zmode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimum">
         <number>4</number>
        </property>
        <property name="maximum">
         <number>23</number>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QSpinBox" name="spinBox_evsteps">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_evsteps">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Evolve steps</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLineEdit" name="lineEdit_evname"/>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_evname">
+       <property name="text">
+        <string>optim_file</string>
        </property>
       </widget>
      </item>
@@ -803,7 +866,7 @@
       <x>10</x>
       <y>430</y>
       <width>211</width>
-      <height>131</height>
+      <height>151</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_acquisition">
@@ -904,8 +967,8 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>620</y>
-      <width>511</width>
+      <y>630</y>
+      <width>581</width>
       <height>54</height>
      </rect>
     </property>
@@ -927,6 +990,19 @@
         </widget>
        </item>
       </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_fcscan">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>Focus_scan</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton_BL">
