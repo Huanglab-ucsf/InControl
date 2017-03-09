@@ -52,6 +52,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_uncheckall.clicked.connect(partial(self.switch_all, False))
         self._ui.pushButton_ampall.clicked.connect(partial(self.updateZern, -1, None))
         self._ui.pushButton_stpall.clicked.connect(partial(self.setZern_step, -1, None))
+        self._ui.pushButton_fcscan.clicked.connect(self.scan_focus)
         self._ui.radioButton_laser.toggled.connect(self.laserSwitch)
         self._ui.lineEdit_zernstep.returnPressed.connect(partial(self.setZern_step, None, None))
         self._ui.lineEdit_zernampli.returnPressed.connect(partial(self.updateZern, None, None))
@@ -153,6 +154,12 @@ class UI(inLib.ModuleUI):
         if display:
             self.displaySegs()
         # done with toDMSegs
+    def scan_focus(self):
+        '''
+        scan_focus, measure the position with maximum sharpness and/or signal value.
+        '''
+        print("This function is not completed yet.")
+
 
     def setGain(self):
         gain = float(self._ui.lineEdit_gain.text())
@@ -170,24 +177,24 @@ class UI(inLib.ModuleUI):
         if(zmode is None):
             zmode = int(self._ui.lineEdit_zmode.text())
         elif(zmode == -1):
+
             for iz in np.arange(4,self.z_max):
                 item = QtGui.QTableWidgetItem()
                 item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
                 self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
                 self.z_comps.grab_mode(iz).step = stepsize
-
-        # set single z_steps
-        if(np.isscalar(zmode)):
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
-            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
-            self.z_comps.grab_mode(zmode).step = stepsize
-        else:
-            for iz, zs in zip(zmode,stepsize):
+        else: #zmode is not -1. set single z_steps
+            if(np.isscalar(zmode)):
                 item = QtGui.QTableWidgetItem()
                 item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
-                self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
-                self.z_comps.grab_mode(iz).step = zs
+                self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+                self.z_comps.grab_mode(zmode).step = stepsize
+            else:
+                for iz, zs in zip(zmode,stepsize):
+                    item = QtGui.QTableWidgetItem()
+                    item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+                    self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
+                    self.z_comps.grab_mode(iz).step = zs
         # done with setZern_step
 
     def stepZern(self, zmode = None, forward = True):
@@ -218,10 +225,11 @@ class UI(inLib.ModuleUI):
             zmode = int(self._ui.lineEdit_zmode.text())
             if ampli is None:
                 ampli = float(self._ui.lineEdit_zernampli.text())
-                print("Zernike mode:", zmode, "Amplitude:", ampli)
-            else:
-                print(ampli)
-                zmode = np.arange(1, len(ampli)+1)
+
+        if zmode == -1:
+            zmode = np.arange(4, self.z_max)
+            ampli = np.ones_like(zmode)*float(self._ui.lineEdit_zernampli.text()) # the previous ampli is no longer valid, if not none
+
 
         if np.isscalar(zmode):
             self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
@@ -309,7 +317,6 @@ class UI(inLib.ModuleUI):
         print("metrics to display.")
         self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
         self._ui.mpl_metrics.draw()
-        print("metrics displayed.")
             # done with displayMetrics
 
     def displayImage(self, snapIm):
@@ -400,7 +407,9 @@ class UI(inLib.ModuleUI):
         '''
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
-        self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs)
+        flabel = self._ui.lineEdit_evname.text() #
+        Nmeasure = self.spinbox_evsteps.value()
+        self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs, Nmeasure, flabel)
         self.EV_thread.finished.connect(self._evolution_ready)
         self._ui.pushButton_evolve.setEnabled(False)
         self.EV_thread.start()

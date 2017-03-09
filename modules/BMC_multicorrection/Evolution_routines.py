@@ -60,7 +60,7 @@ class Pattern_evolution(object):
         snap_stack = np.array(snap_stack)
         np.save('D:\Data\Dan\ZM_'+str(zmode), snap_stack)
         self.ui.displayMetrics(mt)
-
+        # np.save('D:\Data\Dan\Mt_'+ self.flabel + str(zmode), mt)
         max_ind = np.argmax(mt)
         if(max_ind == 0 or max_ind == N-1):
             new_coeff = coef_array[max_ind]
@@ -71,9 +71,9 @@ class Pattern_evolution(object):
                 new_coeff = -0.5*p2[1]/p2[0]
             else:
                 new_coeff = coef_array[max_ind]
-        return new_coeff
+        return new_coeff, mt
 
-    def Evolve(self, zmodes, start_coeffs, Nmeasure = 11):
+    def Evolve(self, zmodes, start_coeffs, Nmeasure, fpath):
         '''
         zmodes: the modes selected for optimization
         Start_coeffs: The starting coefficients of the evolution
@@ -85,14 +85,17 @@ class Pattern_evolution(object):
         5. go to step 1.
         '''
         new_coeffs = np.copy(start_coeffs)
+        metric_val = np.zeros(Nmeasure, len(zmodes))
         self.ui.updateZern(zmodes, start_coeffs)
         NZ = len(zmodes) # number of modes
         for ii in np.arange(NZ):
             zm = zmodes[ii]
             coef0 = start_coeffs[ii]
             stepsize = self.ui.z_comps.grab_mode(zm).step
-            new_para = self.singlemode_Nstep(zm, coef0, stepsize, Nmeasure)
+            new_para, mt = self.singlemode_Nstep(zm, coef0, stepsize, Nmeasure)
             new_coeffs[ii] = new_para
             self.ui.updateZern(zm, new_para)
+            metric_val[:,ii] = mt
 
+        np.save(fpath, metric_val)
         print("New coefficients:", new_coeffs)
