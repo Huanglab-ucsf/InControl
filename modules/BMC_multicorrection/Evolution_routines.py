@@ -85,7 +85,7 @@ class Pattern_evolution(object):
         5. go to step 1.
         '''
         new_coeffs = np.copy(start_coeffs)
-        metric_val = np.zeros(Nmeasure, len(zmodes))
+        metric_val = np.zeros([Nmeasure, len(zmodes)])
         self.ui.updateZern(zmodes, start_coeffs)
         NZ = len(zmodes) # number of modes
         for ii in np.arange(NZ):
