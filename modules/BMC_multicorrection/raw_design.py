@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-
+from matplotlibwidget import  MatplotlibWidget
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -113,16 +113,16 @@ class Ui_Form(object):
         self.tab_display.setObjectName(_fromUtf8("tab_display"))
         self.tab_image_phase = QtGui.QWidget()
         self.tab_image_phase.setObjectName(_fromUtf8("tab_image_phase"))
-        self.mpl_image = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_image = MatplotlibWidget(self.tab_image_phase)
         self.mpl_image.setGeometry(QtCore.QRect(10, 30, 271, 271))
         self.mpl_image.setObjectName(_fromUtf8("mpl_image"))
-        self.mpl_phase = QtGui.QGraphicsView(self.tab_image_phase)
+        self.mpl_phase = MatplotlibWidget(self.tab_image_phase)
         self.mpl_phase.setGeometry(QtCore.QRect(280, 30, 281, 271))
         self.mpl_phase.setObjectName(_fromUtf8("mpl_phase"))
         self.tab_display.addTab(self.tab_image_phase, _fromUtf8(""))
         self.tab_metric = QtGui.QWidget()
         self.tab_metric.setObjectName(_fromUtf8("tab_metric"))
-        self.mpl_metrics = QtGui.QGraphicsView(self.tab_metric)
+        self.mpl_metrics = MatplotlibWidget(self.tab_metric)
         self.mpl_metrics.setGeometry(QtCore.QRect(20, 70, 541, 241))
         self.mpl_metrics.setObjectName(_fromUtf8("mpl_metrics"))
         self.horizontalLayoutWidget_2 = QtGui.QWidget(self.tab_metric)
@@ -147,10 +147,10 @@ class Ui_Form(object):
         self.horizontalLayoutWidget_3.setObjectName(_fromUtf8("horizontalLayoutWidget_3"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.horizontalLayoutWidget_3)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
-        self.mpl_sharpness = QtGui.QGraphicsView(self.horizontalLayoutWidget_3)
+        self.mpl_sharpness = MatplotlibWidget(self.horizontalLayoutWidget_3)
         self.mpl_sharpness.setObjectName(_fromUtf8("mpl_sharpness"))
         self.horizontalLayout.addWidget(self.mpl_sharpness)
-        self.mpl_signal = QtGui.QGraphicsView(self.horizontalLayoutWidget_3)
+        self.mpl_signal = MatplotlibWidget(self.horizontalLayoutWidget_3)
         self.mpl_signal.setObjectName(_fromUtf8("mpl_signal"))
         self.horizontalLayout.addWidget(self.mpl_signal)
         self.tab_display.addTab(self.tab_Optimize, _fromUtf8(""))
@@ -435,6 +435,8 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinBox_evsteps.sizePolicy().hasHeightForWidth())
         self.spinBox_evsteps.setSizePolicy(sizePolicy)
+        self.spinBox_evsteps.setMinimum(5)
+        self.spinBox_evsteps.setProperty("value", 11)
         self.spinBox_evsteps.setObjectName(_fromUtf8("spinBox_evsteps"))
         self.grid_zernset.addWidget(self.spinBox_evsteps, 3, 2, 1, 1)
         self.label_evsteps = QtGui.QLabel(self.gridLayoutWidget_3)
@@ -705,8 +707,8 @@ class Ui_Form(object):
         self.table_Zcoeffs.setSortingEnabled(__sortingEnabled)
         self.label_zampli.setText(_translate("Form", "Amplitude", None))
         self.label_zmode.setText(_translate("Form", "Mode", None))
-        self.lineEdit_zernstep.setText(_translate("Form", "0.10", None))
-        self.lineEdit_gain.setText(_translate("Form", "-5", None))
+        self.lineEdit_zernstep.setText(_translate("Form", "1.00", None))
+        self.lineEdit_gain.setText(_translate("Form", "-10", None))
         self.lineEdit_zernampli.setText(_translate("Form", "0.0", None))
         self.label_gain.setText(_translate("Form", "Gain", None))
         self.label_zernstep.setText(_translate("Form", "stepsize", None))

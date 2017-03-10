@@ -329,14 +329,16 @@ class UI(inLib.ModuleUI):
 
         if zmode is None:
             zmode = self._ui.spinBox_Zmode.value()
-        elif zmode == -1:
-            zmode = np.arange(4, self.z_max)
-            ampli = np.ones_like(zmode)*ampli
 
         if np.isscalar(zmode):
-            self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
-            self.updateTable_ampli(zmode) # update the table display
-        else:
+            if zmode == -1:
+                zmode = np.arange(4, self.z_max)
+                ampli = np.ones_like(zmode)*ampli
+            else:
+                self.z_comps.grab_mode(zmode).ampli = ampli # set ampli
+                self.updateTable_ampli(zmode) # update the table display
+
+        if np.isscalar(zmode) == False:
             '''
             set the amplitude one by one
             '''
