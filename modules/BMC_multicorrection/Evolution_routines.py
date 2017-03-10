@@ -97,5 +97,6 @@ class Pattern_evolution(object):
             self.ui.updateZern(zm, new_para)
             metric_val[:,ii] = mt
 
+        print(fpath)
         np.save(fpath, metric_val)
         print("New coefficients:", new_coeffs)

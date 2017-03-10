@@ -7,7 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
-from matplotlibwidget import MatplotlibWidget
+from matplotlibwidget import  MatplotlibWidget
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
@@ -435,6 +435,8 @@ class Ui_Form(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.spinBox_evsteps.sizePolicy().hasHeightForWidth())
         self.spinBox_evsteps.setSizePolicy(sizePolicy)
+        self.spinBox_evsteps.setMinimum(5)
+        self.spinBox_evsteps.setProperty("value", 11)
         self.spinBox_evsteps.setObjectName(_fromUtf8("spinBox_evsteps"))
         self.grid_zernset.addWidget(self.spinBox_evsteps, 3, 2, 1, 1)
         self.label_evsteps = QtGui.QLabel(self.gridLayoutWidget_3)
@@ -705,8 +707,8 @@ class Ui_Form(object):
         self.table_Zcoeffs.setSortingEnabled(__sortingEnabled)
         self.label_zampli.setText(_translate("Form", "Amplitude", None))
         self.label_zmode.setText(_translate("Form", "Mode", None))
-        self.lineEdit_zernstep.setText(_translate("Form", "0.10", None))
-        self.lineEdit_gain.setText(_translate("Form", "-5", None))
+        self.lineEdit_zernstep.setText(_translate("Form", "1.00", None))
+        self.lineEdit_gain.setText(_translate("Form", "-10", None))
         self.lineEdit_zernampli.setText(_translate("Form", "0.0", None))
         self.label_gain.setText(_translate("Form", "Gain", None))
         self.label_zernstep.setText(_translate("Form", "stepsize", None))

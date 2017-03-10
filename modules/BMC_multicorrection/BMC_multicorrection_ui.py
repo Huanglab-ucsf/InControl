@@ -277,26 +277,25 @@ class UI(inLib.ModuleUI):
 
         if(zmode is None):
             zmode = self._ui.spinBox_Zmode.value()
-        elif(zmode == -1):
 
+        if(np.isscalar(zmode) and zmode!= -1):
+            item = QtGui.QTableWidgetItem()
+            item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+            self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
+            self.z_comps.grab_mode(zmode).step = stepsize
+        elif(np.isscalar(zmode) and zmode == -1):
             for iz in np.arange(4,self.z_max):
                 item = QtGui.QTableWidgetItem()
                 item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
                 self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
                 self.z_comps.grab_mode(iz).step = stepsize
-        else: #zmode is not -1. set single z_steps
-            if(np.isscalar(zmode)):
+        else:
+            for iz, zs in zip(zmode,stepsize):
                 item = QtGui.QTableWidgetItem()
                 item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
-                self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
-                self.z_comps.grab_mode(zmode).step = stepsize
-            else:
-                for iz, zs in zip(zmode,stepsize):
-                    item = QtGui.QTableWidgetItem()
-                    item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
-                    self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
-                    self.z_comps.grab_mode(iz).step = zs
-        # done with setZern_step
+                self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
+                self.z_comps.grab_mode(iz).step = zs
+    # done with setZern_step
 
     def stepZern(self, zmode = None, forward = True):
         '''
