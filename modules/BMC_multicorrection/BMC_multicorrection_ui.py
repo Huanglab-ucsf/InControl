@@ -128,7 +128,6 @@ class UI(inLib.ModuleUI):
             metric = ao_metric.secondMoment(image, 96.5, diffLimit)
         if mode == 'max':
             metric = np.max(image)
-            print("max_pixel", metric)
         return metric
 
 
@@ -156,11 +155,15 @@ class UI(inLib.ModuleUI):
         self._ui.mpl_phase.figure.axes[0].matshow(segs, cmap ='RdBu')
         self._ui.mpl_phase.draw()
 
-    def displayMetrics(self, metrics):
+    def displayMetrics(self, metrics, err_bar= None):
         '''
         display metrics
         '''
-        self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
+        if err_bar is None:
+            self._ui.mpl_metrics.figure.axes[0].plot(metrics, '-gx', linewidth = 2)
+        else:
+            x_dummy = np.arange(len(metrics))
+            self._ui.mpl_metrics.figure.axes[0].errorbar(x_dummy,metrics,yerr = err_bar,fmt='-go', linewidth = 2)
         self._ui.mpl_metrics.draw()
             # done with displayMetrics
 
@@ -179,7 +182,7 @@ class UI(inLib.ModuleUI):
         '''
         act_ind = self._switch_zern()
         start_coeffs = self.z_comps.get_parameters(act_ind)[0] # only get those
-        flabel = self._ui.lineEdit_evname.text() #
+        flabel = str(self._ui.lineEdit_evname.text()) #
         Nmeasure = self._ui.spinBox_evsteps.value()
         self.EV_thread = Optimize_pupil(self.Evolution, act_ind, start_coeffs, Nmeasure, flabel)
         self.EV_thread.finished.connect(self._evolution_ready)
@@ -422,7 +425,6 @@ class UI(inLib.ModuleUI):
             mts[ii] = self.calc_image_metric(snap)
         mt = np.mean(mts)
         sd = np.std(mts)
-        print(mts)
         print("Metric:", mt, 'SD:', sd)
         # done with single_Evaluate
 

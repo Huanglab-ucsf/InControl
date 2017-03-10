@@ -55,7 +55,8 @@ class Optimize_pupil(QtCore.QThread):
         self.zmodes = zmodes
         self.start_coeffs  = start_coeffs
         self.Nmeasure = Nmeasure
-        self.data_path = 'D:\Data\Dan\zmet_'+ flabel
+        self.data_path = 'D://Data//Dan//zmet_'+ flabel
+
 
     def run(self):
         self.ev_control.Evolve(self.zmodes,self.start_coeffs, Nmeasure = self.Nmeasure, fpath = self.data_path)

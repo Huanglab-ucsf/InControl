@@ -41,7 +41,8 @@ class Pattern_evolution(object):
         # self.ui._control.laserSwitch(False)
         # self.ui.resetMirror() removed on 02/09/17.
         mt = np.mean(mts)
-        return mt, snap
+        msig = np.std(mts)
+        return mt, msig,snap
         # done with single_Evaluate
 
     def singlemode_Nstep(self, zmode, start_coeff = 0.0, stepsize = 0.5, N=9):
@@ -50,16 +51,17 @@ class Pattern_evolution(object):
         '''
         HN = int(N/2)
         mt = np.zeros(N)
+        msig = np.zeros(N)
         coef_array = (np.arange(N)-HN)*stepsize + start_coeff
         snap_stack = []
         for ii in np.arange(N):
             self.ui.updateZern(zmode, coef_array[ii])
-            mt[ii], snap = self.single_Evaluate()
+            mt[ii], msig[ii], snap = self.single_Evaluate()
             snap_stack.append(snap)
 
         snap_stack = np.array(snap_stack)
-        np.save('D:\Data\Dan\ZM_'+str(zmode), snap_stack)
-        self.ui.displayMetrics(mt)
+        np.save('D:\Data\Dan\ZM_stack'+str(zmode), snap_stack)
+        self.ui.displayMetrics(mt, msig)
         # np.save('D:\Data\Dan\Mt_'+ self.flabel + str(zmode), mt)
         max_ind = np.argmax(mt)
         if(max_ind == 0 or max_ind == N-1):
@@ -97,6 +99,6 @@ class Pattern_evolution(object):
             self.ui.updateZern(zm, new_para)
             metric_val[:,ii] = mt
 
-        print(fpath)
+    
         np.save(fpath, metric_val)
         print("New coefficients:", new_coeffs)
