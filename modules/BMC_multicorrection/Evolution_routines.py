@@ -28,6 +28,7 @@ class Pattern_evolution(object):
         '''
         Just apply the zernike coefficients, take the image and evaluate the sharpness
         z_coeffs: from 1 to z_max.
+        This can be reused.
         '''
         # amplitude only-mask = False, the raw_MOD is updated as well.
         self.ui.toDMSegs(display = False) # this only modulates
@@ -75,6 +76,12 @@ class Pattern_evolution(object):
                 new_coeff = coef_array[max_ind]
         return new_coeff, mt
 
+
+    def dynamic_stepwise(self, zmode, step_0):
+        '''
+        update the z_mode coefficients dynamically
+        '''
+
     def Evolve(self, zmodes, start_coeffs, Nmeasure, fpath):
         '''
         zmodes: the modes selected for optimization
@@ -99,6 +106,6 @@ class Pattern_evolution(object):
             self.ui.updateZern(zm, new_para)
             metric_val[:,ii] = mt
 
-    
+
         np.save(fpath, metric_val)
         print("New coefficients:", new_coeffs)

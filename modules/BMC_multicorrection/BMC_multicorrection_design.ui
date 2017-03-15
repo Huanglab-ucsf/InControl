@@ -163,7 +163,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_image_phase">
      <attribute name="title">
@@ -409,7 +409,7 @@
     </item>
     <item row="2" column="1">
      <property name="text">
-      <string>0.2</string>
+      <string>1.0</string>
      </property>
     </item>
     <item row="3" column="0">
@@ -459,7 +459,7 @@
     </item>
     <item row="7" column="1">
      <property name="text">
-      <string>0.2</string>
+      <string>1.5</string>
      </property>
     </item>
     <item row="8" column="0">
@@ -876,14 +876,14 @@
      </rect>
     </property>
     <layout class="QGridLayout" name="grid_acquisition">
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QLabel" name="label_masksize">
        <property name="text">
         <string>r_mask</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_nsteps">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -896,7 +896,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QLineEdit" name="lineEdit_mask">
        <property name="text">
         <string>50</string>
@@ -910,7 +910,7 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QSpinBox" name="spinbox_Nsteps">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -956,6 +956,13 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="pushButton_saveImage">
+       <property name="text">
+        <string>Save image</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -973,7 +980,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>630</y>
+      <y>640</y>
       <width>581</width>
       <height>54</height>
      </rect>
@@ -983,6 +990,12 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label_start">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>Start position(mm)</string>
          </property>
@@ -990,6 +1003,12 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit_start">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text">
           <string>0.2500</string>
          </property>
@@ -1027,6 +1046,49 @@
       <widget class="QRadioButton" name="radioButton_laser">
        <property name="text">
         <string>Laser on</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>580</y>
+      <width>581</width>
+      <height>54</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_Segselect">
+         <property name="text">
+          <string>Select segments(1---140, separated by comma or space)</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_Segselect">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_Segselect">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>modulate segments</string>
        </property>
       </widget>
      </item>

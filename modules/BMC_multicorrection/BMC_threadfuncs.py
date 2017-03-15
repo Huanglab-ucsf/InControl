@@ -59,5 +59,40 @@ class Optimize_pupil(QtCore.QThread):
 
 
     def run(self):
+        '''
+        run the pupil optimization (this is solely Zernike based)
+        '''
         self.ev_control.Evolve(self.zmodes,self.start_coeffs, Nmeasure = self.Nmeasure, fpath = self.data_path)
     # done with Optimize_pupil
+
+
+
+class Single_modulation(QtCore.QThread):
+    '''
+    modulate the deformable mirror with the single mode
+    variables: 140
+    '''
+
+    def __init__(self,mod_control,segments,ampli,flabel):
+        QtCore.QThread.__init__(self)
+        self.mod_control = mod_control
+        self.segments = segments
+        self.amplitude = ampli
+        self.data_path = 'D://Data//Dan//segmod_'+ flabel
+        self._log_modulation_()
+
+    def _log_modulation_(self):
+        '''
+        export the modulation as log
+        '''
+        output = np.array([self.segments, self.amplitude])
+        np.save(self.data_path+'_mod_' + int(self.Niter), output)
+        self.Niter +=1
+
+
+    def run(self):
+        '''
+        run the single segments modulation
+        unfinished 
+        '''
+        pass 

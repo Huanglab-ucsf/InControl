@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class zern_mode(object):
     '''
-    This is a small class of Zernike modes.
+    This is a small class of Zernike modes. It includes all the properties of the zernike modes.
     '''
     def __init__(self, z_mode, ampli, step = 0.10):
         self._zmode = z_mode
@@ -45,12 +45,15 @@ class zern_mode(object):
     def stepdown(self):
         self._ampli-=self.step
 
+    def moveby(self,amp_change):
+        self._ampli+=amp_change
+
     # -------------------------------Done with zern_mode -------------------
 
 
 class zm_list(object):
     '''
-    A bigger class, a list of zern_mode.
+    A bigger class, a list of zern_mode and some associated functions
     '''
     def __init__(self, z_max = 25, z_start = 4):
         self.zlist = []
@@ -76,7 +79,7 @@ class zm_list(object):
 
     def grab_mode(self, z_mode):
         '''
-        grab the z_mode node in the list
+        grab the z_mode node in the list and return it to the calling control.
         '''
         if z_mode > self.max_mode or z_mode < self.start_mode:
             print(self.max_mode, self.start_mode, z_mode)
@@ -84,6 +87,10 @@ class zm_list(object):
         return self.zlist[z_mode - self.start_mode] # return a node.
 
     def sync_coeffs(self):
+        '''
+        synchronize amplitudes of currently active modes. The mode number is specified by the indices of
+        nonzero elements.
+        '''
         z_coeffs = np.zeros(self.max_mode) # a complete coefficient list
         activated = np.where(self.active == True)[0]
 
