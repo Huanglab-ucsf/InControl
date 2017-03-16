@@ -7,14 +7,16 @@ class API():
     def __init__(self, HWtype = 31, SerialNum = 83854883, verbose = False):
         self.HWtype = HWtype
         self.connected = False
-        dllname = os.path.join(os.path.dirname(__file__), 'APT.dll')
+        dllname = "C:\Program Files\Thorlabs\APT\APT Server\APT.dll"
         if not os.path.exists(dllname):
             print("ERROR: DLL not found")
 
         else:
+            print("DLL found!")
             self.aptdll = windll.LoadLibrary(dllname)
             self.aptdll.EnableEventDlg(True)
-            self.aptdll.AptInit()
+            self.aptdll.APTInit()
+            self.HWtype = c_long(HWtype)
 
 
 
@@ -23,4 +25,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
