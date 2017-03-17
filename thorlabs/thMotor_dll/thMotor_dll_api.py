@@ -126,13 +126,13 @@ class API():
         '''
         just jog the stage up, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, 1, False)
+        self.aptdll.MOT_MoveJog(self.SerialNum, c_int(1), False)
 
     def jog_down(self):
         '''
         jog the stage dowm, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, 2, 0)
+        self.aptdll.MOT_MoveJog(self.SerialNum, c_int(2))
         print("Jogged down!")
         return True
 
