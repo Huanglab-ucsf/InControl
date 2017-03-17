@@ -22,7 +22,9 @@ class API():
 
         else:
             print("DLL found!")
+            self.verbose = verbose
             self.aptdll = windll.LoadLibrary(dllname)
+            self.aptdll.APTCleanUp()
             self.aptdll.EnableEventDlg(True)
             self.aptdll.APTInit()
             self.HWtype = c_long(HWtype)
@@ -124,13 +126,16 @@ class API():
         '''
         just jog the stage up, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, 1, True)
+        self.aptdll.MOT_MoveJog(self.SerialNum, 1, False)
 
     def jog_down(self):
         '''
         jog the stage dowm, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, 2, True)
+        self.aptdll.MOT_MoveJog(self.SerialNum, 2, 0)
+        print("Jogged down!")
+        return True
+
 
     def identify(self):
         '''
@@ -149,9 +154,9 @@ class API():
 def main():
     API_test = API(verbose = True)
     if API_test.connected:
-        API_test.identify()
-        API_test.jog_up()
-        API_test.jod_down()
+        # API_test.jog_up()
+        API_test.move_by(0.50)
+        print(API_test.get_stageInfo())
         API_test.clean_up()
     else:
         print("Initialization fails.")
