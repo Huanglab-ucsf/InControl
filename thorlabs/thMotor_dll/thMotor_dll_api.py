@@ -8,7 +8,7 @@ dan.xie@ucsf.edu
 
 
 import os
-from ctypes import c_long, c_buffer, c_float, windll, pointer
+from ctypes import c_int, c_long, c_buffer, c_float, windll, pointer
 print os.getcwd()
 
 
@@ -126,7 +126,7 @@ class API():
         '''
         just jog the stage up, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, c_int(1), False)
+        self.aptdll.MOT_MoveJog(self.SerialNum, 1)
 
     def jog_down(self):
         '''
@@ -154,8 +154,10 @@ class API():
 def main():
     API_test = API(verbose = True)
     if API_test.connected:
+        pos = API_test.get_pos()
         # API_test.jog_up()
-        API_test.move_by(0.50)
+        API_test.move_to(0.0)
+
         print(API_test.get_stageInfo())
         API_test.clean_up()
     else:
