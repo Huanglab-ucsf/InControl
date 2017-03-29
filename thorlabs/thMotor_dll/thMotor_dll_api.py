@@ -8,8 +8,12 @@ dan.xie@ucsf.edu
 
 
 import os
+<<<<<<< HEAD
 from ctypes import c_int, c_long, c_buffer, c_float, windll, pointer
 print os.getcwd()
+=======
+from ctypes import c_long, c_buffer, c_float, windll, pointer
+>>>>>>> 33ad8a5310c38bebc0c3d20146d6ad941e229a9c
 
 
 class API():
@@ -23,6 +27,8 @@ class API():
         else:
             print("DLL found!")
             self.verbose = verbose
+            self.dstep = 0.001 # one micron stepsize
+            self.bl_range = 0.020 # backlash correction range 
             self.aptdll = windll.LoadLibrary(dllname)
             self.aptdll.APTCleanUp()
             self.aptdll.EnableEventDlg(True)
@@ -30,8 +36,6 @@ class API():
             self.HWtype = c_long(HWtype)
             self.SerialNum = SerialNum
             self.init_hardware() # initialization
-
-
 
 
     def init_hardware(self):
@@ -51,6 +55,23 @@ class API():
             raise Exception('Connection Failed. Check Serial Number!')
             return False
 
+
+
+    def go_home(self):
+        '''
+        Go home
+        '''
+        if self.verbose:
+            print('Going home...')
+        if not self.connected:
+            raise Exception('Please connect first!')
+
+        self.aptdll.MOT_MoveHome(self.SerialNum)
+        return True
+
+
+
+
     def get_stageInfo(self):
         '''
         Get the stage information
@@ -64,7 +85,7 @@ class API():
         return stageInfo
 
 
-    def set_stageInfo(self):
+    def set_stageInfo(self, min_pos, max_pos):
         '''
         Set the stage information
         '''
@@ -74,6 +95,17 @@ class API():
         pitch = c_float(self.config.get_pitch())
         self.aptdll.MOT_SetStageAxisInfo(self.SerialNum, min_pos, max_pos, units, pitch)
         return True
+
+
+    def set_stepsize(self, dstep, test_ax = False):
+        '''
+        Set the moving stepsize
+        '''
+        self.dstep = dstep
+        if test_ax:
+            self.aptdll.MOT_SetJogStepSize(self.SerialNum, c_float(dstep))
+        if self.verbose:
+            print("step size reset to:", self.dstep)
 
     def get_pos(self):
         '''
@@ -126,15 +158,33 @@ class API():
         '''
         just jog the stage up, assume the stage is connected.
         '''
+<<<<<<< HEAD
         self.aptdll.MOT_MoveJog(self.SerialNum, 1)
+=======
+        self.move_by(self.dstep)
+>>>>>>> 33ad8a5310c38bebc0c3d20146d6ad941e229a9c
 
     def jog_down(self):
         '''
         jog the stage dowm, assume the stage is connected.
         '''
-        self.aptdll.MOT_MoveJog(self.SerialNum, c_int(2))
-        print("Jogged down!")
+        self.move_by(-self.dstep)
         return True
+
+    def bl_correction(self, dest_pos):
+        '''
+        back lash correction, smarter than stepwise motion
+        '''
+        current_pos = self.get_pos()
+        if dest_pos > current_pos:
+            self.move_by(dest_pos-current_pos+self.bl_range)
+            self.move_by(-self.bl_range)
+        else:
+            self.move_by(dest_pos-current_pos-self.bl_range)
+            self.move_by(self.bl_range)
+        if self.verbose:
+            print("Backlash corrected!")
+
 
 
     def identify(self):

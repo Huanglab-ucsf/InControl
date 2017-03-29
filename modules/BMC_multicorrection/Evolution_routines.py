@@ -80,7 +80,11 @@ class Pattern_evolution(object):
     def dynamic_stepwise(self, zmode, step_0):
         '''
         update the z_mode coefficients dynamically
+        0.c
         '''
+
+
+
 
     def Evolve(self, zmodes, start_coeffs, Nmeasure, fpath):
         '''
