@@ -7,9 +7,9 @@ import os, glob
 class Control(inLib.Module):
 
     def __init__(self, control, settings):
-        print "Initializing illumination..."
+        print("Initializing illumination...")
         inLib.Module.__init__(self, control, settings)
-        print "illumination module initialized."
+        print("illumination module initialized.")
 
         self.initSettings = settings
         self.saved_settings = []
@@ -47,7 +47,7 @@ class Control(inLib.Module):
 
     def newSettings(self, filename):
         settings_dict = inLib.load_settings(filename)
-        if settings_dict.has_key('devices'):
+        if 'devices' in settings_dict:
             settings_dict = settings_dict['devices']['shutters']['settings']#['channel_settings']
         settings_dict['settings_filename'] = filename
         self.saved_settings = [settings_dict] + self.saved_settings

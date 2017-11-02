@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
 
-from PyQt4 import QtGui,QtCore
+from PyQt5 import QtWidgets,QtCore
 import inLib
 from Utilities import QExtensions as qext
 import numpy as np
 from numpy.lib.scimath import sqrt as _msqrt
-import fit_results_design
+from . import fit_results_design
 import copy
 import time
 from libs import scipy_gaussfitter
@@ -17,7 +17,7 @@ class UI(inLib.ModuleUI):
         design_path = 'modules.adaptiveOptics.adaptiveOptics_design'
         inLib.ModuleUI.__init__(self, control, ui_control, design_path)
 
-        self._ui.buttonGroupGuess = QtGui.QButtonGroup()
+        self._ui.buttonGroupGuess = QtWidgets.QButtonGroup()
         self._ui.buttonGroupGuess.addButton(self._ui.radioButtonPlane)
         self._ui.buttonGroupGuess.addButton(self._ui.radioButtonMirror)
         self._ui.buttonGroupGuess.addButton(self._ui.radioButtonFromFile)
@@ -34,12 +34,14 @@ class UI(inLib.ModuleUI):
             self._ui.lineEditFile.setText(self._control._settings['filename'])
 
         self._ui.spinBoxIterations.setValue(self._control._settings['nIterations'])
-
-        self._window.connect(self._ui.pushButtonPSF,QtCore.SIGNAL('clicked()'),self.acquirePSF)
-        self._window.connect(self._ui.pushButtonModulate,QtCore.SIGNAL('clicked()'),self.modulate)
-        self._window.connect(self._ui.pushButtonSave,QtCore.SIGNAL('clicked()'),self.savePF)
-        self._window.connect(self._ui.pushButton_oneRun, QtCore.SIGNAL('clicked()'),self.oneRun)
-
+        self._ui.pushButtonPSF.clicked.connect(self.acquirePSF)
+        self._ui.pushButtonModulate.clicked.connect(self.modulate)
+        self._ui.pushButtonSave.clicked.connect(self.savePF)
+#        self._window.connect(self._ui.pushButtonPSF,QtCore.SIGNAL('clicked()'),self.acquirePSF)
+#        self._window.connect(self._ui.pushButtonModulate,QtCore.SIGNAL('clicked()'),self.modulate)
+#        self._window.connect(self._ui.pushButtonSave,QtCore.SIGNAL('clicked()'),self.savePF)
+#        self._window.connect(self._ui.pushButton_oneRun, QtCore.SIGNAL('clicked()'),self.oneRun)
+#
 
         self._ui.pushButton_modUnwrapped.clicked.connect(self.modulateUnwrapped)
 
@@ -68,8 +70,6 @@ class UI(inLib.ModuleUI):
         self.use_zernike = False
         self.remove_PTTD = True
 
-        self._ui.mplwidgetPhase.figure.axes[0].hold(False)
-        self._ui.mplwidgetPhase_2.figure.axes[0].hold(False)
 
         self._scanner = None
 
@@ -244,11 +244,11 @@ class UI(inLib.ModuleUI):
         PF = self._control.fit()
         fit_result_dialog = FitResultsDialog(PF)
         if fit_result_dialog.exec_():
-            print 'adaptiveOptics: Fit accepted.'
+            print('adaptiveOptics: Fit accepted.')
             self.use_zernike = True
             remove = fit_result_dialog.getRemove()
             if remove:
-                print 'adaptiveOptics: Remove pistion, tip, tilt and defocus.'
+                print('adaptiveOptics: Remove pistion, tip, tilt and defocus.')
                 PF = self._control.removePTTD()
             self._displayPhase(PF.zernike)
         else:
@@ -275,7 +275,7 @@ class UI(inLib.ModuleUI):
             z0 = self._ui.doubleSpinBoxMirrorDistance.value()
             guess = ('mirror',z0)
         elif checked == self._ui.radioButtonFromFile:
-            filename = QtGui.QFileDialog.getOpenFileName(None,'Open initial guess',
+            filename = QtWidgets.QFileDialog.getOpenFileName(None,'Open initial guess',
                                                   '','*.npy')
             if filename:
                 guess = ('file', str(filename))
@@ -306,7 +306,7 @@ class UI(inLib.ModuleUI):
             self._ui_control.slm.updateModulationDisplay()
 
     def savePF(self):
-        filename = QtGui.QFileDialog.getSaveFileName(None,'Save to file',
+        filename = QtWidgets.QFileDialog.getSaveFileName(None,'Save to file',
                                                   '','*.npy')
         if filename:
             self._control.savePF(str(filename))
@@ -349,16 +349,16 @@ class UI(inLib.ModuleUI):
 class Modulation:
     def __init__(self, index, ui):
         self.index = index
-        self.checkbox = QtGui.QCheckBox(str(self.index))
+        self.checkbox = QtWidgets.QCheckBox(str(self.index))
         self.checkbox.stateChanged.connect(ui._modulation_toggled)
         self.checkbox.toggle()
 
 
 
-class FitResultsDialog(QtGui.QDialog):
+class FitResultsDialog(QtWidgets.QDialog):
 
     def __init__(self, PF, parent=None):
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.PF = PF
         self.ui = fit_results_design.Ui_Dialog()
         self.ui.setupUi(self)

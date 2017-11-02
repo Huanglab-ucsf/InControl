@@ -9,7 +9,7 @@
 import numpy as np
 import os.path
 import time
-import pyfftw
+#import pyfftw
 import sys
 
 def fftImage(image, use_pyfftw=True):
@@ -44,4 +44,4 @@ def secondMomentOnStack(images, pixelSize, diffLimit):
             sm[i] = secondMoment(images[i],pixelSize,diffLimit)
         return sm
     else:
-        print "got None for images"
+        print("got None for images")

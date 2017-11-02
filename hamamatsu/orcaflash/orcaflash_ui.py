@@ -1,7 +1,9 @@
 #!/usr/bin/python
 
 import inLib
-from PyQt4 import QtCore, QtGui, Qwt5
+from PyQt5 import QtCore, QtGui, Qwt5
+import sys
+sys.path.append('D:\\Dan\\Programs\\InControl\\')
 from Utilities import QExtensions as qext
 from functools import partial
 import time
@@ -122,7 +124,7 @@ class UI(inLib.DeviceUI):
         self._ui.settings6_radioButton.hide()
 
         self.settings = [self._control.loadedSettings]
-        print self.settings[0]
+        print(self.settings[0])
         settings_name = self.settings[0]['settings_filename']
         self._ui.settings1_radioButton.setText(settings_name)
         self._ui.settings1_radioButton.setChecked(True)
@@ -270,11 +272,11 @@ class UI(inLib.DeviceUI):
     def _dropEvent(self, event):
         for url in event.mimeData().urls():
             filename = str(url.encodedPath())[1:]
-            print filename
+            print(filename)
             try:
                 self._newSettings(filename)
             except:
-                print "Unable to load settings file ", filename
+                print("Unable to load settings file ", filename)
 
     def _saveImageNumpy(self):
         self._control.saveFrameToNumpy("test_frame.npy")
@@ -392,8 +394,8 @@ class UI(inLib.DeviceUI):
         x1_scaled = int(x1/6.4)
         y0_scaled = int(y0/6.4)
         y1_scaled = int(y1/6.4)
-        print x0_scaled, x1_scaled
-        print y0_scaled, y1_scaled
+        print(x0_scaled, x1_scaled)
+        print(y0_scaled, y1_scaled)
         roi_display[y0_scaled:y1_scaled+1, x0_scaled:x1_scaled+1] = 255/2
         qt_roiimage = qext.numpy_to_qimage8(roi_display, 0,255,self._cmap)
         roi_pixmap = QtGui.QPixmap.fromImage(qt_roiimage)

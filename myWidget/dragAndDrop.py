@@ -1,27 +1,27 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore,QtGui,Qwt5
+from PyQt5 import QtCore,QtWidgets
 
 
-class dropWidget(QtGui.QWidget):
+class dropWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.__class__.dragEnterEvent = self.dragEnterEvent
         self.__class__.dragMoveEvent = self.dragEnterEvent
         self.__class__.dropEvent = self.dropEvent
         self.setAcceptDrops(True)
 
-        print "initialized dropWidget..."
+        print("initialized dropWidget...")
 
         self.show()
 
     def dragEnterEvent(self, event):
         event.acceptProposedAction()
         event.accept()
-        print "Drag enter event..."
+        print("Drag enter event...")
 
     def dropEvent(self, event):
-        print "Drop event..."
+        print("Drop event...")
 
     

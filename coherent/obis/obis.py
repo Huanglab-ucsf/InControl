@@ -20,7 +20,7 @@ class Control(inLib.Device):
         self.power_range = []
 
         if not(len(self._api.tty) == self.num_ports):
-            print "Not all lasers available..."
+            print("Not all lasers available...")
 
         for i in range(0,self.num_ports):
             laser_wavelength = self.getWavelength(i)
@@ -45,6 +45,8 @@ class Control(inLib.Device):
     def getWavelength(self, port):
         self._api.sendCommand(port, "SYST:INF:WAV?")
         resp = self._api.waitResponse(port).rsplit('\r\n')
+        print(port)
+        print(resp)
         return int(resp[0])
 
     def getBaseTemperature(self, port):
@@ -117,13 +119,13 @@ class Control(inLib.Device):
 if __name__ == "__main__":
     cube = Cube405()
     if cube.getStatus():
-        print cube.getPowerRange()
-        print cube.getLaserOnOff()
+        print((cube.getPowerRange()))
+        print((cube.getLaserOnOff()))
         power = 2.0
         while power < 3.0:
             cube.setPower(power)
             time.sleep(0.5)
-            print cube.getPower()
+            print((cube.getPower()))
             power += 0.1
 
 

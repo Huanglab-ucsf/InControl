@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore,QtGui
 from functools import partial
 import inLib
 import sys
 import numpy as np
-
+import sys
+sys.path.append('D:\\Programs\\')
 from Utilities import QExtensions as qext
 
 
@@ -22,7 +23,7 @@ class UI(inLib.DeviceUI):
         w642 = np.where(abs(laser_lines - 642) < 10)
 
         laser_ports = [w401[0], w488[0], w642[0]]
-        print laser_ports
+        print(laser_ports)
 
         self.sliders = [self._ui.Slider401, self._ui.Slider488, self._ui.Slider642]
         self.onoff = [self._ui.On401, self._ui.On488, self._ui.On642]
@@ -32,7 +33,7 @@ class UI(inLib.DeviceUI):
 
         for i in range(0,len(laser_ports)):
             if len(laser_ports[i])==1:
-                print (i, laser_ports[i][0])
+                print((i, laser_ports[i][0]))
                 self.sliders[i].valueChanged.connect(partial(self._updatePower, i, laser_ports[i][0]))
                 self.onoff[i].stateChanged.connect(partial(self._turnOnOff, i, laser_ports[i][0]))
                 self.digMod[i].stateChanged.connect(partial(self._setDigitalMod, i, laser_ports[i][0]))
@@ -57,8 +58,8 @@ class UI(inLib.DeviceUI):
 
     def _turnOnOff(self, index, port):
         state = self.onoff[index].isChecked()
-        print port, state
-        print (self.onoff[0].isChecked(), self.onoff[1].isChecked(), self.onoff[2].isChecked())
+        print(port, state)
+        print((self.onoff[0].isChecked(), self.onoff[1].isChecked(), self.onoff[2].isChecked()))
         self._control.setLaserOnOff(port, state)
         
 

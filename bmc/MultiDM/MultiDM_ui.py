@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-from PyQt4 import QtGui,QtCore
+from PyQt5 import QtWidgets,QtCore
 import inLib
 from Utilities import QExtensions as qext
 import numpy as np
@@ -61,17 +61,17 @@ class UI(inLib.DeviceUI):
         self._applyManyMultsToMirrorThread = None
 
     def loadPattern(self):
-        filename = QtGui.QFileDialog.getOpenFileName(None,'Open pattern','','*.npy')
+        filename = QtWidgets.QFileDialog.getOpenFileName(None,'Open pattern','','*.npy')
         m = float(self._ui.lineEdit_loadMult.text())
         pattern = self._control.loadPattern(filename, m)
         self._displayPhase(pattern)
 
     def loadVaryFile(self):
-        self.varyfilename = QtGui.QFileDialog.getOpenFileName(None,'Open list of files file','','*.*')
+        self.varyfilename = QtWidgets.QFileDialog.getOpenFileName(None,'Open list of files file','','*.*')
         self._ui.label_filenameloaded.setText(self.varyfilename)
 
     def loadSegs(self):
-        filename = QtGui.QFileDialog.getOpenFileName(None,'Open segments','','*.*')
+        filename = QtWidgets.QFileDialog.getOpenFileName(None,'Open segments','','*.*')
         self._control.loadSegments(str(filename))
         segments = self._control.getSegments()
         self._displaySegments(segments)
@@ -418,16 +418,16 @@ class ApplyManyMultsToMirror(QtCore.QThread):
 class Modulation:
     def __init__(self, index, ui):
         self.index = index
-        self.checkbox = QtGui.QCheckBox(str(self.index))
+        self.checkbox = QtWidgets.QCheckBox(str(self.index))
         self.checkbox.stateChanged.connect(ui._modulation_toggled)
         self.checkbox.toggle()
 
 
 
-class FitResultsDialog(QtGui.QDialog):
+class FitResultsDialog(QtWidgets.QDialog):
     
     def __init__(self, PF, parent=None):
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.PF = PF
         self.ui = fit_results_design.Ui_Dialog()
         self.ui.setupUi(self)

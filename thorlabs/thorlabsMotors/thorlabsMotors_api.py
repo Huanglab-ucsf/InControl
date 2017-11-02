@@ -4,11 +4,11 @@
 #
 
 
-from PyQt4 import QtCore, QtGui, QAxContainer
+from PyQt5 import QtCore, QtGui, QAxContainer
 
 import sys
 import time
-import mgmotorAX
+from . import mgmotorAX
 
 class API():
     def __init__(self):

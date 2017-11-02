@@ -2,12 +2,12 @@
 
 
 import inLib
-from PyQt4.QtGui import QImage
+from PyQt5.QtGui import QImage
 import numpy as np
-import libs.imagewriters as writer
+from libs.imagewriters import DaxFile 
 import time
 import ctypes
-import Queue
+import queue
 import threading
 #from modules.adaptiveOptics import signalForAO
 
@@ -126,11 +126,11 @@ class Control(inLib.Device):
         nl = '\n'
         for key in prop_ids:
             value = self._api.getPropertyValue(prop_ids[key])
-            print key + str(": ") + str(value) + nl
+            print((key + str(": ") + str(value) + nl))
 
     def setOutputTriggerPeriod(self, period):
         self._setProp(1835344, period)
-        print "New trigger period: ", self._getProp(1835344)
+        print(("New trigger period: ", self._getProp(1835344)))
 
     def setToExposureMode(self, polarity=1):
         self._setProp(1835360, 2)
@@ -145,9 +145,9 @@ class Control(inLib.Device):
     def newSettings(self, filename, settings_dict=None):
         if settings_dict is None:
             settings_dict = inLib.load_settings(filename)
-            if settings_dict.has_key('devices'):
+            if 'devices' in settings_dict:
                 settings_dict = settings_dict['devices']['camera']['settings']
-            print settings_dict
+            print(settings_dict)
             settings_dict['settings_filename'] = filename
         self.saved_settings = [settings_dict] + self.saved_settings
         return self.saved_settings
@@ -159,18 +159,18 @@ class Control(inLib.Device):
             y0 = roi[2] 
             xsize = roi[1] - x0
             ysize = roi[3] - y0
-            print "Setting ROI to: %i,%i. And size: %i,%i." % (x0,y0,xsize,ysize)
+            print(("Setting ROI to: %i,%i. And size: %i,%i." % (x0,y0,xsize,ysize)))
             self._setROI(x0,y0,xsize,ysize)
             time.sleep(0.05)
             self._setROI(x0,y0,xsize,ysize)
         except:
-            print "Unable to set new ROI"
+            print("Unable to set new ROI")
         try:
             exposure_time = settings_dict['exposure_time']
-            print "Setting exposure time to: %.2f ms" % (exposure_time*1000)
+            print(("Setting exposure time to: %.2f ms" % (exposure_time*1000)))
             self.setExposureTime(exposure_time, inMillisec=False)
         except:
-            print "Unable to set new timings"
+            print("Unable to set new timings")
 
     def loadSettings(self, settings):
         if type(settings) is str:
@@ -184,18 +184,18 @@ class Control(inLib.Device):
                 y0 = roi[2] 
                 xsize = roi[1] - x0
                 ysize = roi[3] - y0
-                print "Setting ROI to: %i,%i. And size: %i,%i." % (x0,y0,xsize,ysize)
+                print(("Setting ROI to: %i,%i. And size: %i,%i." % (x0,y0,xsize,ysize)))
                 self._setROI(x0,y0,xsize,ysize)
                 time.sleep(0.05)
                 self._setROI(x0,y0,xsize,ysize)
             except:
-                print "Unable to set new ROI"
+                print("Unable to set new ROI")
             try:
                 exposure_time = settings['exposure_time']
-                print "Setting exposure time to: %.2f ms" % (exposure_time*1000)
+                print(("Setting exposure time to: %.2f ms" % (exposure_time*1000)))
                 self.setExposureTime(exposure_time, inMillisec=False)
             except:
-                print "Unable to set new timings"
+                print("Unable to set new timings")
 
         
 
@@ -238,7 +238,7 @@ class Control(inLib.Device):
         x0,y0 = self._getX0Y0()
 
     def setROI_commonsettings(self, setting):
-        print "Common settings: ", setting
+        print(("Common settings: ", setting))
         if setting == "128x128":
             #self._setROI(960,960,128,128)
             self._setROI(1088,960,128,128)
@@ -291,7 +291,7 @@ class Control(inLib.Device):
         self._api.setTriggerMode(value)
         self.beginPreview()
         cyclicTriggerPeriod = self._getProp(prop_ids["timing cyclic trigger period"])
-        print "Cyclic trigger period (sec): %.3f\n" % cyclicTriggerPeriod
+        print(("Cyclic trigger period (sec): %.3f\n" % cyclicTriggerPeriod))
 
     def getExposureTime(self, use_kinetic=False):
         expTime = self._api.getExposureTime()
@@ -336,7 +336,7 @@ class Control(inLib.Device):
             return None
 
     def beginPreview(self):
-        print "Starting preview mode..."
+        print("Starting preview mode...")
         xres,yres = self._getResolution()
         self._props['dimensions'] = xres,yres
         self._continuousCapture(self._previewFrames)
@@ -403,7 +403,7 @@ class Control(inLib.Device):
         self.latestFrame = -1
         self.recordedFrames = 0
         self.recording = True
-        print "Starting to record..."
+        print("Starting to record...")
         self._continuousCapture(self._recordFrames)
         '''
         while totalFrames<numFrames and self.recording:
@@ -419,7 +419,7 @@ class Control(inLib.Device):
         self.latestFrame = -1
         self.recordedFrames = 0
         self.recording = True
-        print "Starting to record..."
+        print("Starting to record...")
         self._continuousCapture(self._recordFrames)
 
     def takeSnap(self):
@@ -456,11 +456,11 @@ class Control(inLib.Device):
         self._api.idle()
         time.sleep(1)
         self.daxfile.closeFile([0,0,0], 0)
-        print "Closing DAX file " + str(self.daxfile.filename)
+        print(("Closing DAX file " + str(self.daxfile.filename)))
         self.latestFrame = -1
 
     def shutDown(self):
-        print 'Shutting down ORCA Flash4. camera...'
+        print('Shutting down ORCA Flash4. camera...')
         self.stopCapture()
         self._api.closeCamera()
 

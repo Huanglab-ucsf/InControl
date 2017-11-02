@@ -9,9 +9,9 @@ import numpy as np
 import os
 import time
 import matplotlib.pyplot as plt
-from DM_simulate import DM
+from .DM_simulate import DM
 from scipy.ndimage import interpolation
-import psf_tools
+from . import psf_tools
 import subprocess
 
 
@@ -19,7 +19,7 @@ import subprocess
 class Control(inLib.Module):
 
     def __init__(self, control, settings):
-        print 'Initializing BMC_multicorrection.'
+        print('Initializing BMC_multicorrection.')
         inLib.Module.__init__(self, control, settings) # inheriting
         dims = self._control.camera.getDimensions()
         self.dims = dims
@@ -38,7 +38,7 @@ class Control(inLib.Module):
         self.laser_port = w488[0]
 
         # self.laser_port = self._control.lasers.laser_ports[0]
-        print(self.laser_port)
+        print((self.laser_port))
         print('BMC_multicorrection initialized.')
     #------------------------- Private functions
 
@@ -121,9 +121,9 @@ class Control(inLib.Module):
         '''
         pattern
         '''
-        print(raw_MOD.shape)
+        print((raw_MOD.shape))
         new_MOD = self._alignPupil(raw_MOD)
-        print("Pattern extrema:", new_MOD.max(), new_MOD.min())
+        print(("Pattern extrema:", new_MOD.max(), new_MOD.min()))
         self.DM.setPattern(new_MOD)
         self.DM.findSeg()
         # end of pattern2Segs
@@ -169,7 +169,7 @@ class Control(inLib.Module):
         if self.proc is not None:
             self.proc.stdin.write("\n")
             output = self.proc.stdout.read()
-            print("stdout:", output)
+            print(("stdout:", output))
         # done with advanceWithPipe
 
 
@@ -208,11 +208,11 @@ class Control(inLib.Module):
         #self, nsteps = 31, stepsize = 0.3, z_correct = 3.0, z_start = None
         '''
         dstep = self._dz
-        print("The scan step:", dstep)
+        print(("The scan step:", dstep))
         self._control.servo.setStage(z_start+z_correct)
         time.sleep(3)
         ndown = int(z_correct/dstep)
-        for ii in xrange(ndown):
+        for ii in range(ndown):
             self._control.servo.jogDown()
             time.sleep(0.25)
 

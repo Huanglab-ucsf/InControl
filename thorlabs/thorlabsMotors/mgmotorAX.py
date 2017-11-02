@@ -5,7 +5,7 @@
 # Hazen 8/09
 #
 
-from PyQt4 import QtCore, QtGui, QAxContainer
+from PyQt5 import QtCore, QtGui, QAxContainer
 
 import sys
 import time

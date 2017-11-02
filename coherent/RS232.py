@@ -5,7 +5,7 @@
 # Hazen 3/09
 #
 
-import uspp.uspp as uspp
+from . import uspp.uspp as uspp
 import time
 
 class RS232():
@@ -38,7 +38,7 @@ class RS232():
         self.tty.write(command + self.end_of_line)
 
     def shutDown(self):
-        print "RS232 shutDown"
+        print("RS232 shutDown")
         del(self.tty)
 
     def getResponse(self):

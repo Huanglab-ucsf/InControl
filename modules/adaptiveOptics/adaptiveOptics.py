@@ -5,7 +5,7 @@ import inLib
 import numpy as np
 from Utilities import zernike
 #from Utilities import pupil_forInControl as pupil
-import pupil_forInControl as pupil
+from . import pupil_forInControl as pupil
 from scipy.ndimage import interpolation
 from scipy.ndimage import gaussian_filter as gf
 from scipy import optimize
@@ -14,7 +14,7 @@ import time
 import matplotlib.pyplot as plt
 import libtim
 import libtim.zern
-import signalForAO
+from . import signalForAO
 import skimage
 from skimage.restoration import unwrap_phase
 
@@ -33,12 +33,12 @@ GS = 'plane'
 class Control(inLib.Module):
 
     def __init__(self, control, settings):
-        print 'Initializing Adaptive Optics.'
+        print('Initializing Adaptive Optics.')
         inLib.Module.__init__(self, control, settings)
         dim = self._control.camera.getDimensions()
         # A list to store the indices of the 'Other' modulations, given by the SLM API:
         self._modulations = []
-        print 'Adaptive Optics initialized.'
+        print('Adaptive Optics initialized.')
 
         self.hasSLM = settings['hasSLM']
         self.hasMirror = settings['hasMirror']
@@ -122,9 +122,9 @@ class Control(inLib.Module):
         data = np.zeros((nSteps,) + dim)
         slicesFrames = np.zeros((nFrames,)+dim)
 
-        for i in xrange(nPatterns):
+        for i in range(nPatterns):
             ao.advancePatternWithPipe()
-            for j in xrange(nFrames):
+            for j in range(nFrames):
                 im = self._control.camera.getMostRecentImageNumpy()
                 if im is None:
                     time.sleep(frame_length)
@@ -133,7 +133,7 @@ class Control(inLib.Module):
                 time.sleep(frame_length)
             data[i] = np.mean(slicesFrames, axis=0)
         if filename:
-            print "ao: Saving vary ao to ", filename
+            print("ao: Saving vary ao to ", filename)
             np.save(filename, data)
         return data
 
@@ -194,7 +194,7 @@ class Control(inLib.Module):
         if center_xy:
             # The coordinates of the brightest pixel
             cz, cy, cx = np.unravel_index(np.argmax(gf(scan*mask,2)), scan.shape)
-            print "Center found at: ", (cz,cy,cx)
+            print("Center found at: ", (cz,cy,cx))
             self._center = [cz, cy, cx] # save this for one-run procedure
             # We laterally center the scan at the brightest pixel
 
@@ -209,7 +209,7 @@ class Control(inLib.Module):
             PSF[:,nx/2-mask_size:ny/2+mask_size,ny/2-mask_size:nx/2+mask_size] = cut
             # Background estimation
             self._background = np.mean(scan[hcyl])
-            print "Background guess: ", self._background
+            print("Background guess: ", self._background)
         else:
             self._background = np.mean(scan[hcyl])
         PSF[np.logical_not(new_cyl)] = self._background
@@ -227,7 +227,7 @@ class Control(inLib.Module):
             time.sleep(2)
         sharpness = signalForAO.secondMomentOnStack(self._PSF,pixelSize,diffLimit)
         self._sharpness = sharpness
-        print "Maximum sharpness = ", sharpness.max()
+        print("Maximum sharpness = ", sharpness.max())
         return sharpness
 
 
@@ -311,11 +311,11 @@ class Control(inLib.Module):
         else:
             A = self._pupil.plane
 
-        print "Finding PF..."
-        print "   Using parameters:"
-        print "   dz = ", self._dz
-        print "   background = ", self._background
-        print "   z_offset = ", z_offset
+        print("Finding PF...")
+        print("   Using parameters:")
+        print("   dz = ", self._dz)
+        print("   background = ", self._background)
+        print("   z_offset = ", z_offset)
         complex_PF = self._pupil.psf2pf(self._PSF, self._dz, self._background, A, nIt, z_offset,
                                         resetAmp=resetAmp,symmeterize=symmeterize)
 
@@ -337,7 +337,7 @@ class Control(inLib.Module):
         self.pf_phase = unwrap_phase(Pupil_final.phase)
         self.pf_ampli = Pupil_final.amplitude
         sth = self.Strehl_ratio()
-        print("Strehl ratio:", sth)
+        print(("Strehl ratio:", sth))
 
         return self._PF.phase
 
@@ -361,10 +361,10 @@ class Control(inLib.Module):
         '''
         nx,ny = self._PF.phase.shape
         radius = np.sum(self._pupil.r[nx/2,:]<1)/2
-        print "Radius of fitted zernike: ", radius
+        print("Radius of fitted zernike: ", radius)
         #fitResults = libtim.zern.fit_zernike(self._PF.phase, rad=radius, nmodes=15)
         unwrapped=self.unwrap()
-        print "Unwrapped!"
+        print("Unwrapped!")
 
 #        fitResults_wrong = libtim.zern.fit_zernike(self._PF.phase, rad=radius, nmodes=25)
         fitResults = libtim.zern.fit_zernike(unwrapped, rad=radius, nmodes=25)
@@ -378,8 +378,8 @@ class Control(inLib.Module):
 
     def unwrap(self):
         unwrapped = unwrap_phase(self._PF.phase)
-        print "The unwrapped phase has a size of :"
-        print unwrapped.shape
+        print("The unwrapped phase has a size of :")
+        print(unwrapped.shape)
 
         return unwrapped
 
@@ -394,7 +394,7 @@ class Control(inLib.Module):
 
         nx,ny = unwrapped.shape
         rad = np.sum(self._pupil.r[nx/2,:]<1)/2
-        print "radius:", rad
+        print("radius:", rad)
 
 
         if skip4orders:
@@ -423,8 +423,8 @@ class Control(inLib.Module):
         cx = geometry.cx
         cy = geometry.cy
         if self._zernFitUnwrappedModes is not None:
-            print "ZernFitUnwrapped Modes: ", self._zernFitUnwrappedModes
-            print "Radius for zernCalc: ", r
+            print("ZernFitUnwrapped Modes: ", self._zernFitUnwrappedModes)
+            print("Radius for zernCalc: ", r)
             zernCalc = libtim.zern.calc_zernike(self._zernFitUnwrappedModes, r, mask=useMask)
 
             MOD = -1*zernCalc
@@ -461,7 +461,7 @@ class Control(inLib.Module):
                 Each modulation that is sent to the SLM by the AdaptiveOptics module has an
                 individual index, which can be used later to access this modulation.
         '''
-        print 'Modulating pupil function.'
+        print('Modulating pupil function.')
 
         #geometry = self._control.slm.getGeometry()
         geometry = self._getGeo()
@@ -473,17 +473,17 @@ class Control(inLib.Module):
             #theta = np.arctan2(geometry.y_pxl, x_pxl)
             #MOD = -zernike.basic_set(self._PF.zernike_coefficients, geometry.r, theta)
             if self._zernFitUnwrappedModes is not None:
-                print "ZernFitUnwrapped Modes: ", self._zernFitUnwrappedModes
+                print("ZernFitUnwrapped Modes: ", self._zernFitUnwrappedModes)
                     #print "Radius for zernCalc: ", r
                 zernCalc = libtim.zern.calc_zernike(self._zernFitUnwrappedModes,geometry.d/2.0,
                                                zern_data ={}, mask = False)
                 MOD0=-1*zernCalc
 
             else:
-                print "not pre-fitted!"
+                print("not pre-fitted!")
                 MOD0 = -1*libtim.zern.calc_zernike(self._PF.zernike_coefficients, geometry.d/2.0,
                                                zern_data ={}, mask = False)
-            print "Using zernike to modulate. Radius of calculated mod: ", (geometry.d/2.0)
+            print("Using zernike to modulate. Radius of calculated mod: ", (geometry.d/2.0))
             MOD0 = np.flipud(MOD0)
             MOD0 = np.rot90(MOD0)
             MOD0 = np.rot90(-1.0*MOD0)

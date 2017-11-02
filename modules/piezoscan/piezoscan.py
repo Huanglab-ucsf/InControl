@@ -9,9 +9,9 @@ import inLib
 class Control(inLib.Module):
 
     def __init__(self, control, settings):
-        print 'Initializing Piezoscan.'
+        print('Initializing Piezoscan.')
         inLib.Module.__init__(self, control, settings)
-        print 'Piezoscan initialized.'
+        print('Piezoscan initialized.')
         self.active = False
 
         if settings['ThorlabsMotor'] == True:
@@ -75,14 +75,14 @@ class Control(inLib.Module):
         data = np.zeros((nSteps,) + dim)
         slicesFrames = np.zeros((nFrames,)+dim)
         frame_length = 1.0/self._control.camera.getFrameRate()
-        for i in xrange(nSteps):
+        for i in range(nSteps):
             if self.active:
                 if up:
                     self._control.servo.jogUp()
                 else:
                     self._control.servo.jogDown()
                 time.sleep(4*frame_length)
-                for j in xrange(nFrames):
+                for j in range(nFrames):
                     im = self._control.camera.getMostRecentImageNumpy()
                     if im is None:
                         time.sleep(frame_length)
@@ -93,7 +93,7 @@ class Control(inLib.Module):
             else:
                 break
         if self.active and filename:
-            print 'piezoscan: Saving scan to', filename
+            print('piezoscan: Saving scan to', filename)
             np.save(filename, data)
             self.active = False
         return data
@@ -114,7 +114,7 @@ class Control(inLib.Module):
             *filename*: str
                 If not *None*, the image data will be saved in a .npy file with this name.
         '''
-        print 'piezoscan: Scanning with params:', start, end, nSteps
+        print('piezoscan: Scanning with params:', start, end, nSteps)
         self.active = True
         dz = abs((end-start)/(nSteps-1.0))
         orig_z = self._control.piezo.getPosition(3)
@@ -125,11 +125,11 @@ class Control(inLib.Module):
         data = np.zeros((nSteps,) + dim)
         slicesFrames = np.zeros((nFrames,)+dim)
         frame_length = 1.0/self._control.camera.getFrameRate()
-        for i in xrange(nSteps):
+        for i in range(nSteps):
             if self.active:
                 self._control.piezo.moveTo(3, zs[i])
                 time.sleep(2*frame_length)
-                for j in xrange(nFrames):
+                for j in range(nFrames):
                     slicesFrames[j] = self._control.camera.getMostRecentImageNumpy()
                     time.sleep(frame_length)
                 data[i] = np.mean(slicesFrames, axis=0)
@@ -137,7 +137,7 @@ class Control(inLib.Module):
                 break
         self._control.piezo.moveTo(3, orig_z)
         if self.active and filename:
-            print 'piezoscan: Saving scan to', filename
+            print('piezoscan: Saving scan to', filename)
             np.save(filename, data)
             self.active = False
         return data
@@ -154,7 +154,7 @@ class Control(inLib.Module):
             '''
             If the start point coordinate is not specified
             '''
-            for ii in xrange(nsteps+N_correct):
+            for ii in range(nsteps+N_correct):
                 self._control.servo.jogUp()
             time.sleep(3)
 
@@ -162,7 +162,7 @@ class Control(inLib.Module):
             self._control.moveTo(z_start+z_correct)
             time.sleep(2)
         # now, move the piezo back
-        for ii in xrange(N_correct):
+        for ii in range(N_correct):
             self._control.servo.jogDown()
             time.sleep(0.25)
         # done with bl_correct

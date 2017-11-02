@@ -14,13 +14,14 @@ def loadFormatConverterDLL():
     global formatconverter
     if formatconverter == 0:
         if os.path.exists("format_converters.dll"):
-            formatconverter = cdll.LoadLibrary("format_converters")
+            formatconverter = cdll.windll.LoadLibrary("format_converters")
         elif os.path.exists("andor/format_converters.dll"):
-            formatconverter = cdll.LoadLibrary("andor/format_converters")
+            formatconverter = cdll.windll.LoadLibrary("andor/format_converters")
         elif os.path.exists("libs/format_converters.dll"):
-            formatconverter = cdll.LoadLibrary("libs/format_converters")
+            formatconverter = cdll.windll.LoadLibrary(r"libs/format_converters")
 
-loadFormatConverterDLL()
+    print("formatconverter:", formatconverter)
+#loadFormatConverterDLL()
 
 #
 # Copies the image data from the AndorCamera class image buffer into
@@ -41,7 +42,7 @@ def andorToQtImage(andor_data, qt_image_data_sip_ptr, qt_image_size, min, max):
     if qt_image_size == andor_data_len:
         formatconverter.andorToQtImage(andor_data, qt_image_data_sip_ptr, andor_data_len, c_int(min), c_int(max), byref(image_min), byref(image_max))
     else:
-        print "andorToQtImage: buffers are not the same size! " + str(andor_data_len) + " " + str(qt_image_size)
+        print("andorToQtImage: buffers are not the same size! " + str(andor_data_len) + " " + str(qt_image_size))
     return [image_min.value, image_max.value]
 
 
@@ -71,18 +72,18 @@ if __name__ == "__main__":
     andor_data.raw = char1 + char2
     qt_data = c_char('c')
 
-    print "1", repr(andor_data.raw), qt_data
+    print("1", repr(andor_data.raw), qt_data)
     formatconverter.andorToQtImage(andor_data, byref(qt_data), 1, min, max)
 
     correct = ord(char1) + ord(char2) * 256
-    print correct
+    print(correct)
     correct = (correct - min)*256/range
 
     if correct < 0:
         correct = 0
     if correct > 255:
         correct = 255
-    print "2", repr(andor_data.raw), ord(qt_data.value), "=", correct
+    print("2", repr(andor_data.raw), ord(qt_data.value), "=", correct)
 
 
 #

@@ -35,7 +35,8 @@ class API():
         temp = c_int(-1)
         tango.LSX_CreateLSID(byref(temp))
         self.LSID = temp.value
-        error = tango.LSX_ConnectSimple(self.LSID, 1, "COM7", 57600, 0)
+        #tm_out = tango.LSX_GetCommandTimeout(self.LSID, int *toRead, int *toMove, int *toCal);
+        error = tango.LSX_ConnectSimple(self.LSID, 1, "COM4", 57600, 1) # changed by Dan
         if error:
             print "Marzhauser error", error
             self.good = 0

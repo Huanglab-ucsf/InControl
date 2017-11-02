@@ -8,7 +8,8 @@
 
 
 import sys
-from PyQt4 import QtGui
+sys.path.append('D:\\Dan\\Programs\\InControl\\')
+from PyQt5 import QtGui, QtWidgets
 import inLib
 import inControl_design
 
@@ -17,9 +18,9 @@ class UI(object):
     def __init__(self, control):
         self._control = control
 
-        self._app = QtGui.QApplication(sys.argv)
+        self._app = QtWidgets.QApplication(sys.argv)
 
-        self._window = QtGui.QWidget()
+        self._window = QtWidgets.QWidget()
         self._window.closeEvent = self.shutDown
 
         self._ui = inControl_design.Ui_Form()
@@ -51,7 +52,7 @@ class UI(object):
                     device_ui_path = inLib.get_device_ui_path(settings['devices'][device])
                     # Try to import the ui module:
                     try:
-                        print 'Trying to import', device_ui_path
+                        print('Trying to import', device_ui_path)
                         device_ui_module = inLib.import_module(device_ui_path)
                         #print "ui_path:", device_ui_path
                         # Start the UI:
@@ -59,7 +60,7 @@ class UI(object):
                         self._device_ui_controls[device] = device_ui_module.UI(device_control)
                     except ImportError:
                         # There is no ui for this device. Do nothing.
-                        print 'Did not find UI for {0}. Passing...'.format(device)
+                        print('Did not find UI for {0}. Passing...'.format(device))
                     except:
                         raise
                     # Add an entry to the device list widget:
@@ -72,13 +73,13 @@ class UI(object):
             if settings['modules'][module]['active']:
                 module_ui_path = inLib.get_module_ui_path(module)
                 try:
-                    print 'Trying to import', module_ui_path
+                    print('Trying to import', module_ui_path)
                     module_ui_module = inLib.import_module(module_ui_path)
                     print("Module imported.")
                     self._module_ui_controls[module] = module_ui_module.UI(module_controls[module],
                             self)
                 except ImportError:
-                    print 'Did not find UI for {0}. Passing...'.format(module)
+                    print('Did not find UI for {0}. Passing...'.format(module))
                 self._ui.listWidgetModules.addItem(module)
         self.__dict__.update(self._module_ui_controls)
 
@@ -103,20 +104,20 @@ class UI(object):
 
     def _on_row_activatedD(self, item):
         temp = str(item.text())
-        if temp in self._device_ui_controls.keys():
+        if temp in list(self._device_ui_controls.keys()):
             self._device_ui_controls[temp]._window.show()
 
 
     def _on_row_activatedM(self, item):
         temp = str(item.text())
-        if temp in self._module_ui_controls.keys():
+        if temp in list(self._module_ui_controls.keys()):
             self._module_ui_controls[temp]._window.show()
 
 
     def shutDown(self, event):
-        for m in self._module_ui_controls.values():
+        for m in list(self._module_ui_controls.values()):
             m.shutDown()
-        for d in self._device_ui_controls.values():
+        for d in list(self._device_ui_controls.values()):
             d.shutDown()
         self._control.shutDown()
         self._app.quit()

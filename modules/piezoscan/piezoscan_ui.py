@@ -9,20 +9,20 @@ import inLib
 class UI(inLib.ModuleUI):
     
     def __init__(self, control, ui_control):
-        print 'Initializing Piezoscan UI.'
+        print('Initializing Piezoscan UI.')
         inLib.ModuleUI.__init__(self, control, ui_control, 'modules.piezoscan.piezoscan_design')
-        print 'Piezoscan design initialized.'
+        print('Piezoscan design initialized.')
         self._ui.doubleSpinBoxStart.valueChanged.connect(self.calcScanParams)
         self._ui.doubleSpinBoxEnd.valueChanged.connect(self.calcScanParams)
         self._ui.spinBoxNSteps.valueChanged.connect(self.calcScanParams)
         self._ui.spinBoxNFrames.valueChanged.connect(self.calcScanParams)
         self._window.connect(self._ui.pushButtonScan,QtCore.SIGNAL('clicked()'),self.scan)
-        print 'Calculating piezoscan parameters.'
+        print('Calculating piezoscan parameters.')
         self.calcScanParams()
         
         self._scanner = None
 
-        print 'Piezoscan UI initialized.'
+        print('Piezoscan UI initialized.')
 
 
     def getParams(self):
@@ -89,5 +89,5 @@ class Scanner(QtCore.QThread):
                                            self.filename)
 
     def stop(self):
-        print 'trying to stop'
+        print('trying to stop')
         self.control.stop()

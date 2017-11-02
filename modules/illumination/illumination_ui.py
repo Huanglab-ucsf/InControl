@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore,QtGui,Qwt5
+from PyQt5 import QtCore,QtGui
 from functools import partial
 import inLib
 import sys
@@ -29,7 +29,7 @@ class UI(inLib.ModuleUI):
 
         for i in range(0,len(laser_ports)):
             if len(laser_ports[i])==1:
-                print (i, laser_ports[i][0])
+                print((i, laser_ports[i][0]))
                 self.sliders[i].valueChanged.connect(partial(self._updatePower, i, laser_ports[i][0]))
                 self.onoff[i].stateChanged.connect(partial(self._turnOnOff, i, laser_ports[i][0]))
                 self.digMod[i].stateChanged.connect(partial(self._setDigitalMod, i, laser_ports[i][0]))
@@ -104,7 +104,7 @@ class UI(inLib.ModuleUI):
     def dragEnterEvent(self,event):
         event.acceptProposedAction()
         event.accept()
-        print "Drag Enter Event..."
+        print("Drag Enter Event...")
         '''
         if event.mimeData().hasUrls():
             event.accept()
@@ -115,15 +115,15 @@ class UI(inLib.ModuleUI):
     def dropEvent(self, event):
         for url in event.mimeData().urls():
             filename = str(url.encodedPath())[1:]
-            print filename
+            print(filename)
             try:
                 self._newSettings(filename)
             except:
-                print "Unable to load settings file ", filename
+                print("Unable to load settings file ", filename)
 
     def _newSettings(self, filename):
         self.settings = self._control.newSettings(filename)
-        print self.settings
+        print(self.settings)
         if len(self.settings) > self._max_saved:
             self.settings.pop()
         for i,p in enumerate(self.settings):
@@ -139,8 +139,8 @@ class UI(inLib.ModuleUI):
             if radioButton.isChecked():
                 self._control.updateSettings(p)
         self._ui.pushButton_startShutters.setEnabled(True)
-        print "\n Shutter Sequence: "
-        print p
+        print("\n Shutter Sequence: ")
+        print(p)
 
     def useSimpleSeq(self):
         if self._ui.settings1_radioButton.isChecked() or self._ui.special_radioButton.isChecked() or self._ui.special2_radioButton.isChecked():
@@ -247,8 +247,8 @@ class UI(inLib.ModuleUI):
         shutter_dict = self._createShutterDict(frames)
         frames = int(self._ui.lineEdit_shutterFrames.text())
         freq = int(self._ui.lineEdit_freq.text())
-        print "\n Shutter sequence: "
-        print shutter_dict
+        print("\n Shutter sequence: ")
+        print(shutter_dict)
         useConfocal = self._ui.checkBox_confocal.isChecked()
         if useConfocal:
             #oversampling = 1000

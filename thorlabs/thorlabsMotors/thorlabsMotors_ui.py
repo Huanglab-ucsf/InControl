@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore, QtGui, QAxContainer
+from PyQt5 import QtCore, QtGui, QAxContainer
 import inLib
 import time
 
@@ -15,7 +15,7 @@ class UI(inLib.DeviceUI):
 
     def __init__(self, control):
         design_path = 'thorlabs.thorlabsMotors.thorlabsMotors_design'
-        print 'Thorlabs stage: Initializing UI.'
+        print('Thorlabs stage: Initializing UI.')
         inLib.DeviceUI.__init__(self, control, design_path)
 
         #self.homeX, self.homeY, z = self._control.position()
@@ -77,7 +77,7 @@ class UI(inLib.DeviceUI):
         self._control.setStage(z_start+self.blrange)
         time.sleep(3)
         ndown = int(self.blrange/dstep)+1
-        for ii in xrange(ndown):
+        for ii in range(ndown):
             self._control.jogDown()
             time.sleep(0.25)
          # done with backlash correction
@@ -100,7 +100,7 @@ class APTUser1(QAxContainer.QAxWidget):
         try:
             self.dynamicCall('LoadParamSet(char[])', "smallstep")
         except:
-            print "loadparamset for APT User failed"
+            print("loadparamset for APT User failed")
 
     def moveTo(self, pos):
         self.dynamicCall('MoveAbsoluteEx(int, double, double, bool)', 0, pos, 0.0, False)

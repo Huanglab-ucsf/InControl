@@ -11,14 +11,16 @@ This module is InControl's library for miscellaneous utilities.
 '''
 
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtCore
 import functools
 import threading
 import sys
+sys.path.append('D:\\Dan\\Programs\\InControl\\')
 import numpy as np
 import traceback
 import os
 import yaml
+import importlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
@@ -36,9 +38,9 @@ def import_module(path):
         *module*: module
             In instance of the imported module.
     '''
-    file = path.split('.')[-1]
-    # print("fileis:", file)
-    return __import__(path, globals(), locals(), [file], -1)
+    file_m = path.split('.')[-1]
+    #return importlib.import_module(path)
+    return __import__(path, globals(), locals(), [file_m], 0)
 
 
 def get_device_path(device):
@@ -75,39 +77,39 @@ def load_settings(path):
 
 
 class _UI:
-        def __init__(self, control, design_path):
-		self._control = control
-		self._window = QtGui.QWidget()
-		'''
-		if design_path=='modules.testing.testing2_design':
-                    self._window = QtGui.QMainWindow()
-                    print "testing..."
-                else:
-                    self._window = QtGui.QWidget()
-                    '''
-		ui_module = import_module(design_path)
-		self._ui = ui_module.Ui_Form()
-		try:
-                    self._ui.setupUi(self._window)
-                except:
-                    self._window = QtGui.QMainWindow()
-                    self._ui.setupUi(self._window)
-		self._window.closeEvent = self._hide_window
+    def __init__(self, control, design_path):
+        self._control = control
+        self._window = QtWidgets.QWidget()
+        '''
+        if design_path=='modules.testing.testing2_design':
+            self._window = QtWidgets.QMainWindow()
+            print "testing..."
+        else:
+            self._window = QtWidgets.QWidget()
+            '''
+        ui_module = import_module(design_path)
+        self._ui = ui_module.Ui_Form()
+        try:
+            self._ui.setupUi(self._window)
+        except:
+            self._window = QtWidgets.QMainWindow()
+            self._ui.setupUi(self._window)
+        self._window.closeEvent = self._hide_window
 
-	def dragEnterEvent(self, event):
-            event.acceptProposedAction()
-            event.accept()
-            print "Drag enter event..."
+    def dragEnterEvent(self, event):
+        event.acceptProposedAction()
+        event.accept()
+        print("Drag enter event...")
 
-        def dropEvent(self, event):
-            print "Drop event..."
+    def dropEvent(self, event):
+        print("Drop event...")
 
-        def _hide_window(self, event):
-                self._window.hide()
-                event.ignore()
+    def _hide_window(self, event):
+            self._window.hide()
+            event.ignore()
 
-        def shutDown(self):
-                pass
+    def shutDown(self):
+            pass
 
 DeviceUI = _UI
 
@@ -165,7 +167,7 @@ class CommandQueue:
             response = function(*args, **kwargs)
         except:
             etype, value, tb = sys.exc_info()
-            print ''.join(traceback.format_exception(etype, value, tb))
+            print((''.join(traceback.format_exception(etype, value, tb))))
             response = None
         self.__lock.release()
         return response
@@ -177,8 +179,8 @@ class MplCanvas(FigureCanvas):
         self.figure = Figure(figsize, dpi)
         FigureCanvas.__init__(self, self.figure)
         self.setParent(parent)
-        FigureCanvas.setSizePolicy(self, QtGui.QSizePolicy.Expanding,
-                QtGui.QSizePolicy.Expanding)
+        FigureCanvas.setSizePolicy(self, QtWidgets.QSizePolicy.Expanding,
+                QtWidgets.QSizePolicy.Expanding)
         FigureCanvas.updateGeometry(self)
 
 

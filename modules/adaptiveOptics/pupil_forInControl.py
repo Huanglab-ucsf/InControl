@@ -7,7 +7,7 @@ from numpy.lib.scimath import sqrt as _msqrt
 import tempfile as _tempfile
 #from Utilities import zernike as _zernike
 from matplotlib.pylab import *
-import pyfftw
+#import pyfftw
 #from scipy import weave
 
 
@@ -91,7 +91,7 @@ class Pupil(object):
                 phase += p
             PF = _np.sqrt(n_photons/self.pupil_npxl)*_np.exp(1j*phase)
             PF = _np.nan_to_num(PF)
-	    return self.apply_NA_restriction(PF)
+            return self.apply_NA_restriction(PF)
 
         if _np.ndim(z) == 0 or _np.ndim(z) == 2:
             return compute_pupil_function(z)
@@ -166,15 +166,12 @@ class Pupil(object):
 
 
     def apply_NA_restriction(self, PF):
-
         '''
         Sets all values of a given pupil function to zero that are out of NA range.
         '''
-
-	PF[self.r>1] = 0
-	return PF
-
-
+        PF[self.r>1] = 0
+        return PF
+    
     def compute_Fisher_Information(self, PSF, poisson_noise, voxel_size,
             mask=None):
 
@@ -202,9 +199,9 @@ class Pupil(object):
             dPSF = [_*mask for _ in dPSF]
             noisy = PSF + poisson_noise
 
-        FI = [[0,0,0] for _ in xrange(3)]
-        for i in xrange(3):
-            for j in xrange(3):
+        FI = [[0,0,0] for _ in range(3)]
+        for i in range(3):
+            for j in range(3):
                 FI[i][j] = _np.sum(dPSF[i]*dPSF[j]/noisy,-1).sum(-1)
 
         return FI
@@ -214,7 +211,7 @@ class Pupil(object):
 
         FI = self.compute_Fisher_Information(PSF, poisson_noise, voxel_size,
                 mask)
-        return [_np.sqrt(1.0/FI[_][_]) for _ in xrange(3)]
+        return [_np.sqrt(1.0/FI[_][_]) for _ in range(3)]
 
 
 
@@ -248,8 +245,8 @@ class Geometry:
         self.size = size
         self.nx, self.ny = size
         self.x_pxl, self.y_pxl = _np.meshgrid(_np.arange(self.nx),_np.arange(self.ny))
-        self.x_pxl -= cx
-        self.y_pxl -= cy
+        self.x_pxl -= int(self.cx)
+        self.y_pxl -= int(self.cy)
         self.r_pxl = _msqrt(self.x_pxl**2+self.y_pxl**2)
         self.r = 2.0*self.r_pxl/d
         self.theta = _np.arctan2(self.y_pxl, self.x_pxl)
@@ -412,8 +409,8 @@ class Simulation(Pupil):
             else:
                 PSF = _np.zeros((nz,nx,nx))+1j*_np.zeros((nz,nx,nx))
         except MemoryError:
-            print 'Not enough memory for PSF, \
-                    using memory map in a temporary file.'
+            print('Not enough memory for PSF, \
+                    using memory map in a temporary file.')
             temp_file = _tempfile.TemporaryFile()
             if intensity:
                 temp_type = float
@@ -422,8 +419,8 @@ class Simulation(Pupil):
             PSF = _np.memmap(temp_file, dtype=temp_type, mode='w+',
                 shape=(nz,nx,nx))
 
-        for i in xrange(nz):
-            if verbose: print 'Calculating PSF slice for z={0}um.'.format(zs[i])
+        for i in range(nz):
+            if verbose: print('Calculating PSF slice for z={0}um.'.format(zs[i]))
             if use_pyfftw:
                 aligned = pyfftw.n_byte_align(_np.exp(2*_np.pi*1j*kz*zs[i])*PF,16)
                 U = N * pyfftw.interfaces.numpy_fft.ifft2(aligned)
@@ -503,9 +500,9 @@ class Simulation(Pupil):
         expr2 = "Ic = mu + (U * Uconj)"
 
 
-        for ii in xrange(nIterations):
+        for ii in range(nIterations):
 
-            print 'Iteration',ii+1
+            print('Iteration',ii+1)
             # Calculate PSF field from given PF:
             U = self.pf2psf(A, zs, intensity=False)
             # Calculated PSF intensity with noise:
@@ -514,16 +511,16 @@ class Simulation(Pupil):
             Ic = mu + (U * Uconj)
 
             minFunc = _np.mean(PSF*_np.log(PSF/Ic))
-            print 'Relative entropy per pixel:', minFunc
+            print('Relative entropy per pixel:', minFunc)
             redChiSq = mean((PSF-Ic)**2)
-            print 'Reduced Chi square:', redChiSq
+            print('Reduced Chi square:', redChiSq)
 
             # Comparing measured with calculated PSF by entropy minimization:
             Ue = (PSF/Ic)*U
             #weave.blitz(expr1)
             # New PF guess:
             A = _np.zeros_like(Ue) + 1j*_np.zeros_like(Ue)
-            for i in xrange(len(zs)):
+            for i in range(len(zs)):
                 #Ue[i] = _fftpack.fftshift(Ue[i])
                 if use_pyfftw:
                     Ue_aligned = pyfftw.n_byte_align(_fftpack.fftshift(Ue[i]),16)
@@ -575,8 +572,8 @@ class Simulation(Pupil):
         nz = len(zs)
         sliPSF = _np.zeros((nz,self.nx,self.nx))
 
-        for i in xrange(nz):
-            if verbose: print 'Calculating PSF slice for z={0}um.'.format(zs[i])
+        for i in range(nz):
+            if verbose: print('Calculating PSF slice for z={0}um.'.format(zs[i]))
 
             modPF = self.get_sli_pupil_function(zs[i], n_photons, dmf) * \
                     _np.exp(1j*modulation)
@@ -592,7 +589,7 @@ class Simulation(Pupil):
         images = _np.zeros((nz, self.nx, self.nx))
         PF = self.get_sli_pupil_function(z0, n_photons)
 
-        for i in xrange(nz):
+        for i in range(nz):
             modPF = PF * _np.exp(1j*modulations[i])
             images[i] = self.pf2psf(modPF, 0, intensity=True, verbose=False)
 

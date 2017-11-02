@@ -6,7 +6,7 @@ from ctypes import wintypes
 from ctypes.wintypes import WORD, DWORD, BYTE, LONG, SHORT, DOUBLE
 import numpy as np
 import sys
-import Queue
+import queue
 import threading
 import time
 
@@ -116,7 +116,7 @@ class API:
     '''
 
     def __init__(self):
-        self.dcam_path = "D:\\Programs\\DCAM-SDK (1112)\\bin\\win32\\"
+        self.dcam_path = "D:\\Programs\\DCAM-SDK (1112)\\bin\\x64\\"
         self.dcam = windll.LoadLibrary(self.dcam_path+"dcamapi")
 
         res1 = c_void_p(0)
@@ -486,7 +486,7 @@ class API:
         # Keep track of the maximum backlog.
         backlog = cur_frame_number - self.last_frame_number
         if (backlog > self.number_image_buffers):
-            print "warning: hamamatsu camera frame buffer overrun detected!"
+            print("warning: hamamatsu camera frame buffer overrun detected!")
         if (backlog > self.max_backlog):
             self.max_backlog = backlog
         self.last_frame_number = cur_frame_number
@@ -553,9 +553,9 @@ class API:
 if __name__ == '__main__':
     cam_api = API()
     cam_api.openCamera()
-    print "Camera: ", cam_api.getString(0x04000104)
-    print "Version: ", cam_api.getString(0x04000105)
-    print "DCAM-API Version: ", cam_api.getString(0x04000108)
+    print("Camera: ", cam_api.getString(0x04000104))
+    print("Version: ", cam_api.getString(0x04000105))
+    print("DCAM-API Version: ", cam_api.getString(0x04000108))
     cam_api.setPropertyValue(4202768, 768)
     cam_api.setPropertyValue(4202784, 256)
     cam_api.setPropertyValue(4202800, 768)
@@ -564,28 +564,28 @@ if __name__ == '__main__':
     cam_api.setExposureTime(0.0005)
     data_type = cam_api.getDataType()
     xsize,ysize = cam_api.getDataSize()
-    print "DataType: ", data_type
-    print "x,y size: ", xsize, ysize
-    print "Trigger mode: ", cam_api.getTriggerMode()
-    print "Exposure time: ", cam_api.getExposureTime()
+    print("DataType: ", data_type)
+    print("x,y size: ", xsize, ysize)
+    print("Trigger mode: ", cam_api.getTriggerMode())
+    print("Exposure time: ", cam_api.getExposureTime())
     cam_api.preCapture(1)
     numFrames = 200
     cam_api.allocFrame(numFrames)
     cam_api.allocFrame(numFrames)
     ims = np.zeros((numFrames,xsize*ysize),dtype=np.uint16)
-    print "Frame count for allocFrame: ", cam_api.getFrameCount()
+    print("Frame count for allocFrame: ", cam_api.getFrameCount())
     bytesize = cam_api.getDataFrameBytes()
-    print "ByteSize: ", bytesize
+    print("ByteSize: ", bytesize)
     cam_api.capture()
     t1 = time.clock()
-    print "Transfer info: ", cam_api.getTransferInfo()
+    print("Transfer info: ", cam_api.getTransferInfo())
     cam_api.wait(4, 0x80000000)
-    print "Transfer info: ", cam_api.getTransferInfo()
+    print("Transfer info: ", cam_api.getTransferInfo())
     t2 = time.clock()
     for i in range(0, numFrames):
         ims[i] = cam_api.lockData(i, xsize*ysize)
     cam_api.unlockData()
-    print "Transfer info: ", cam_api.getTransferInfo()
+    print("Transfer info: ", cam_api.getTransferInfo())
     t3 = time.clock()
     cam_api.freeFrame()
     #cam_api.preCapture(0)
@@ -614,8 +614,8 @@ if __name__ == '__main__':
     #print "Status: ", stat
     #errRelease = cam_api.releaseBuffer()
     #print "ReleaseBuffer error: ", cam_api.getLastError()
-    print "Frame count for attachFrame: ", cam_api.getFrameCount()
-    print "Transfer info: ", cam_api.getTransferInfo()
+    print("Frame count for attachFrame: ", cam_api.getFrameCount())
+    print("Transfer info: ", cam_api.getTransferInfo())
     
     cam_api.idle()
 
@@ -627,9 +627,9 @@ if __name__ == '__main__':
         propID = cam_api.getNextPropertyID(propID)
         propName = cam_api.getPropertyName(propID)
         propVal = cam_api.getPropertyValue(propID)
-        print "ID: ", propID
-        print "Name: ", propName
-        print "Value: ", propVal
+        print("ID: ", propID)
+        print("Name: ", propName)
+        print("Value: ", propVal)
     
     #cam_api.freeFrame()
     cam_api.closeCamera()

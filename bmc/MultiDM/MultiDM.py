@@ -115,7 +115,7 @@ class Control(inLib.Device):
                 if (pattern.shape[0] == npixels) and (pattern.shape[1]==npixels):
                     self.mirror.pattern = pattern.copy()
                 else:
-                    print "Problem cropping pattern for DM."
+                    print("Problem cropping pattern for DM.")
             if self.mirror.pattern.shape[0] < npixels:
                 pattern = np.zeros((npixels,npixels))
                 origShape = self.mirror.pattern.shape[0]
@@ -186,14 +186,14 @@ class Control(inLib.Device):
         return self.numZernsToVary
 
     def varyMultiplierCurrent(self, minMult, maxMult, num, wTime, externallyCalled = False):
-        print("The number of multipliers:", num)
-        print("mininum:", minMult)
-        print("maximum:",maxMult)
+        print(("The number of multipliers:", num))
+        print(("mininum:", minMult))
+        print(("maximum:",maxMult))
         self.numZernsToVary = num
         mults = np.linspace(minMult,maxMult,num)
         filenms = []
         baseline = self.returnPattern()
-        for i in xrange(num):
+        for i in range(num):
             self.clear()
             newPattern = baseline * mults[i]
             self.mirror.setPattern(newPattern)
@@ -205,7 +205,7 @@ class Control(inLib.Device):
 
         time.sleep(0.1)
 
-        print "Finished creating files for varying multiplier for current pattern..."
+        print("Finished creating files for varying multiplier for current pattern...")
 
         wTimeStr = "%i" % wTime
         numStr = "%i" % num
@@ -213,7 +213,7 @@ class Control(inLib.Device):
         args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
 
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            print("Polling proc: ", self.proc.poll())
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()
@@ -227,10 +227,10 @@ class Control(inLib.Device):
             if wTime<0:
                 for i in range(num):
                     time.sleep(1)
-                    print "Going to next..."
+                    print("Going to next...")
                     self.advancePatternWithPipe()
             output = self.proc.stdout.read()
-            print "proc stdout: ", output
+            print("proc stdout: ", output)
             return 1
         
 
@@ -258,7 +258,7 @@ class Control(inLib.Device):
         amps = np.linspace(minAmp,maxAmp,num)
         filenms = []
         baseline = self.returnPattern()
-        for i in xrange(num):
+        for i in range(num):
             if clearfirst:
                 self.clear() #clears mirror pattern and segments
             else:
@@ -274,7 +274,7 @@ class Control(inLib.Device):
 
         time.sleep(0.1)
 
-        print "Finished creating files for varying Zernike..."
+        print("Finished creating files for varying Zernike...")
 
         wTimeStr = "%i" % wTime
         numStr = "%i" % num
@@ -285,7 +285,7 @@ class Control(inLib.Device):
         #                 numStr, wTimeStr], shell=True)
 
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            print("Polling proc: ", self.proc.poll())
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()
@@ -299,10 +299,10 @@ class Control(inLib.Device):
             if wTime<0:
                 for i in range(num):
                     time.sleep(1)
-                    print "Going to next..."
+                    print("Going to next...")
                     self.advancePatternWithPipe()
             output = self.proc.stdout.read()
-            print "proc stdout: ", output
+            print("proc stdout: ", output)
             return 1
 
     def varyZernRadii(self, mode, amp, maxR, minR, num, wTime, radius=None, useMask=True, clearfirst=True,
@@ -331,7 +331,7 @@ class Control(inLib.Device):
         rads = np.linspace(minR,maxR,num,dtype=np.uint16)
         filenms = []
         baseline = self.returnPattern()
-        for i in xrange(num):
+        for i in range(num):
             if clearfirst:
                 self.clear() #clears mirror pattern and segments
             else:
@@ -347,7 +347,7 @@ class Control(inLib.Device):
 
         time.sleep(0.1)
 
-        print "Finished creating files for varying Zernike radii..."
+        print("Finished creating files for varying Zernike radii...")
 
         wTimeStr = "%i" % wTime
         numStr = "%i" % num
@@ -358,7 +358,7 @@ class Control(inLib.Device):
         #                 numStr, wTimeStr], shell=True)
 
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            print("Polling proc: ", self.proc.poll())
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()
@@ -372,10 +372,10 @@ class Control(inLib.Device):
             if wTime<0:
                 for i in range(num):
                     time.sleep(1)
-                    print "Going to next..."
+                    print("Going to next...")
                     self.advancePatternWithPipe()
             output = self.proc.stdout.read()
-            print "proc stdout: ", output
+            print("proc stdout: ", output)
             return 1
         
 
@@ -390,13 +390,13 @@ class Control(inLib.Device):
         wTimeStr = "%i" % wTime
         files_file = str(filename)
         num = len(np.loadtxt(files_file, dtype='S'))
-        print "varyArbitrary: Number of files to load is ", num
+        print("varyArbitrary: Number of files to load is ", num)
         numStr = "%i" % num
         self.numZernsToVary = num
         args = [self.executable, files_file, str(self.multiplier), numStr, wTimeStr]
 
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            print("Polling proc: ", self.proc.poll())
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()
@@ -410,10 +410,10 @@ class Control(inLib.Device):
             if wTime<0:
                 for i in range(num):
                     time.sleep(1)
-                    print "Going to next..."
+                    print("Going to next...")
                     self.advancePatternWithPipe()
             output = self.proc.stdout.read()
-            print "proc stdout: ", output
+            print("proc stdout: ", output)
             return 1
         
             
@@ -439,7 +439,7 @@ class Control(inLib.Device):
         files_file = "allSegFiles_group.txt"
         np.savetxt(files_file, np.array(filenms), fmt='%s', delimiter='\n')
 
-        print "Finished creating files for varying group offsets..."
+        print("Finished creating files for varying group offsets...")
         time.sleep(0.5)
 
         wTimeStr = "%i" % wTime
@@ -448,7 +448,7 @@ class Control(inLib.Device):
         args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
         
         if self.proc is not None:
-            print "Polling proc: ", self.proc.poll()
+            print("Polling proc: ", self.proc.poll())
             if self.proc.poll() is None:
                 self.proc.terminate()
                 self.proc.communicate()
@@ -462,16 +462,16 @@ class Control(inLib.Device):
             if wTime<0:
                 for i in range(num):
                     time.sleep(1)
-                    print "Going to next..."
+                    print("Going to next...")
                     self.advancePatternWithPipe()
             output = self.proc.stdout.read()
-            print "proc stdout: ", output
+            print("proc stdout: ", output)
             return 1
 
 
     def addOther(self, data, on_geometry_changed=None, args=()):
         data_new = np.rot90(data-data.min())
-        print "Data_New max: ", data_new.max()
+        print("Data_New max: ", data_new.max())
         data_new = self.preMultiplier * data_new #/ data_new.max()
         index = self._other.counter
         self._other.others[index] = _OtherModulation(data_new-data_new.mean(),on_geometry_changed, args)
@@ -550,14 +550,14 @@ class Mirror():
             diffx = self.pattern.shape[0] - data.shape[0]
             diffy = self.pattern.shape[1] - data.shape[1]
             if diffx != diffy:
-                print "Mirror.addToPattern: Something's not square..."
+                print("Mirror.addToPattern: Something's not square...")
             else:
                 border = diffx/2
                 self.pattern[border:-1*border,border:-1*border] += data
         else:
-            print "Mirror.addToPattern: Shape mismatch..."
-            print "Mirror.addToPattern: Data to add has shape: ", data.shape
-            print "Mirror.addToPattern: Pattern  has shape: ", self.pattern.shape
+            print("Mirror.addToPattern: Shape mismatch...")
+            print("Mirror.addToPattern: Data to add has shape: ", data.shape)
+            print("Mirror.addToPattern: Pattern  has shape: ", self.pattern.shape)
         return self.pattern
         
 
@@ -597,8 +597,8 @@ class Mirror():
     def addXTilt(self, seg, tilt):
         w = self.whereSegment(seg)
         toAdd = self.findTilt(tilt)
-        print "toAdd shape:", toAdd.shape
-        print "pattern segment shape:", self.pattern[w].shape
+        print("toAdd shape:", toAdd.shape)
+        print("pattern segment shape:", self.pattern[w].shape)
         self.pattern[w] += toAdd
         
     def addYTilt(self, seg, tilt):

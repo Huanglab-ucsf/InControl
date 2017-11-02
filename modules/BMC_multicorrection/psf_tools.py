@@ -52,7 +52,7 @@ def psf_processing(raw_scan, raw_center, r_mask = 40):
 
     pupil_g = pupil_geometry((ny,nx), cy, cx, r_mask)
     center = np.unravel_index(np.argmax(gf(raw_scan*pupil_g.mask,2)), raw_scan.shape)
-    print "Center found at: ", center
+    print("Center found at: ", center)
     pz, py, px = center
     pupil_g = pupil_geometry((ny,nx), py, px, r_mask) # new geometry
     hcyl = np.array(nz*[np.logical_and(pupil_g.r_pxl>=r_mask*1.30, pupil_g.r_pxl<1.50)])

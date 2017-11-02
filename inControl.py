@@ -10,7 +10,7 @@
 import sys
 sys.path.append('D:\\Programs')
 import os
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 import inLib
 from inControl_ui import UI
 
@@ -26,11 +26,11 @@ class Control(object):
         Reads the settings and loads all specified devices and modules.
         Sets up instrument-wide properties and calls the UI.
         '''
-        print 'inControl: Starting up...'
+        print('inControl: Starting up...')
         if len(sys.argv) > 1:
             settings_filename = sys.argv[1]
         else:
-            print 'Loading default settings.'
+            print('Loading default settings.')
             settings_filename = 'settings_default.yaml'
         self._settings = inLib.load_settings(settings_filename)
 
@@ -132,11 +132,11 @@ class Control(object):
         Shuts down all InControl modules and devices.
         It is called when the user closes InControl's main window.
         '''
-        for module in self._module_controls.values():
+        for module in list(self._module_controls.values()):
             module.shutDown()
-        for device in self._device_controls.values():
+        for device in list(self._device_controls.values()):
             device.shutDown()
-        print 'Closing InControl.'
+        print('Closing InControl.')
 
 				
 if __name__ == '__main__':

@@ -5,7 +5,7 @@
 # Hazen 2/09
 #
 
-import formatconverters as fconv
+from . import formatconverters as fconv
 
 
 # Dax file writing class

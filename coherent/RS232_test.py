@@ -5,8 +5,9 @@
 # Hazen 3/09
 #
 
-import uspp.uspp as uspp
+#import uspp.uspp as uspp
 import time
+from .uspp import uspp 
 
 class API():
     def __init__(self, ports, timeout=None,
@@ -14,9 +15,11 @@ class API():
         self.tty = []
         self.live = []
         num_of_ports = len(ports)
+        print("Ports:", ports)
         for i in range(0,num_of_ports):
             try:
                 self.tty.append(uspp.SerialPort(ports[i], timeout, baudrate))
+                print("tty:",self.tty)
                 self.tty[i].flush()
                 self.end_of_line = end_of_line
                 self.wait_time = wait_time
@@ -43,7 +46,7 @@ class API():
         self.tty[port_num].write(command + self.end_of_line)
 
     def shutDown(self):
-        print "RS232 shutDown"
+        print("RS232 shutDown")
         del(self.tty)
 
     def getResponse(self, port_num):

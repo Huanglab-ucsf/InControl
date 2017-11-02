@@ -54,9 +54,9 @@ See also uspp module docstring.
 from win32file import *
 from win32event import *
 import win32con
-import exceptions
+import builtins 
 
-class SerialPortException(exceptions.Exception):
+class SerialPortException():
     """Exception raise in the SerialPort methods"""
     def __init__(self, args=None):
         self.args=args
@@ -204,10 +204,12 @@ class SerialPort:
         """
 
         (hr, buff) = ReadFile(self.__handle, num)
-        if len(buff)<>num and self.__timeout!=0: # Time-out  
+        if len(buff)!=num and self.__timeout!=0: # Time-out  
             raise SerialPortException('Timeout')
         else:
-            return buff
+            print("Buffer:", buff)
+            return buff.decode()
+
 
 
     def readline(self):
@@ -227,7 +229,8 @@ class SerialPort:
         """Write the string s to the serial port"""
         overlapped=OVERLAPPED()
         overlapped.hEvent=CreateEvent(None, 0,0, None)
-        WriteFile(self.__handle, s, overlapped)
+        print("Handle:", self.__handle)
+        WriteFile(self.__handle, s.encode(), overlapped)
         # Wait for the write to complete
         WaitForSingleObject(overlapped.hEvent, INFINITE)
 
