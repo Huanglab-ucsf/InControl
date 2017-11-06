@@ -207,7 +207,6 @@ class SerialPort:
         if len(buff)!=num and self.__timeout!=0: # Time-out  
             raise SerialPortException('Timeout')
         else:
-            print("Buffer:", buff)
             return buff.decode()
 
 

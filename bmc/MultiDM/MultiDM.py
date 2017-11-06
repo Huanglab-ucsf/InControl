@@ -522,7 +522,7 @@ class Mirror():
 
     def initGeo(self, npixels):
         self.nPixels = npixels
-        self.borders = np.linspace(0,self.nPixels,num=self.nSegments+1)
+        self.borders = np.linspace(0,self.nPixels,num=self.nSegments+1).astype('uint16')
         self.pixInSeg = self.borders[1]-self.borders[0]
         self.setPupilGeometry(npixels/2, npixels/2, npixels)
         

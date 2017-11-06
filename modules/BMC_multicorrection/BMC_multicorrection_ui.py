@@ -1,17 +1,17 @@
 #!/usr/bin/python
 # let me debug this through.
 
-from PyQt4 import QtGui,QtCore
+from PyQt5 import QtWidgets,QtCore
 import inLib
 import numpy as np
 import copy
 import time
 import libtim.zern as lzern
-import AO_algos.Image_metrics as ao_metric
-from BMC_threadfuncs import BL_correction, Optimize_pupil
-from zern_funcs import zm_list
+from .AO_algos import Image_metrics as ao_metric
+from .BMC_threadfuncs import BL_correction, Optimize_pupil
+from .zern_funcs import zm_list
 from functools import partial
-from Evolution_routines import Pattern_evolution
+from .Evolution_routines import Pattern_evolution
 from itertools import product
 
 
@@ -208,11 +208,11 @@ class UI(inLib.ModuleUI):
         zm = self.z_max-4
 
         for zmode in np.arange(zm):
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(QtWidgets.QApplication.translate("Form", str(0), None, QtWidgets.QApplication.UnicodeUTF8))
             self._ui.table_Zcoeffs.setItem(zmode-4, 0, item)
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(0), None, QtGui.QApplication.UnicodeUTF8))
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(QtWidgets.QApplication.translate("Form", str(0), None, QtWidgets.QApplication.UnicodeUTF8))
             self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
         # done with flushTable
 
@@ -282,20 +282,20 @@ class UI(inLib.ModuleUI):
             zmode = self._ui.spinBox_Zmode.value()
 
         if(np.isscalar(zmode) and zmode!= -1):
-            item = QtGui.QTableWidgetItem()
-            item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+            item = QtWidgets.QTableWidgetItem()
+            item.setText(QtWidgets.QApplication.translate("Form", str(stepsize), None, QtWidgets.QApplication.UnicodeUTF8))
             self._ui.table_Zcoeffs.setItem(zmode-4, 1, item)
             self.z_comps.grab_mode(zmode).step = stepsize
         elif(np.isscalar(zmode) and zmode == -1):
             for iz in np.arange(4,self.z_max):
-                item = QtGui.QTableWidgetItem()
-                item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+                item = QtWidgets.QTableWidgetItem()
+                item.setText(QtWidgets.QApplication.translate("Form", str(stepsize), None, QtWidgets.QApplication.UnicodeUTF8))
                 self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
                 self.z_comps.grab_mode(iz).step = stepsize
         else:
             for iz, zs in zip(zmode,stepsize):
-                item = QtGui.QTableWidgetItem()
-                item.setText(QtGui.QApplication.translate("Form", str(stepsize), None, QtGui.QApplication.UnicodeUTF8))
+                item = QtWidgets.QTableWidgetItem()
+                item.setText(QtWidgets.QApplication.translate("Form", str(stepsize), None, QtWidgets.QApplication.UnicodeUTF8))
                 self._ui.table_Zcoeffs.setItem(iz-4, 1, item)
                 self.z_comps.grab_mode(iz).step = zs
     # done with setZern_step
@@ -358,8 +358,8 @@ class UI(inLib.ModuleUI):
         simply update the table display of the zernike modes.
         '''
         ampli = self.z_comps.grab_mode(z_mode).ampli
-        item = QtGui.QTableWidgetItem()
-        item.setText(QtGui.QApplication.translate("Form", str(ampli), None, QtGui.QApplication.UnicodeUTF8))
+        item = QtWidgets.QTableWidgetItem()
+        item.setText(QtWidgets.QApplication.translate("Form", str(ampli), None, QtWidgets.QApplication.UnicodeUTF8))
         self._ui.table_Zcoeffs.setItem(z_mode-4, 0, item)
         # done with updateDisplay
 
@@ -441,5 +441,5 @@ class zmode_status:
     def __init__(self, index, ui):
         self.index = index
         print("mode:",self.index)
-        self.checkbox = QtGui.QCheckBox(str(self.index))
+        self.checkbox = QtWidgets.QCheckBox(str(self.index))
         # self.checkbox.toggle()

@@ -1,9 +1,10 @@
 #!/usr/bin/python
 
 import inLib
-from PyQt5 import QtCore, QtGui, Qwt5
+from PyQt5 import QtCore, QtGui 
 import sys
 sys.path.append('D:\\Dan\\Programs\\InControl\\')
+sys.path.append('D:\\Programs\\')
 from Utilities import QExtensions as qext
 from functools import partial
 import time
@@ -99,15 +100,6 @@ class UI(inLib.DeviceUI):
         self.plotLength = 0
         self.xForPlot = 1
         self.yForPlot = 1
-        self._ui.lineEdit_plotWidth.setText("%i" % self.plotWidth)
-        self._ui.lineEdit_plotLength.setText("%i" % self.plotLength)
-        self._ui.lineEdit_xForPlot.setText("%i" % self.xForPlot)
-        self._ui.lineEdit_yForPlot.setText("%i" % self.yForPlot)
-        self._ui.lineEdit_plotWidth.returnPressed.connect(partial(self._setPlot,'w'))
-        self._ui.lineEdit_plotLength.returnPressed.connect(partial(self._setPlot,'l'))
-        self._ui.lineEdit_xForPlot.returnPressed.connect(partial(self._setPlot,'x'))
-        self._ui.lineEdit_yForPlot.returnPressed.connect(partial(self._setPlot,'y'))
-        self._ui.radioButton_plotHor.setChecked(True)
         
 
         self._getDisplayTimings()
@@ -174,16 +166,6 @@ class UI(inLib.DeviceUI):
         self._ui.horizontalSlider_max.setRange(0,65535)
         self._ui.horizontalSlider_min.valueChanged.connect(self._setDispMin)
         self._ui.horizontalSlider_max.valueChanged.connect(self._setDispMax)
-
-        grid = Qwt5.QwtPlotGrid()
-        canvas = self._ui.qwtPlot.canvas().setLineWidth(2)
-        pen = QtGui.QPen(QtCore.Qt.lightGray)
-        grid.setPen(pen)
-        grid.attach(self._ui.qwtPlot)
-        self.curve = Qwt5.QwtPlotCurve('')
-        self.curve.setPen(pen)
-        self.curve.attach(self._ui.qwtPlot)
-        self._ui.qwtPlot.enableAxis(1)
 
 
     def _printCamProps(self):
@@ -468,14 +450,6 @@ class UI(inLib.DeviceUI):
             else:
                 crossSection = area.sum(axis=0)
             xaxis = np.arange(0,len(crossSection))
-            curve1 = Qwt5.QwtPlotCurve('')
-            pen = QtGui.QPen(QtCore.Qt.black)
-            pen.setStyle(QtCore.Qt.SolidLine)
-            curve1.setPen(pen)
-            curve1.attach(self._ui.qwtPlot)
-            curve1.setData(xaxis,crossSection)
-            self._ui.qwtPlot.replot()
-            curve1.detach()
         #if self._ui.checkBox_sharpness.isChecked():
             
             

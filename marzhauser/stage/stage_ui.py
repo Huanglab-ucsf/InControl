@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 import inLib
 import time
 
@@ -9,10 +9,11 @@ class UI(inLib.DeviceUI):
     
     def __init__(self, control):
         design_path = 'marzhauser.stage.stage_design'
-        print 'Marzhauser xy-stage: Initializing UI.'
+        print('Marzhauser xy-stage: Initializing UI.')
         inLib.DeviceUI.__init__(self, control, design_path)
 
         self.homeX, self.homeY, z = self._control.position()
+        print("stage positions:", self.homeX, self.homeY)
 
         self._ui.lineEdit_xpos.returnPressed.connect(self._moveX)
         self._ui.lineEdit_ypos.returnPressed.connect(self._moveY)
@@ -50,9 +51,9 @@ class UI(inLib.DeviceUI):
 
     def axisStatus(self):
         status = self._control.getStatusAxis()
-        print "Marz axis status: ", status
+        print("Marz axis status: ", status)
         if status[0]=='M' or status[1]=='M':
-            print "Marz axis status: Moving"
+            print("Marz axis status: Moving")
 
     def _sawtooth(self):
         if self._ui.go_pushButton.text() == 'Go':

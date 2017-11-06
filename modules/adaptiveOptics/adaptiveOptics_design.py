@@ -463,4 +463,4 @@ class Ui_Form(object):
         self.pushButton_setMods.setText(_translate("Form", "Set"))
 
 
-from matplotlibwidgets import MatplotlibWidget
+from matplotlibwidget import MatplotlibWidget

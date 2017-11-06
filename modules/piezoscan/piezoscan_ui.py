@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore,QtGui
 import inLib
 
 
@@ -16,7 +16,8 @@ class UI(inLib.ModuleUI):
         self._ui.doubleSpinBoxEnd.valueChanged.connect(self.calcScanParams)
         self._ui.spinBoxNSteps.valueChanged.connect(self.calcScanParams)
         self._ui.spinBoxNFrames.valueChanged.connect(self.calcScanParams)
-        self._window.connect(self._ui.pushButtonScan,QtCore.SIGNAL('clicked()'),self.scan)
+        #self._window.connect(self._ui.pushButtonScan,QtCore.SIGNAL('clicked()'),self.scan)
+        self._ui.pushButtonScan.clicked.connect(self.scan)
         print('Calculating piezoscan parameters.')
         self.calcScanParams()
         

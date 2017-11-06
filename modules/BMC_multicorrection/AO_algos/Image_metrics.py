@@ -5,7 +5,7 @@ Calculate image metrics, adapted by Dan from the module "signalForAO".
 import numpy as np
 import os.path
 import time
-import pyfftw
+#import pyfftw
 import sys
 import matplotlib.pyplot as plt
 

@@ -3,7 +3,7 @@ Created by Dan on 12/15/2016.
 
 '''
 
-from PyQt4 import QtGui,QtCore
+from PyQt5 import QtGui,QtCore
 import numpy as np
 
 

@@ -6,7 +6,7 @@ Last update: 01/03/2017 by Dan.
 import numpy as np
 import scipy as sp
 import time
-from AO_algos.simplex import simplex_assess
+from .AO_algos import simplex
 
 
 

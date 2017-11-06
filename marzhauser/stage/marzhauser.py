@@ -12,7 +12,8 @@ tango = 0
 def loadTangoDLL():
     global tango
     if (tango == 0):
-        tango = windll.LoadLibrary("C:\Program Files\SwitchBoard\Tango_DLL")
+        tango = windll.LoadLibrary("D:\Dan\Programs\InControl\marzhauser\stage\Tango_DLL")
+        #tango = windll.LoadLibrary("C:\Program Files\SwitchBoard\Tango_DLL")
 
 instantiated = 0
 
@@ -36,9 +37,9 @@ class API():
         tango.LSX_CreateLSID(byref(temp))
         self.LSID = temp.value
         #tm_out = tango.LSX_GetCommandTimeout(self.LSID, int *toRead, int *toMove, int *toCal);
-        error = tango.LSX_ConnectSimple(self.LSID, 1, "COM4", 57600, 1) # changed by Dan
+        error = tango.LSX_ConnectSimple(self.LSID, 1, "COM3", 57600, 1) # changed by Dan
         if error:
-            print "Marzhauser error", error
+            print("Marzhauser error", error)
             self.good = 0
 
     def getStatus(self):
@@ -85,6 +86,7 @@ class API():
         else:
             return
         if self.good:
+            print("The stage is operating normally.", vel)
             tango.LSX_SetVelSingleAxis(self.LSID, axisNum, c_double(vel))
 
     def velocity(self):
@@ -136,6 +138,8 @@ class API():
             maxLen = c_int(32)
             tango.LSX_GetStatusAxis(self.LSID, pcStat, maxLen)
             return repr(pcStat.value)
+        else:
+            print("Wrong status.")
 
     def shutDown(self):
         # Disconnect from the stage
@@ -163,15 +167,15 @@ class API():
 
 if __name__ == "__main__":
     stage = API()
-    print "SN:", stage.serialNumber()
+    print("SN:", stage.serialNumber())
     stage.zero()
-    print "Position:", stage.position()
+    print("Position:", stage.position())
     stage.goAbsolute(100.0, 100.0)
-    print "Position:", stage.position()
+    print("Position:", stage.position())
     stage.goRelative(100.0, 100.0)
-    print "Position:", stage.position()
-    print "Velocity:", stage.velocity()
-    print "Dimensions:", stage.dimensions()
+    print("Position:", stage.position())
+    print("Velocity:", stage.velocity())
+    print("Dimensions:", stage.dimensions())
     stage.shutDown()
 
 #    for info in stage.info():
