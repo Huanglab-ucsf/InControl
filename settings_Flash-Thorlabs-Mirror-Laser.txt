@@ -73,7 +73,7 @@ devices:
         model: obis
         active: true
         settings:
-            ports: ["COM6"] #com15:405; com13:647; com14:488
+            ports: ["COM4"] #com15:405; com13:647; com14:488
             lines: [488]
     camera:
         manufacturer: hamamatsu
@@ -81,11 +81,11 @@ devices:
         active: true
         settings:
             temperature: 20
-            exposure_time: 0.4        # in milliseconds
+            exposure_time: 0.2        # in milliseconds
             delay_time: 50           # in milliseconds
             ad_channel: 0
-            #roi: [1,128,1,128]
-            roi: [980,1108,980,1108]
+            #roi: [1,256,1,256]
+            roi: [896,1152,896,1152]
             binning: [1,1]
     ccd:
         manufacturer: imagingSource
@@ -164,7 +164,7 @@ modules:
         active: false
         settings: null
     adaptiveOptics:
-        active: false
+        active: true
         settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
     piezoscan:
         active: true

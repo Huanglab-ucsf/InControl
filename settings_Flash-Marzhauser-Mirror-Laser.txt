@@ -11,7 +11,7 @@ devices:
     mirror:
         active: true
         manufacturer: bmc
-        model: DM_core
+        model: MultiDM 
         settings:
             pixels: 512
             segments: 12
@@ -73,8 +73,8 @@ devices:
         model: obis
         active: true
         settings:
-            ports: ["COM15","COM14","COM13"] #com15:405; com13:647; com14:488
-            lines: [405, 488, 647]
+            ports: ["COM4"] #,"COM14","COM13"] com4:405; com13:647; com14:488
+            lines: [488]#  647]
     camera:
         manufacturer: hamamatsu
         model: orcaflash
@@ -171,7 +171,7 @@ modules:
         settings:
             ThorlabsMotor: true
     BMC_multicorrection:
-        active: true
+        active: false 
         settings:
             executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
     scripts:

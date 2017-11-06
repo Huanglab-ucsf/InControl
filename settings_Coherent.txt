@@ -73,7 +73,7 @@ devices:
         model: obis
         active: true
         settings:
-            ports: ["COM6"] #com15:405; com13:647; com14:488
+            ports: ["COM4"] #com15:405; com13:647; com14:488
             lines: [488] # 488 only
     camera:
         manufacturer: hamamatsu
