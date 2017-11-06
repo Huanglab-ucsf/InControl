@@ -17,8 +17,11 @@ class API():
         num_of_ports = len(ports)
         print("Ports:", ports)
         for i in range(0,num_of_ports):
+            print(ports[i])
             try:
-                self.tty.append(uspp.SerialPort(ports[i], timeout, baudrate))
+                tty = uspp.SerialPort(ports[i], timeout, baudrate)
+                self.tty.append(tty)
+                #self.tty.append(uspp.SerialPort(ports[i], timeout, baudrate))
                 print("tty:",self.tty)
                 self.tty[i].flush()
                 self.end_of_line = end_of_line
@@ -69,6 +72,7 @@ class API():
         response = ""
         index = -1
         while (index == -1) and (attempts < max_attempts):
+            print("port_number:", port_num)
             response_len = self.tty[port_num].inWaiting()
             if response_len > 0:
                 response += self.tty[port_num].read(response_len)
