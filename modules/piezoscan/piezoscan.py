@@ -16,8 +16,9 @@ class Control(inLib.Module):
 
         if settings['ThorlabsMotor'] == True:
             self.useThorlabs = True
-        else:
+        elif settings['Marzhauser'] == True:
             self.useThorlabs = False
+            self.useMarzhauser = True
 
     '''
     @property
@@ -38,7 +39,7 @@ class Control(inLib.Module):
     def calcScanParams(self, start, end, nSteps):
         '''
         Calculates the step size of a scan.
-
+        This function seems useless. ---Dan
         :Parameters:
             *start*: float
                 Start of scan in micrometers, relative to current position.
@@ -54,9 +55,10 @@ class Control(inLib.Module):
         stepSize = abs(1000.0*(end-start)/(nSteps-1.0))
         return stepSize
 
-    def scan(self, start, end, nSteps, nFrames, filename=None):
+    def scan(self, start, end, nSteps, nFrames, filename=None, later_direction = 0.0):
         '''
         Performs a scan
+        later_direction: the lateral direction in the translation stage (marzhauser. Default: 0.0, scan in the x direction only.)
         '''
         if self.useThorlabs:
             if start<end:
@@ -64,7 +66,8 @@ class Control(inLib.Module):
             else:
                 up=False
             data = self.scan_thorlabs(nSteps, nFrames, up=up, filename=filename)
-        else:
+        elif self.useMarzhauser:
+            data = self.scan_stage(start, end, nSteps, nFrames, filename=filename, later_direction=later_direction)
             data = self.scan_piezo(start, end, nSteps, nFrames, filename=filename)
         return data
 
@@ -97,6 +100,43 @@ class Control(inLib.Module):
             np.save(filename, data)
             self.active = False
         return data
+
+
+    def scan_stage(self, start, end, nSteps, nFrames, filename = None, later_direction = 0.0):
+        '''
+        Performs a motor stage scan. Added by Dan on 11/13/2017.
+        '''
+        print("stage scan: Scanning with parameters:", start, end, nSteps)
+        self.active = True
+        origin_x, origin_y, origin_z = self._control.stage.position() 
+        
+        ds = (end-start)/(nSteps-1.0) # the step size, pos or neg
+        dx = ds*np.cos(later_direction)
+        dy = ds*np.sin(later_direction)
+        rs_x = start*np.cos(later_direction)
+        rs_y = start*np.sin(later_direction)
+        self._control.stage.goRelative(rs_x, rs_y)
+        dim = self._control.camera.getDimensions()
+        data = np.zeros((nSteps,) + dim)
+        slicesFrames = np.zeros((nFrames,)+dim)
+        frame_length = 1.0/self._control.camera.getFrameRate()
+        for ii in range(nSteps):
+            if self.active:
+                self._control.stage.goRelative(dx, dy)
+                time.sleep(2*frame_length)
+                for jj in range(nFrames):
+                    slicesFrames[jj] = self._control.camera.getMostRecentImageNumpy()
+                    time.sleep(frame_length)
+                data[ii] = np.mean(slicesFrames, axis=0)
+            else:
+                break
+        self._control.stage.goAbsolute(origin_x, origin_y)
+        if self.active and filename:
+            print('piezoscan: Saving scan to', filename)
+            np.save(filename, data)
+            self.active = False
+        return data
+
 
     def scan_piezo(self, start, end, nSteps, nFrames, filename=None):
         '''

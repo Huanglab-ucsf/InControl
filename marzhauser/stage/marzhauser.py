@@ -37,7 +37,8 @@ class API():
         tango.LSX_CreateLSID(byref(temp))
         self.LSID = temp.value
         #tm_out = tango.LSX_GetCommandTimeout(self.LSID, int *toRead, int *toMove, int *toCal);
-        error = tango.LSX_ConnectSimple(self.LSID, 1, "COM3", 57600, 1) # changed by Dan
+        cport = "COM3".encode()
+        error = tango.LSX_ConnectSimple(self.LSID, 1, cport,  57600, 1) # changed by Dan
         if error:
             print("Marzhauser error", error)
             self.good = 0
@@ -129,6 +130,7 @@ class API():
             pcStat = create_string_buffer(32)
             maxLen = c_int(32)
             tango.LSX_GetStatus(self.LSID, pcStat, maxLen)
+            print("status:", pcStat.value.decode())
             return repr(pcStat.value)
 
     def getStatusAxis(self):

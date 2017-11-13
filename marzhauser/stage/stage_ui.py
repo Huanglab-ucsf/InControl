@@ -66,9 +66,7 @@ class UI(inLib.DeviceUI):
                 xy = 'y'
             self._sawtoothThread = Sawtooth(self._control, xy,
                                             movement, repeats, timedelay)
-            self._window.connect(self._sawtoothThread,
-                                 QtCore.SIGNAL('sawtoothDone'),
-                                 self._on_sawtoothDone)
+            self._sawtoothThread.finished.connect(self._on_sawtoothDone)
             self._ui.go_pushButton.setText('Wait...')
             self._sawtoothThread.start()
     
@@ -138,6 +136,7 @@ class UI(inLib.DeviceUI):
         self._positionUpdater.stop()
 
 class Sawtooth(QtCore.QThread):
+    my_signal = QtCore.pyqtSignal()
     def __init__(self, control, xy, movement, repeats, timedelay):
         QtCore.QThread.__init__(self)
 
@@ -149,7 +148,8 @@ class Sawtooth(QtCore.QThread):
 
     def run(self):
         self.control.sawtooth(self.xy,self.movement,self.repeats,self.timedelay)
-        self.emit(QtCore.SIGNAL('sawtoothDone'))
+        #self.emit(QtCore.SIGNAL('sawtoothDone'))
+        self.my_signal.emit()
 
 class Move(QtCore.QThread):
     def __init__(self, control, xpos, ypos):
