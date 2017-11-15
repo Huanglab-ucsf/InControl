@@ -9,7 +9,7 @@ devices:
             port: COM3
 
     mirror:
-        active: false 
+        active: true 
         manufacturer: bmc
         model: MultiDM
         settings:

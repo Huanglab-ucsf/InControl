@@ -380,13 +380,20 @@ class Control(inLib.Device):
         
 
     def advancePatternWithPipe(self):
+        print("The process:", self.proc)
         if self.proc is not None:
+            print("The process is not None.")
             self.proc.stdin.write(b"\n")
-            output = self.proc.stout.read()
+            output = self.proc.stdout.read()
             print("Stdout:", output)
+            self.proc = None
 
-    def resetPipe(self):
-        self.proc = None
+    def resetMirror(self):
+        if self.proc is not None:
+            if self.proc.poll() is None:
+                self.proc.kill()
+                print("Bingo!")
+
 
     def varyArbitrary(self, filename, wTime, externallyCalled=False):
         wTimeStr = "%i" % wTime
@@ -493,18 +500,11 @@ class Control(inLib.Device):
         self.mirror.outputSegs(self.tempfilename)
 
         #Wait to make sure file exists
-        time.sleep(0.5)
-
         wTimeStr = str(wtime)
-        args = [self.executable, self.tempfilename, str(self.multiplier), "1", wTimeStr]
-        self.proc = subprocess.Popen(args, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
-        output = self.proc.stdout.read()
-        print(output)
-        #Run executable
-        #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr], shell=True)
-        #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
-         #                "1", "30000"], shell=True)
+
+        self.proc = subprocess.run([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr] )
         
+        print("The pattern is added to the mirror.")
 
 class Mirror():
     def __init__(self, nPixels, nSegments, pattern=None):

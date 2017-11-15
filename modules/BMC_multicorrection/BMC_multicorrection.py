@@ -179,7 +179,6 @@ class Control(inLib.Module):
         '''
         seg_copy = np.copy(self.DM.getSegs())
         return seg_copy
-
         # done with clearMOD
 
 

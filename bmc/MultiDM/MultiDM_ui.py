@@ -9,6 +9,7 @@ from numpy.lib.scimath import sqrt as _msqrt
 import copy
 import time
 import skimage
+import threading
 
 class UI(inLib.DeviceUI):
     
@@ -124,11 +125,14 @@ class UI(inLib.DeviceUI):
         self._control.setPreMultiplier(mult)
 
     def toMirror(self):
-        #self._applyToMirrorThread = ApplyToMirror(self._control)
-        #self._applyToMirrorThread.start()
-        self._control.applyToMirror()
+        self._applyToMirrorThread = ApplyToMirror(self._control)
+        self._applyToMirrorThread.start()
+        #self._applyToMirrorThread.join()
+        #self._control.applyToMirror()
 
     def resetMirror(self):
+        print("reset the mirror!")
+
         #self._resetMirrorThread = ResetMirror(self._control)
         #self._resetMirrorThread.start()
         self._control.advancePatternWithPipe()
@@ -305,8 +309,14 @@ class ApplyToMirror(QtCore.QThread):
     def __init__(self, control):
         QtCore.QThread.__init__(self)
         self._control = control
+        self._lock = threading.lock()
+
+    def stop(self):
+        with self._lock:
+            self._control.advancePatternWithPipe()
 
     def run(self):
+        print("Let's apply a pattern to the mirror!")
         self._control.applyToMirror()
 
 class ResetMirror(QtCore.QThread):

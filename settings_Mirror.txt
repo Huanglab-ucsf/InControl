@@ -15,7 +15,7 @@ devices:
         settings:
             pixels: 512
             segments: 12
-            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            executable: D:/Dan/Programs/UsbExMulti/x64/Release/UsbExMulti.exe
 
     slm:
         active: false
