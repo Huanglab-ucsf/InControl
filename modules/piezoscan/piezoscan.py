@@ -68,6 +68,7 @@ class Control(inLib.Module):
             data = self.scan_thorlabs(nSteps, nFrames, up=up, filename=filename)
         elif self.useMarzhauser:
             data = self.scan_stage(start, end, nSteps, nFrames, filename=filename, later_direction=later_direction)
+        else:
             data = self.scan_piezo(start, end, nSteps, nFrames, filename=filename)
         return data
 
@@ -109,7 +110,7 @@ class Control(inLib.Module):
         print("stage scan: Scanning with parameters:", start, end, nSteps)
         self.active = True
         origin_x, origin_y, origin_z = self._control.stage.position() 
-        
+        print("Original position:", origin_x, origin_y, origin_z) 
         ds = (end-start)/(nSteps-1.0) # the step size, pos or neg
         dx = ds*np.cos(later_direction)
         dy = ds*np.sin(later_direction)

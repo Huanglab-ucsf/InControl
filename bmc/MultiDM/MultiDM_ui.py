@@ -25,6 +25,7 @@ class UI(inLib.DeviceUI):
         self._ui.pushButton_rotate.clicked.connect(self.patternRotate)
         self._ui.pushButton_getSegs.clicked.connect(self.getSegments)
         self._ui.pushButton_toMirror.clicked.connect(self.toMirror)
+        self._ui.pushButton_reset.clicked.connect(self.resetMirror)
         self._ui.pushButton_toMirrorManyZerns.clicked.connect(self.toMirrorManyZerns)
         self._ui.pushButton_toMirrorManyZernRadii.clicked.connect(self.toMirrorManyZernRadii)
         self._ui.pushButton_toMirrorGroupVary.clicked.connect(self.toMirrorGroupVary)
@@ -123,9 +124,14 @@ class UI(inLib.DeviceUI):
         self._control.setPreMultiplier(mult)
 
     def toMirror(self):
-        self._applyToMirrorThread = ApplyToMirror(self._control)
-        self._applyToMirrorThread.start()
-        #self._control.applyToMirror()
+        #self._applyToMirrorThread = ApplyToMirror(self._control)
+        #self._applyToMirrorThread.start()
+        self._control.applyToMirror()
+
+    def resetMirror(self):
+        #self._resetMirrorThread = ResetMirror(self._control)
+        #self._resetMirrorThread.start()
+        self._control.advancePatternWithPipe()
 
     def toMirrorManyZerns(self):
         '''
@@ -302,6 +308,15 @@ class ApplyToMirror(QtCore.QThread):
 
     def run(self):
         self._control.applyToMirror()
+
+class ResetMirror(QtCore.QThread):
+    def __init__(self, control):
+        QtCore.QThread.__init__(self)
+        self._control = control
+
+    def run(self):
+        self._control.advancePatternWithPipe()
+
 
 class ApplyManyZernsToMirror(QtCore.QThread):
 

@@ -9,7 +9,7 @@
 import numpy as np
 import os.path
 import time
-#import pyfftw
+import pyfftw
 import sys
 
 def fftImage(image, use_pyfftw=True):

@@ -381,7 +381,9 @@ class Control(inLib.Device):
 
     def advancePatternWithPipe(self):
         if self.proc is not None:
-            self.proc.stdin.write("\n")
+            self.proc.stdin.write(b"\n")
+            output = self.proc.stout.read()
+            print("Stdout:", output)
 
     def resetPipe(self):
         self.proc = None
@@ -494,10 +496,12 @@ class Control(inLib.Device):
         time.sleep(0.5)
 
         wTimeStr = str(wtime)
-
+        args = [self.executable, self.tempfilename, str(self.multiplier), "1", wTimeStr]
+        self.proc = subprocess.Popen(args, stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        output = self.proc.stdout.read()
+        print(output)
         #Run executable
-        subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
-                         "1", wTimeStr], shell=True)
+        #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr], shell=True)
         #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
          #                "1", "30000"], shell=True)
         

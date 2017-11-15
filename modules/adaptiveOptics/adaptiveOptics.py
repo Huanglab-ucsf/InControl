@@ -195,18 +195,15 @@ class Control(inLib.Module):
             # The coordinates of the brightest pixel
             cz, cy, cx = np.unravel_index(np.argmax(gf(scan*mask,2)), scan.shape)
             print("Center found at: ", (cz,cy,cx))
+            print("Mask size:", mask_size)
             self._center = [cz, cy, cx] # save this for one-run procedure
             # We laterally center the scan at the brightest pixel
 
-            # modified by Dan on 08/09/16
-            shift_y = int(ny/2-cy)
-            shift_x = int(nx/2-cx)
-            PSF_raw = np.roll(scan, shift_y, axis = 1)
-            PSF_raw = np.roll(PSF_raw, shift_x, axis = 2)
-
+            mid_y = int(ny/2)
+            mid_x = int(nx/2)
             cut = scan[:,cy-mask_size:cy+mask_size,cx-mask_size:cx+mask_size]
             PSF = np.zeros((nz,ny,nx))
-            PSF[:,nx/2-mask_size:ny/2+mask_size,ny/2-mask_size:nx/2+mask_size] = cut
+            PSF[:,mid_y-mask_size:mid_y+mask_size,mid_x-mask_size:mid_x+mask_size] = cut
             # Background estimation
             self._background = np.mean(scan[hcyl])
             print("Background guess: ", self._background)
