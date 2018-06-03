@@ -42,6 +42,7 @@ class Control(inLib.Module):
 
         self.hasSLM = settings['hasSLM']
         self.hasMirror = settings['hasMirror']
+        self.scan_device = settings['scan_device']
 
         self._PSF = None
         self._sharpness = None
@@ -171,6 +172,8 @@ class Control(inLib.Module):
         # Some parameters
         start = range_/2.0
         end = -range_/2.0
+        if self._settings['scan_device'] == 'marzhauser':
+            start,end = end, start # the direction of the thorlab motor and the marzhauser stage are opposite
         self._dz = abs(range_/(nSlices-1.0))
 
         # Scan the PSF:

@@ -10,7 +10,7 @@ class Control(inLib.Device):
     
     def __init__(self, settings):
         inLib.Device.__init__(self, 'madCityLabs.nanodrive.nanodrive_api', settings)
-        self._toPrint = False
+        self._toPrint = True
         # Store axis ranges:
         self._axis_range = [0,
                            self._api.getCalibration(1),
@@ -33,14 +33,14 @@ class Control(inLib.Device):
             return True
         if axis == 3 and self._settings['n_axis'] in (1,3):
             return True
-        print 'piezo: Warning! Invalid axis number.'
+        print('piezo: Warning! Invalid axis number.')
         return False
 
     def _positionCheck(self,axis,position):
         if (position >= 0) & (position <= self._axis_range[axis]):
             return True
         else:
-            print 'piezo: Warning! Invalid position.'
+            print('piezo: Warning! Invalid position.')
 
 
     def shutDown(self):
@@ -61,8 +61,10 @@ class Control(inLib.Device):
         '''
         if self._axisCheck(axis) and self._positionCheck(axis, position):
             if self._toPrint:
-                print 'piezo: Moving axis {0} to {1} um.'.format(axis, position)
+                print('piezo: Moving axis {0} to {1} um.'.format(axis, position))
             self._api.singleWriteN(position,axis)
+            pos = self._api.singleReadN(axis)
+            print("New Position:", pos)
             if waitForConvergence:
                 self._waitUntilConverge(axis)
 
@@ -96,7 +98,7 @@ class Control(inLib.Device):
         return self._axis_range
 
 
-    def step(self, axis, step):
+    def step(self, axis, step, verbose = True):
         '''
         Performs a step movement of an axis.
 
@@ -108,6 +110,9 @@ class Control(inLib.Device):
         '''
         position = self.getPosition(axis)+step
         self.moveTo(axis,position)
+        if(verbose):
+            position = self.getPosition(axis)
+            print("")
 
 
     def getNAxis(self):
@@ -123,7 +128,7 @@ class Control(inLib.Device):
     def moveHomeXY(self):
         ''' Moves axis 1 and 2 home, which is the center of the axis ranges. '''
         self.moveTo(1,self._axis_range[1]/2.0)
-        self.moveTo(2,self._axis_range[2]/2.0)
+        szzelf.moveTo(2,self._axis_range[2]/2.0)
 
 
     def moveHomeZ(self):
@@ -133,7 +138,7 @@ class Control(inLib.Device):
 
     def _waitUntilConverge(self, axis):
         if self._toPrint:
-            print 'piezo: Waiting until axis {0} position converges.'.format(axis)
+            print('piezo: Waiting until axis {0} position converges.'.format(axis))
         positions = np.array(self.getPosition(axis))
         time.sleep(self._settings['response_time'])
         positions = np.append(positions, self.getPosition(axis))
@@ -144,6 +149,6 @@ class Control(inLib.Device):
             m = np.std(positions[-5:])
             i += 1
             if self._toPrint:
-                print 'piezo: Axis {0} standard deviation: {1}'.format(axis, m)
+                print('piezo: Axis {0} standard deviation: {1}'.format(axis, m))
             time.sleep(self._settings['response_time'])
 

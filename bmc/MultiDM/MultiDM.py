@@ -5,7 +5,6 @@ import libtim
 import libtim.zern
 from modules.adaptiveOptics import pupil_forInControl as pupil
 import subprocess
-import scipy
 from scipy.ndimage import rotate
 
 class Control(inLib.Device):
@@ -28,17 +27,10 @@ class Control(inLib.Device):
         self.multiplier = 1.0
 
         self.preMultiplier = 80
-
         self.zernike = None
-
-        self._other = _OtherModulations()
-
         self.group = []
-
         self.padding = False
-
         self.proc = None
-        self.numZernsToVary = 100
 
     def getGeometry(self):
         return self._geometry
@@ -68,8 +60,7 @@ class Control(inLib.Device):
         return self.mirror.pattern
 
     def loadSegments(self, filename):
-        msegs = np.loadtxt(filename)
-        #print "msegs: ", msegs
+        msegs = np.loadtxt(filename) 
         self.mirror.inputMirrorSegs(msegs)
         
     def patternRot90(self):
@@ -182,329 +173,30 @@ class Control(inLib.Device):
             p=self.mirror.addToPattern(zern * self.preMultiplier)
         return self.returnPattern()
 
-    def getNumberOfZernToVary(self):
-        return self.numZernsToVary
 
-    def varyMultiplierCurrent(self, minMult, maxMult, num, wTime, externallyCalled = False):
-        print(("The number of multipliers:", num))
-        print(("mininum:", minMult))
-        print(("maximum:",maxMult))
-        self.numZernsToVary = num
-        mults = np.linspace(minMult,maxMult,num)
-        filenms = []
-        baseline = self.returnPattern()
-        for i in range(num):
-            self.clear()
-            newPattern = baseline * mults[i]
-            self.mirror.setPattern(newPattern)
-            self.findSegments()
-            filenms.append("segFile_mult_%.2i.txt" % i)
-            self.mirror.outputSegs(filenms[i])
-        files_file = "allMultFiles_Max%.2i.txt" % maxMult
-        np.savetxt(files_file, np.array(filenms), fmt='%s', delimiter='\n')
-
-        time.sleep(0.1)
-
-        print("Finished creating files for varying multiplier for current pattern...")
-
-        wTimeStr = "%i" % wTime
-        numStr = "%i" % num
-
-        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
-
-        if self.proc is not None:
-            print("Polling proc: ", self.proc.poll())
-            if self.proc.poll() is None:
-                self.proc.terminate()
-                self.proc.communicate()
-                self.proc = None
-
-        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        if externallyCalled:
-            return 0
-        else:
-            if wTime<0:
-                for i in range(num):
-                    time.sleep(1)
-                    print("Going to next...")
-                    self.advancePatternWithPipe()
-            output = self.proc.stdout.read()
-            print("proc stdout: ", output)
-            return 1
-        
-
-    def varyZernAmp(self, mode, maxAmp, minAmp, num, wTime, radius=None, useMask=True, clearfirst=True,
-                    externallyCalled = False):
-        '''
-        Calls external C++ program that applies *num* different patterns of
-        Zernike mode *mode* to the mirror.
-
-        :Parameters:
-            *mode*: int
-                Zernike mode
-            *maxAmp*: float
-            *minAmp*: float
-            *num*: int
-            *wTime*: float
-                Time to wait in milliseconds before new pattern applied to mirror
-            *useMask*: boolean
-                Optional
-            *clearFirst*: boolean
-                Optional
-        '''
-        #mode = self.zernMode
-        self.numZernsToVary = num
-        amps = np.linspace(minAmp,maxAmp,num)
-        filenms = []
-        baseline = self.returnPattern()
-        for i in range(num):
-            if clearfirst:
-                self.clear() #clears mirror pattern and segments
-            else:
-                self.clear()
-                self.mirror.setPattern(baseline)
-            zern = self.calcZernike(mode, amps[i], radius=radius, useMask=useMask)
-            self.addZernike(zernike_pattern=zern)
-            self.findSegments()
-            filenms.append("segFile_mode%.3i_amp%.2i.txt" % (mode,i))
-            self.mirror.outputSegs(filenms[i])
-        files_file = "allSegFiles_%.3i.txt" % mode
-        np.savetxt(files_file, np.array(filenms), fmt='%s', delimiter='\n')
-
-        time.sleep(0.1)
-
-        print("Finished creating files for varying Zernike...")
-
-        wTimeStr = "%i" % wTime
-        numStr = "%i" % num
-
-        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr] 
-
-        #subprocess.call([self.executable, files_file, str(self.multiplier),
-        #                 numStr, wTimeStr], shell=True)
-
-        if self.proc is not None:
-            print("Polling proc: ", self.proc.poll())
-            if self.proc.poll() is None:
-                self.proc.terminate()
-                self.proc.communicate()
-                self.proc = None
-
-        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        if externallyCalled:
-            return 0
-        else:
-            if wTime<0:
-                for i in range(num):
-                    time.sleep(1)
-                    print("Going to next...")
-                    self.advancePatternWithPipe()
-            output = self.proc.stdout.read()
-            print("proc stdout: ", output)
-            return 1
-
-    def varyZernRadii(self, mode, amp, maxR, minR, num, wTime, radius=None, useMask=True, clearfirst=True,
-                      externallyCalled = False):
-        '''
-        Calls external C++ program that applies *num* different patterns of
-        Zernike mode *mode* to the mirror.
-
-        :Parameters:
-            *mode*: int
-                Zernike mode
-            *amp*: float
-                Zernike amplitude
-            *maxR*: float
-            *minR*: float
-            *num*: int
-            *wTime*: float
-                Time to wait in milliseconds before new pattern applied to mirror
-            *useMask*: boolean
-                Optional
-            *clearFirst*: boolean
-                Optional
-        '''
-        #mode = self.zernMode
-        self.numZernsToVary = num
-        rads = np.linspace(minR,maxR,num,dtype=np.uint16)
-        filenms = []
-        baseline = self.returnPattern()
-        for i in range(num):
-            if clearfirst:
-                self.clear() #clears mirror pattern and segments
-            else:
-                self.clear()
-                self.mirror.setPattern(baseline)
-            zern = self.calcZernike(mode, amp, radius=rads[i], useMask=useMask)
-            self.addZernike(zernike_pattern=zern)
-            self.findSegments()
-            filenms.append("segFile_mode%.3i_rad%.2i.txt" % (mode,i))
-            self.mirror.outputSegs(filenms[i])
-        files_file = "allSegFiles_%.3i.txt" % mode
-        np.savetxt(files_file, np.array(filenms), fmt='%s', delimiter='\n')
-
-        time.sleep(0.1)
-
-        print("Finished creating files for varying Zernike radii...")
-
-        wTimeStr = "%i" % wTime
-        numStr = "%i" % num
-
-        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr] 
-
-        #subprocess.call([self.executable, files_file, str(self.multiplier),
-        #                 numStr, wTimeStr], shell=True)
-
-        if self.proc is not None:
-            print("Polling proc: ", self.proc.poll())
-            if self.proc.poll() is None:
-                self.proc.terminate()
-                self.proc.communicate()
-                self.proc = None
-
-        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        if externallyCalled:
-            return 0
-        else:
-            if wTime<0:
-                for i in range(num):
-                    time.sleep(1)
-                    print("Going to next...")
-                    self.advancePatternWithPipe()
-            output = self.proc.stdout.read()
-            print("proc stdout: ", output)
-            return 1
-        
-
-    def advancePatternWithPipe(self):
+    def advancePipe(self):
         print("The process:", self.proc)
         if self.proc is not None:
-            print("The process is not None.")
-            self.proc.stdin.write(b"\n")
-            output = self.proc.stdout.read()
-            print("Stdout:", output)
+            print(self.proc.communicate())
             self.proc = None
 
-    def resetMirror(self):
-        if self.proc is not None:
-            if self.proc.poll() is None:
-                self.proc.kill()
-                print("Bingo!")
-
-
-    def varyArbitrary(self, filename, wTime, externallyCalled=False):
-        wTimeStr = "%i" % wTime
-        files_file = str(filename)
-        num = len(np.loadtxt(files_file, dtype='S'))
-        print("varyArbitrary: Number of files to load is ", num)
-        numStr = "%i" % num
-        self.numZernsToVary = num
-        args = [self.executable, files_file, str(self.multiplier), numStr, wTimeStr]
-
-        if self.proc is not None:
-            print("Polling proc: ", self.proc.poll())
-            if self.proc.poll() is None:
-                self.proc.terminate()
-                self.proc.communicate()
-                self.proc = None
-
-        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        if externallyCalled:
-            return 0
-        else:
-            if wTime<0:
-                for i in range(num):
-                    time.sleep(1)
-                    print("Going to next...")
-                    self.advancePatternWithPipe()
-            output = self.proc.stdout.read()
-            print("proc stdout: ", output)
-            return 1
-        
-            
-    def varyGroupOffset(self, maxAmp, minAmp, num, wTime, group=None, useMask=True,
-                        clearfirst=True, externallyCalled = False):
-        amps = np.linspace(minAmp,maxAmp,num)
-        filenms = []
-        self.numZernsToVary = num
-        baseline = self.returnSegments()
-        if group is None:
-            group = self.group
-        for i in range(num):
-            #Need to change clearfirst
-            if clearfirst:
-                self.clear() #clears mirror pattern and segments
-            else:
-                self.clear()
-                self.mirror.useSegements(baseline)
-            self.pokeGroup(group, amps[i])
-            #self.findSegments() #don't need. we're directly adding segments
-            filenms.append("segFile_GroupVary_amp%.2i.txt" % i)
-            self.mirror.outputSegs(filenms[i])
-        files_file = "allSegFiles_group.txt"
-        np.savetxt(files_file, np.array(filenms), fmt='%s', delimiter='\n')
-
-        print("Finished creating files for varying group offsets...")
-        time.sleep(0.5)
-
-        wTimeStr = "%i" % wTime
-        numStr = "%i" % num
-
-        args = [self.executable, files_file, str(self.multiplier),numStr, wTimeStr]
-        
-        if self.proc is not None:
-            print("Polling proc: ", self.proc.poll())
-            if self.proc.poll() is None:
-                self.proc.terminate()
-                self.proc.communicate()
-                self.proc = None
-            
-        self.proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        if externallyCalled:
-            return 0
-        else:
-            if wTime<0:
-                for i in range(num):
-                    time.sleep(1)
-                    print("Going to next...")
-                    self.advancePatternWithPipe()
-            output = self.proc.stdout.read()
-            print("proc stdout: ", output)
-            return 1
-
-
-    def addOther(self, data, on_geometry_changed=None, args=()):
-        data_new = np.rot90(data-data.min())
-        print("Data_New max: ", data_new.max())
-        data_new = self.preMultiplier * data_new #/ data_new.max()
-        index = self._other.counter
-        self._other.others[index] = _OtherModulation(data_new-data_new.mean(),on_geometry_changed, args)
-        self._other.counter += 1
-        #if self._active and self._other.active:
-        #    self._sum_send()
-        return index
-
-    def setOtherActive(self, index, state):
-        self._other.others[index].active = state
-        if state:
-            p=self.mirror.addToPattern(self._other.others[index].data)
-        return self.returnPattern()
 
     def applyToMirror(self, wtime=-1):
         #First save mirror
         self.mirror.outputSegs(self.tempfilename)
-
-        #Wait to make sure file exists
         wTimeStr = str(wtime)
-
-        self.proc = subprocess.run([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr] )
+        self.proc = subprocess.Popen([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr] , stdin = subprocess.PIPE, stdout = subprocess.PIPE)
         
+        for ir in range(11):
+            line = self.proc.stdout.readline()
+            dec_line = line.rstrip().decode()
+            print(dec_line)
+            if line == '':
+                print('Finished reading.')
+                break
         print("The pattern is added to the mirror.")
+
+# ---------------------------------The class of Deformable Mirror--------------------------
 
 class Mirror():
     def __init__(self, nPixels, nSegments, pattern=None):
@@ -610,12 +302,6 @@ class Mirror():
         toAdd = self.findTilt(tilt)
         self.pattern[w] += toAdd.swapaxes(0,1)
 
-    '''
-    def calcZernikes(self, zernModes):
-        radius = self.nPixels/2
-        zernPattern = libtim.zern.calc_zernike(zernModes, radius, mask=False)
-        return zernPattern
-    '''  
 
     def clear(self):
         self.pattern = np.zeros((self.nPixels,self.nPixels))
@@ -629,48 +315,36 @@ class Mirror():
         self.findSegOffsets()
 
     def pokeSegment(self, seg, amount):
+        '''
+        pokeSegment #seg
+        '''
         pass
 
     def outputSegs(self, filename):
+        print("Filename:", filename)
         allSegments = self.segOffsets.astype(np.int16).flatten()
         forMirror = np.zeros((160),dtype=np.int16)
         forMirror[0:10] = allSegments[1:11]
         forMirror[10:130] = allSegments[12:132]
         forMirror[130:140] = allSegments[133:143]
         segs = np.append(forMirror, np.zeros((16),dtype=np.int16))
-        #segs = np.append(self.segOffsets.astype(np.int16).flatten(),np.zeros((16),dtype=np.int16))
-        np.savetxt(filename, segs, fmt='%i', delimiter='\n')
+
+        np.savetxt(filename, segs, fmt='%i', delimiter="\r\n", newline = " ")
         return segs
 
     def inputMirrorSegs(self, msegs):
+        print(msegs.shape)
         newSegs = np.zeros((144))
         newSegs[1:11] = msegs[0:10]
         newSegs[12:132] = msegs[10:130]
         newSegs[133:143] = msegs[130:140]
         self.segOffsets = newSegs.reshape(12,12)
-        #print "segOffsets: ", self.segOffsets
 
     def returnSegs(self):
         return self.segOffsets
 
-    def useSegements(self,segs):
-        self.segOffsets = segs.copy()
-
-class _OtherModulations:
-    def __init__(self):
-        self.active = True
-        self.others = {}
-        self.counter = 0
-
-class _OtherModulation:
-
-    def __init__(self, data, on_geometry_changed, args):
-
-        self.active = True
-        self.data = data
-        self.on_geometry_changed = on_geometry_changed
-        self.args = args
         
+#++++++++++++++++++++++++++++++++ The test function +++++++++++++++++++++++++++++
         
 if __name__ == "__main__":
 
@@ -685,4 +359,3 @@ if __name__ == "__main__":
         m.outputSegs(fname)
         allFiles.append(fname)
         m.clear()
-    np.savetxt(toSaveDir+"allSegFiles.txt", np.array(allFiles), fmt='%s', delimiter='\n')

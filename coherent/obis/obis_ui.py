@@ -20,9 +20,10 @@ class UI(inLib.DeviceUI):
 
         w401 = np.where(abs(laser_lines - 401) < 10)
         w488 = np.where(abs(laser_lines - 488) < 10)
+        w561 = np.where(abs(laser_lines - 561) < 10)
         w642 = np.where(abs(laser_lines - 642) < 10)
 
-        laser_ports = [w401[0], w488[0], w642[0]]
+        laser_ports = [w401[0], w488[0], w561[0], w642[0]]
         print(laser_ports)
 
         self.sliders = [self._ui.Slider401, self._ui.Slider488, self._ui.Slider642]

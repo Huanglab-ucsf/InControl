@@ -20,21 +20,6 @@ class Control(inLib.Module):
             self.useThorlabs = False
             self.useMarzhauser = True
 
-    '''
-    @property
-    def active(self):
-        return self._active
-
-    @active.setter
-    def active(self, value):
-        print 1
-        if type(value) == bool:
-            print 2
-            self._active = value
-            print 3
-        else:
-            raise TypeError
-    '''
 
     def calcScanParams(self, start, end, nSteps):
         '''

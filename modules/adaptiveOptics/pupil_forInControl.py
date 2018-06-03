@@ -7,7 +7,7 @@ from numpy.lib.scimath import sqrt as _msqrt
 import tempfile as _tempfile
 #from Utilities import zernike as _zernike
 from matplotlib.pylab import *
-#import pyfftw
+import pyfftw
 #from scipy import weave
 
 

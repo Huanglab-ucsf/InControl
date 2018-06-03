@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 import inLib
 import time
 
@@ -9,7 +9,7 @@ class UI(inLib.DeviceUI):
     
     def __init__(self, control):
         design_path = 'madCityLabs.nanodrive.nanodrive_design'
-        print 'piezo: Initializing UI.'
+        print('piezo: Initializing UI.')
         inLib.DeviceUI.__init__(self, control, design_path)
 
         self._nAxis = self._control.getNAxis()
@@ -54,14 +54,17 @@ class UI(inLib.DeviceUI):
         self._ui.doubleSpinBoxX.editingFinished.connect(self._moveToX)
         self._ui.doubleSpinBoxY.editingFinished.connect(self._moveToY)
         self._ui.doubleSpinBoxZ.editingFinished.connect(self._moveToZ)
-        self._window.connect(self._ui.pushButtonUp,QtCore.SIGNAL('clicked()'),self._stepUp)
-        self._window.connect(self._ui.pushButtonDown,QtCore.SIGNAL('clicked()'),self._stepDown)
-        self._window.connect(self._ui.pushButtonLeft,QtCore.SIGNAL('clicked()'),self._stepLeft)
-        self._window.connect(self._ui.pushButtonRight,QtCore.SIGNAL('clicked()'),self._stepRight)
-        self._window.connect(self._ui.pushButtonHomeXY,QtCore.SIGNAL('clicked()'),self.moveHomeXY)
-        self._window.connect(self._ui.pushButtonUpZ,QtCore.SIGNAL('clicked()'),self._stepUpZ)
-        self._window.connect(self._ui.pushButtonDownZ,QtCore.SIGNAL('clicked()'),self._stepDownZ)
-        self._window.connect(self._ui.pushButtonHomeZ,QtCore.SIGNAL('clicked()'),self.moveHomeZ)
+        self._ui.pushButtonUp.clicked.connect(self._stepUp)
+        self._ui.pushButtonUpZ.clicked.connect(self._stepUpZ)
+        self._ui.pushButtonDownZ.clicked.connect(self._stepDownZ)
+        #self._window.connect(self._ui.pushButtonUp,QtCore.SIGNAL('clicked()'),self._stepUp)
+        #self._window.connect(self._ui.pushButtonDown,QtCore.SIGNAL('clicked()'),self._stepDown)
+        #self._window.connect(self._ui.pushButtonLeft,QtCore.SIGNAL('clicked()'),self._stepLeft)
+        #self._window.connect(self._ui.pushButtonRight,QtCore.SIGNAL('clicked()'),self._stepRight)
+        #self._window.connect(self._ui.pushButtonHomeXY,QtCore.SIGNAL('clicked()'),self.moveHomeXY)
+        #self._window.connect(self._ui.pushButtonUpZ,QtCore.SIGNAL('clicked()'),self._stepUpZ)
+        #self._window.connect(self._ui.pushButtonDownZ,QtCore.SIGNAL('clicked()'),self._stepDownZ)
+        #self._window.connect(self._ui.pushButtonHomeZ,QtCore.SIGNAL('clicked()'),self.moveHomeZ)
 
         self._ui.updateInfo_checkBox.stateChanged.connect(self._updateInfo)
         self._positionUpdater = QtCore.QTimer()
