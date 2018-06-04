@@ -26,11 +26,11 @@ class UI(inLib.DeviceUI):
         laser_ports = [w401[0], w488[0], w561[0], w642[0]]
         print(laser_ports)
 
-        self.sliders = [self._ui.Slider401, self._ui.Slider488, self._ui.Slider642]
-        self.onoff = [self._ui.On401, self._ui.On488, self._ui.On642]
-        self.groupBoxes = [self._ui.OBIS401, self._ui.OBIS488, self._ui.OBIS642]
-        color = ["(135,0,205,80)", "(0,240,255,80)", "(255,10,0,80)"]
-        self.digMod = [self._ui.checkBox_digMod401, self._ui.checkBox_digMod488, self._ui.checkBox_digMod642]
+        self.sliders = [self._ui.Slider401, self._ui.Slider488, self._ui.Slider561, self._ui.Slider642]
+        self.onoff = [self._ui.On401, self._ui.On488, self._ui.On561, self._ui.On642]
+        self.groupBoxes = [self._ui.OBIS401, self._ui.OBIS488, self._ui.OBIS561, self._ui.OBIS642]
+        color = ["(135,0,205,80)", "(0,240,255,80)", "(0,0,255,0)" "(255,10,0,80)"]
+        self.digMod = [self._ui.checkBox_digMod401, self._ui.checkBox_digMod488, self._ui.checkBox_digMod561, self._ui.checkBox_digMod642]
 
         for i in range(0,len(laser_ports)):
             if len(laser_ports[i])==1:

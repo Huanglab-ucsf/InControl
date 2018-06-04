@@ -7,12 +7,11 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
-sys.path.append('D:\\Dan\\Programs\\InControl\\myWidget\\')
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(606, 299)
+        Form.resize(790, 299)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -608,6 +607,27 @@ class Ui_Form(object):
         self.checkBox_digMod488.setObjectName("checkBox_digMod488")
         self.gridLayout_2.addWidget(self.checkBox_digMod488, 2, 0, 1, 2)
         self.horizontalLayout.addWidget(self.OBIS488)
+        self.OBIS561 = QtWidgets.QGroupBox(Form)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.OBIS561.sizePolicy().hasHeightForWidth())
+        self.OBIS561.setSizePolicy(sizePolicy)
+        self.OBIS561.setObjectName("OBIS561")
+        self.Slider561 = QtWidgets.QSlider(self.OBIS561)
+        self.Slider561.setGeometry(QtCore.QRect(10, 20, 20, 201))
+        self.Slider561.setOrientation(QtCore.Qt.Vertical)
+        self.Slider561.setObjectName("Slider561")
+        self.On561 = QtWidgets.QCheckBox(self.OBIS561)
+        self.On561.setGeometry(QtCore.QRect(10, 230, 66, 17))
+        self.On561.setObjectName("On561")
+        self.Pow561 = QtWidgets.QLabel(self.OBIS561)
+        self.Pow561.setGeometry(QtCore.QRect(80, 230, 47, 13))
+        self.Pow561.setObjectName("Pow561")
+        self.checkBox_digMod561 = QtWidgets.QCheckBox(self.OBIS561)
+        self.checkBox_digMod561.setGeometry(QtCore.QRect(10, 250, 131, 17))
+        self.checkBox_digMod561.setObjectName("checkBox_digMod561")
+        self.horizontalLayout.addWidget(self.OBIS561)
         self.OBIS642 = QtWidgets.QGroupBox(Form)
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -917,6 +937,10 @@ class Ui_Form(object):
         self.Pow488.setText(_translate("Form", "Power: "))
         self.On488.setText(_translate("Form", "Laser On"))
         self.checkBox_digMod488.setText(_translate("Form", "Digital Modulation"))
+        self.OBIS561.setTitle(_translate("Form", "OBIS 561"))
+        self.On561.setText(_translate("Form", "Laser On"))
+        self.Pow561.setText(_translate("Form", "Power:"))
+        self.checkBox_digMod561.setText(_translate("Form", "Digital Modulation"))
         self.OBIS642.setTitle(_translate("Form", "OBIS 642"))
         self.On642.setText(_translate("Form", "Laser On"))
         self.Pow647.setText(_translate("Form", "Power: "))
