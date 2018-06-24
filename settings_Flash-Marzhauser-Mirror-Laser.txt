@@ -1,4 +1,4 @@
-machine: Sequoia
+machine: Everglades 
 working_dir: D:\Data\Dan
 devices:
     syringePumps:
@@ -15,7 +15,7 @@ devices:
         settings:
             pixels: 512
             segments: 12
-            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            executable: D:/Dan/Programs/UsbExMulti/x64/Release/UsbExMulti.exe
 
     slm:
         active: false
@@ -158,18 +158,19 @@ modules:
             normalize: true
             centroid: false
     illumination:
-        active: false
+        active: false 
         settings: null
     testing:
         active: false
         settings: null
     adaptiveOptics:
-        active: false
-        settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
+        active: true 
+        settings: {filename: psfm01.npy, nFrames: 2, nIterations: 5, nSlices: 11, range: 20.0, hasSLM: false, hasMirror: true, scan_device: marzhauser}
     piezoscan:
         active: true
         settings:
-            ThorlabsMotor: true
+            ThorlabsMotor: false
+            Marzhauser: true
     BMC_multicorrection:
         active: false 
         settings:

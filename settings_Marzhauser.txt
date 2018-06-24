@@ -15,7 +15,7 @@ devices:
         settings:
             pixels: 512
             segments: 12
-            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            executable: D:/Dan/Programs/UsbExMulti/x64/Release/UsbExMulti.exe
 
     slm:
         active: false
@@ -71,14 +71,14 @@ devices:
     lasers:
         manufacturer: coherent
         model: obis
-        active: false 
+        active: true 
         settings:
-            ports: ["COM4"] #com15:405; com13:647; com14:488
-            lines: [488]
+            ports: ["COM4", "COM7"] #com15:405; com13:647; com14:488
+            lines: [488, 561] # 488 only
     camera:
         manufacturer: hamamatsu
         model: orcaflash
-        active: false 
+        active: true 
         settings:
             temperature: 20
             exposure_time: 0.2        # in milliseconds
@@ -121,7 +121,7 @@ devices:
     piezo:
         manufacturer: madCityLabs
         model: nanodrive
-        active: false
+        active: true 
         settings:
             n_axis: 1              # The number of axis
             response_time: 0.1      # See below for explanation:
@@ -164,8 +164,8 @@ modules:
         active: false
         settings: null
     adaptiveOptics:
-        active: false 
-        settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
+        active: true 
+        settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true, scan_device: marzhauser}
     piezoscan:
         active: true 
         settings:

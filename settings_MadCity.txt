@@ -9,13 +9,13 @@ devices:
             port: COM3
 
     mirror:
-        active: false
+        active: true 
         manufacturer: bmc
-        model: DM_core
+        model: MultiDM
         settings:
             pixels: 512
             segments: 12
-            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            executable: D:/Dan/Programs/UsbExMulti/x64/Release/UsbExMulti.exe
 
     slm:
         active: false
@@ -71,21 +71,21 @@ devices:
     lasers:
         manufacturer: coherent
         model: obis
-        active: true
+        active: false 
         settings:
-            ports: ["COM4", "COM7"] #com15:405; com13:647; com14:488
-            lines: [488, 561] # 488 only
+            ports: ["COM4"] #com15:405; com13:647; com14:488
+            lines: [488]
     camera:
         manufacturer: hamamatsu
         model: orcaflash
-        active: false
+        active: false 
         settings:
             temperature: 20
-            exposure_time: 0.4        # in milliseconds
+            exposure_time: 0.2        # in milliseconds
             delay_time: 50           # in milliseconds
             ad_channel: 0
             #roi: [1,256,1,256]
-            roi: [920,1176,860,1116]
+            roi: [896,1152,896,1152]
             binning: [1,1]
     ccd:
         manufacturer: imagingSource
@@ -109,22 +109,22 @@ devices:
     stage:
         manufacturer: marzhauser
         model: stage
-        active: false
+        active: false 
         settings:
             step: 1.0
     servo:
         manufacturer: thorlabs
         model: thorlabsMotors
-        active: false
+        active: false 
         settings:
             step: 0.0004
     piezo:
         manufacturer: madCityLabs
         model: nanodrive
-        active: false
+        active: true 
         settings:
-            n_axis: 1              # The number of axis
-            response_time: 0.1      # See below for explanation:
+            n_axis: 3              # The number of axis
+            response_time: 0.2      # See below for explanation:
             precision: 0.01         # After a move cmd, the position is probed every
                                     # 'response_time' secs, until the std of the last 5
                                     # position is below the 'precision'.
@@ -158,22 +158,24 @@ modules:
             normalize: true
             centroid: false
     illumination:
-        active: false
+        active: false 
         settings: null
     testing:
         active: false
         settings: null
     adaptiveOptics:
-        active: false
+        active: false 
         settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true}
     piezoscan:
-        active: false
+        active: true 
         settings:
-            ThorlabsMotor: true
+            ThorlabsMotor: false
+            Marzhauser: false 
     BMC_multicorrection:
-        active: false
+        active: false 
         settings:
             executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            zmax: 25
     scripts:
         active: false
         settings: null

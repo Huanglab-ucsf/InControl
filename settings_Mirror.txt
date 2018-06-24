@@ -169,7 +169,8 @@ modules:
     piezoscan:
         active: false
         settings: 
-            ThorlabsMotor: true
+            ThorlabsMotor: false 
+            Marzhauser: true
     scripts:
         active: false
         settings: null

@@ -169,7 +169,7 @@ modules:
     piezoscan:
         active: true
         settings:
-            ThorlabsMotor: true
+            ThorlabsMotor: false
     BMC_multicorrection:
         active: true
         settings:
