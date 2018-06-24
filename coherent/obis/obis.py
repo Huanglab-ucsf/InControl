@@ -12,9 +12,11 @@ class Control(inLib.Device):
 
         ports = settings['ports']
 
-        inLib.Device.__init__(self, 'coherent.RS232_test', settings, ports)
+        inLib.Device.__init__(self, 'coherent.RS232_API', settings, ports)
 
         self.num_ports = len(ports)
+        print(self.num_ports)
+        print(len(self._api.tty))
 
         self.laser_lines = []
         self.power_range = []

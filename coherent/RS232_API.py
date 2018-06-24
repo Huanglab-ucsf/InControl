@@ -16,12 +16,12 @@ class API():
         num_of_ports = len(ports)
         print("Ports:", ports)
         for i in range(0,num_of_ports):
-            print(ports[i].encode())
+            print(ports[i])
             try:
                 print("import new laser:")
-                tty = serial.Serial(ports[i].encode(), baudrate, timeout)
-                print("new port:", tty)
-                self.tty.append(tty)
+                ser = serial.Serial(ports[i], baudrate, timeout=timeout) 
+                print("new port:", ser)
+                self.tty.append(ser)
                 #self.tty.append(uspp.SerialPort(ports[i], timeout, baudrate))
                 self.tty[i].flush()
                 self.end_of_line = end_of_line
@@ -47,7 +47,7 @@ class API():
 
     def sendCommand(self, port_num, command):
         self.tty[port_num].flush()
-        self.tty[port_num].write(command + self.end_of_line)
+        self.tty[port_num].write((command + self.end_of_line).encode())
 
     def shutDown(self):
         print("RS232 shutDown")
@@ -57,7 +57,7 @@ class API():
         response = ""
         response_len = self.tty[port_num].inWaiting()
         while response_len:
-            response += self.tty[port_num].read(response_len)
+            response += self.tty[port_num].read(response_len).decode()
             time.sleep(self.wait_time)
             response_len = self.tty[port_num].inWaiting()
         if len(response) > 0:
@@ -73,10 +73,9 @@ class API():
         response = ""
         index = -1
         while (index == -1) and (attempts < max_attempts):
-            print("port_number:", port_num)
             response_len = self.tty[port_num].inWaiting()
             if response_len > 0:
-                response += self.tty[port_num].read(response_len)
+                response += self.tty[port_num].read(response_len).decode()
             time.sleep(0.1 * self.wait_time)
             index = response.find(end_of_response)
             attempts += 1

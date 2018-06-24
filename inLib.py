@@ -39,7 +39,7 @@ def import_module(path):
             In instance of the imported module.
     '''
     file_m = path.split('.')[-1]
-    #return importlib.import_module(path)
+    return importlib.import_module(path)
     return __import__(path, globals(), locals(), [file_m], 0)
 
 
