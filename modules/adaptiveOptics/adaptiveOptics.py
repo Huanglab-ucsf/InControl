@@ -552,7 +552,7 @@ class Control(inLib.Module):
         MOD = interpolation.shift(MOD,(cy-255.5,cx-255.5),order=0,
                                                        mode='nearest')
         # Cut out center 512x512:
-        c = MOD.shape[0]/2
+        c = int(MOD.shape[0]/2)
         MOD = MOD[c-256:c+256,c-256:c+256]
 
 
