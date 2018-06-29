@@ -49,6 +49,7 @@ class Control(object):
                     device_module = inLib.import_module(device_path)
                     device_settings_dict = device_dict['settings']
                     device_settings_dict['settings_filename'] = settings_filename
+                    print(device_settings_dict)
                     device_control = device_module.Control(device_settings_dict)
                     self._device_controls[device] = inLib.CommandQueue(device_control)
         self.__dict__.update(self._device_controls)

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>100</y>
+     <width>391</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>GroupBox</string>
+   </property>
+   <widget class="QRadioButton" name="radioButton_488OD0">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>95</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD0</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_488OD1">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>20</y>
+      <width>129</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD1</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_488OD2">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>20</y>
+      <width>197</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD2</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_488OD3">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>20</y>
+      <width>399</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD3</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
