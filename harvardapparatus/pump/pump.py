@@ -41,8 +41,11 @@ class Control(inLib.Device):
 
 
     def stop(self):
+        '''
+        Updated
+        '''
         outputSTP = self._api.commWithResp('STP')
-        print('02STP ' + str(outputSTP1))
+        print(outputSTP)
         time.sleep(self.sleeptime)
 
     def setMaxForwardRate(self, num):
@@ -68,12 +71,14 @@ class Control(inLib.Device):
         Updated
         '''
         if direction == 0:
-            d_str = units
+            d_str = units + ' '
         else:
-            d_str = units + 'W'
+            d_str = units + 'W '
         ser_command = d_str + str(rate)
+        print(ser_command)
         rateOutput = self._api.commWithResp(ser_command) 
         print(rateOutput)
+        time.sleep(self.sleeptime)
 
     def setVolume(self, vol, direction):
         '''

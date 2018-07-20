@@ -14,20 +14,29 @@ class UI(inLib.DeviceUI):
     def __init__(self, control):
         design_path = 'harvardapparatus.pump.pump_design'
         inLib.DeviceUI.__init__(self, control, design_path)
-        self._ui.lineEdit_rate.setText('0')
 
 
         self._ui.pushButton_run.clicked.connect(self.start)
         self._ui.pushButton_stp.clicked.connect(self.stop)
+        self._ui.pushButton_clt.clicked.connect(partial(self.clear, 'T'))
         self._ui.comboBox_dia.currentIndexChanged.connect(self.set_diameter)
         self._ui.comboBox_drt.currentIndexChanged.connect(self.set_direction)
+
+        self._ui.lineEdit_rat.returnPressed.connect(self.set_rate)
         # Initialize the UI
         ver = self._control.findPump()
         if (ver == ''):
             print("Cannnot find the pump.")
         self.set_diameter()
+        self.set_direction()
 
     # ================== Set the syringe pump parameters ====================
+    def _status_log_(self):
+        '''
+        display current status of the pump.
+        '''
+        pass
+
 
     def set_direction(self):
         self.direction = int(self._ui.comboBox_drt.currentIndex())
@@ -35,11 +44,12 @@ class UI(inLib.DeviceUI):
 
     def set_rate(self):
         rate = float(self._ui.lineEdit_rat.text())
-        units = str(self._ui.comboBox_units.currentText())
+        units = str(self._ui.comboBox_rat.currentText())
+        print(rate, units)
         self._control.setRate(rate, units, self.direction)
     
     def set_diameter(self):
-        dia_tx = str(self._ui.comboBox_units.currentTest())
+        dia_tx = str(self._ui.comboBox_dia.currentText())
         self._control.setDiameter(dia_tx)
 
     def set_volume(self):
@@ -54,10 +64,9 @@ class UI(inLib.DeviceUI):
                 
 
     def stop(self):
-        self.live=False
-        self._control.stop(self._pumpNum)
+        self._control.stop()
            
-    def clear_vol(self):
+    def clear(self, cl_char):
         '''
         clear the vol 
         '''

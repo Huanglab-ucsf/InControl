@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>428</width>
-    <height>301</height>
+    <width>522</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -71,7 +71,7 @@
      <widget class="QComboBox" name="comboBox_drt">
       <item>
        <property name="text">
-        <string>Forward</string>
+        <string>Infusion</string>
        </property>
       </item>
       <item>
@@ -117,7 +117,7 @@
     <item>
      <widget class="QLabel" name="label_vol">
       <property name="text">
-       <string>Volume (uL)</string>
+       <string>Target volume (uL)</string>
       </property>
      </widget>
     </item>
@@ -139,18 +139,18 @@
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="verticalLayoutWidget_2">
+  <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>220</x>
+     <x>200</x>
      <y>20</y>
-     <width>91</width>
-     <height>221</height>
+     <width>181</width>
+     <height>191</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout_btn">
-    <item>
-     <widget class="QPushButton" name="pushButton_run">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="2" column="0">
+     <widget class="QPushButton" name="pushButton_clt">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -158,50 +158,11 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>Run</string>
+       <string>Clear target</string>
       </property>
      </widget>
     </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_stp">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Stop</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_clr">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Clear rate</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton_clv">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="text">
-       <string>Clear volume</string>
-      </property>
-     </widget>
-    </item>
-    <item>
+    <item row="4" column="0">
      <widget class="QPushButton" name="pushButton_rst">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -214,23 +175,89 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButton_stp">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Stop</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButton_run">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Run</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="pushButton_cla">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Clear accumu</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QCheckBox" name="checkBox_clt">
+      <property name="text">
+       <string>Withdraw</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QCheckBox" name="checkBox_cla">
+      <property name="text">
+       <string>Withdraw</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
-  <widget class="QPlainTextEdit" name="plainTextEdit_status">
+  <widget class="QWidget" name="verticalLayoutWidget_2">
    <property name="geometry">
     <rect>
-     <x>220</x>
-     <y>250</y>
-     <width>171</width>
-     <height>31</height>
+     <x>200</x>
+     <y>220</y>
+     <width>181</width>
+     <height>71</height>
     </rect>
    </property>
-   <property name="lineWidth">
-    <number>1</number>
-   </property>
-   <property name="readOnly">
-    <bool>true</bool>
-   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Current status</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPlainTextEdit" name="TE_status">
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
