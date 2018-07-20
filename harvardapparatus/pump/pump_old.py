@@ -25,24 +25,34 @@ class Control(inLib.Device):
         '''
         Send a query command to the terminal
         '''
-        ver = self._api.commWithResp('VER') 
-        print(ver)
-        return ver
+        pass
             
 
-    def run(self, direction):
-        '''
-        Updated
-        '''
-        command_str = ['RUN', 'RUNW']
-        outputRun = self._api.commWithResp(command_str[direction])
+    def runForward(self, num):
+        if num==0:
+            outputRun = self._api.commWithResp('RUN')
+            print('00RUN ' + str(outputRun))
+        elif num==1:
+            outputRun = self._api.commWithResp('02RUN')
+            print('02RUN ' + str(outputRun))
         time.sleep(self.sleeptime)
-        print(outputRun)
 
+    def runReverse(self, num):
+        if num==0:
+            outputRRun = self._api.commWithResp('RUNW')
+            print('00RUN ' + outputRRun)
+        elif num==1:
+            outputRRun1 = self._api.commWithResp('02RUNW')
+            print('02RUN ' + outputRRun1)
+        time.sleep(self.sleeptime)
 
-    def stop(self):
-        outputSTP = self._api.commWithResp('STP')
-        print('02STP ' + str(outputSTP1))
+    def stop(self, num):
+        if num==0:
+            outputSTP = self._api.commWithResp('STP')
+            print('00STP ' + str(outputSTP))
+        elif num==1:
+            outputSTP1 = self._api.commWithResp('02STP')
+            print('02STP ' + str(outputSTP1))
         time.sleep(self.sleeptime)
 
     def setMaxForwardRate(self, num):
@@ -63,36 +73,32 @@ class Control(inLib.Device):
             print('02MAXW ' + outputMAXW)
         time.sleep(self.sleeptime)
 
-    def setRate(self, rate, units, direction):
-        '''
-        Updated
-        '''
-        if direction == 0:
-            d_str = units
-        else:
-            d_str = units + 'W'
-        ser_command = d_str + str(rate)
-        rateOutput = self._api.commWithResp(ser_command) 
-        print(rateOutput)
+    def setForwardRate(self, num, flowrate, units):
+        commands = ['ULH', 'ULM', 'MLM']
+        if num==1:
+            num=2
+        num_str = '0'+str(num)
+        #rateOutput = self._api.commWithResp(num_str + commands[units] + ' ' + str(flowrate))
+        rateOutput = self._api.commWithResp(commands[units] + ' ' + str(flowrate))
+        print(num_str + commands[units] + ' ' + str(flowrate) + ' ' + str(rateOutput))
+        time.sleep(self.sleeptime)
 
-    def setVolume(self, vol, direction):
-        '''
-        Updated
-        '''
-        if direction == 0:
-            ser_command = 'ULT ' + str(vol)
-        else:
-            ser_command = 'ULTW ' + str(vol) 
-        rateOutput = self._api.commWithResp(ser_command) 
-        print(rateOutput)
+    def setReverseRate(self, num, flowrate, units):
+        commands = ['ULHW', 'ULMW', 'MLMW']
+        if num==1:
+            num=2
+        num_str = '0'+str(num)
+        rRateOutput = self._api.commWithResp(num_str + commands[units] + ' ' + str(flowrate))
+        print(num_str + commands[units] + ' ' + str(flowrate) + ' ' + str(rRateOutput))
+        time.sleep(self.sleeptime)
 
-    def setDiameter(self, diam_text):
-        '''
-        Updated
-        '''
-        ser_command = 'MMD '+diam_text
-        diamOutput = self._api.commWithResp(ser_command)
-        print(diamOutput)
+    def setSyringeDiameter(self, num, diam):
+        commands = [4.78, 8.66, 12.06, 14.50, 19.13, 21.7, 26.7]
+        if num==1:
+            num=2
+        num_str = '0'+str(num)
+        diamOutput = self._api.commWithResp(num_str + 'MMD ' + str(commands[diam]))
+        print(num_str + 'MMD ' + str(commands[diam]) + str(diamOutput))
         time.sleep(self.sleeptime)
 
     def clearForwardRate(self, num):
