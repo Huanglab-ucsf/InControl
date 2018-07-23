@@ -19,16 +19,19 @@ class UI(inLib.DeviceUI):
         self._ui.pushButton_run.clicked.connect(self.start)
         self._ui.pushButton_stp.clicked.connect(self.stop)
         self._ui.pushButton_clt.clicked.connect(partial(self.clear, 'T'))
+        self._ui.pushButton_status.clicked.connect(self.get_status)
         self._ui.comboBox_dia.currentIndexChanged.connect(self.set_diameter)
         self._ui.comboBox_drt.currentIndexChanged.connect(self.set_direction)
 
         self._ui.lineEdit_rat.returnPressed.connect(self.set_rate)
+        self._ui.lineEdit_vol.returnPressed.connect(self.set_volume)
         # Initialize the UI
         ver = self._control.findPump()
         if (ver == ''):
             print("Cannnot find the pump.")
         self.set_diameter()
         self.set_direction()
+        self.reset()
 
     # ================== Set the syringe pump parameters ====================
     def _status_log_(self):
@@ -50,6 +53,7 @@ class UI(inLib.DeviceUI):
     
     def set_diameter(self):
         dia_tx = str(self._ui.comboBox_dia.currentText())
+        print(dia_tx)
         self._control.setDiameter(dia_tx)
 
     def set_volume(self):
@@ -58,6 +62,11 @@ class UI(inLib.DeviceUI):
 
 
     # ================== Operation functions ================================
+
+    def get_status(self):
+        status_txt = self._control.getStatus()
+        self._ui.TE_status.setPlainText(status_txt)
+
     
     def start(self):
         self._control.run(self.direction)
@@ -70,7 +79,8 @@ class UI(inLib.DeviceUI):
         '''
         clear the vol 
         '''
-        pass
+        if cl_char == 'T':
+            pass
 
 
     def clear_rat(self):
@@ -81,7 +91,8 @@ class UI(inLib.DeviceUI):
         
             
     def reset(self):
-        pass
+        self._control.clearTarget(0)
+        self._control.clearTarget(1)
 
 
 

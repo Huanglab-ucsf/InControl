@@ -21,14 +21,38 @@ class Control(inLib.Device):
         #oldRate keeps track of the last flowrate used, first value being pump 0, second being pump 1, etc.
         self.oldRate = 0
 
+
+        # =================================== query functions ===============================
+
+
+    def _parse_commoutput_(self, output_comm):
+        '''
+        parse output command.
+        '''
+
     def findPump(self):
         '''
         Send a query command to the terminal
         '''
         ver = self._api.commWithResp('VER') 
-        print(ver)
         return ver
             
+    def getStatus(self):
+        dia_str = self._api.commWithResp('DIA')
+        print(dia_str)
+        time.sleep(self.sleeptime)
+        rat_str = self._api.commWithResp('RAT')
+        print(rat_str)
+        raw_str = self._api.commWithResp('RAT W')
+        print(raw_str)
+        vol_str = self._api.commWithResp('RAT')
+        print(vol_str)
+        status_raw = ''.join([dia_str, rat_str, raw_str, vol_str])
+        status = ''.join(status_raw.split(':'))
+        return status
+
+        
+
 
     def run(self, direction):
         '''
@@ -48,23 +72,13 @@ class Control(inLib.Device):
         print(outputSTP)
         time.sleep(self.sleeptime)
 
-    def setMaxForwardRate(self, num):
-        if num==0:
+    def setMax(self, direction):
+        if direction ==0:
             outputMAX = self._api.commWithResp('MAX')
-            print('00MAX ' + outputMAX)
-        elif num==1:
-            self._api.commWithResp('02MAX')
-            print('02MAX ' + outputMAX)
+        elif direction ==1:
+            self._api.commWithResp('MAXW')
         time.sleep(self.sleeptime)
 
-    def setMaxReverseRate(self, num):
-        if num==0:
-            outputMAXW = self._api.commWithResp('MAXW')
-            print('00MAXW ' + outputMAXW)
-        elif num==1:
-            outputMAXW1self._api.commWithResp('02MAXW')
-            print('02MAXW ' + outputMAXW)
-        time.sleep(self.sleeptime)
 
     def setRate(self, rate, units, direction):
         '''
@@ -77,7 +91,6 @@ class Control(inLib.Device):
         ser_command = d_str + str(rate)
         print(ser_command)
         rateOutput = self._api.commWithResp(ser_command) 
-        print(rateOutput)
         time.sleep(self.sleeptime)
 
     def setVolume(self, vol, direction):
@@ -95,28 +108,24 @@ class Control(inLib.Device):
         '''
         Updated
         '''
-        ser_command = 'MMD '+diam_text
+        if '(' in diam_text:
+            diam_num = diam_text.split('(')[1].split(')')[0]
+            ser_command = 'MMD '+ diam_num
+
+        else:
+            ser_command = 'MMD '+diam_text
         diamOutput = self._api.commWithResp(ser_command)
         print(diamOutput)
         time.sleep(self.sleeptime)
 
-    def clearForwardRate(self, num):
-        if num==0:
-            outputCLT = self._api.commWithResp('00CLT')
-            print('00CLT ' + outputCLT)
-        elif num==1:
-            otuputCLT1 = self._api.commWithResp('02CLT')
-            print('02CLT ' + outputCLT1)
+    def clearTarget(self, direction):
+        if direction ==0:
+            outputCLT = self._api.commWithResp('CLT')
+        else:
+            outputCLT = self._api.commWithResp('CLTW')
         time.sleep(self.sleeptime)
+        print(outputCLT)
 
-    def clearReverseRate(self, num):
-        if num==0:
-            outputCLTW = self._api.commWithResp('00CLTW')
-            print('00CLTW ' + outputCLTW)
-        elif num==1:
-            outputCLTW1 = self._api.commWithResp('02CLTW')
-            print('02CLTW ' + outputCLTW1)
-        time.sleep(self.sleeptime)
 
     def setAndRun(self, num, flowrate, units):
         if num==1:
