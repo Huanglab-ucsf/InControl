@@ -3,12 +3,12 @@ import numpy as np
 import os 
 import matplotlib.pyplot as plt
 
-class Control(inLib.Module):
+class Control(inLib.Device):
     '''
     the core control program for wave front sensor. 
     '''
-    def __init__(self,control,settings):
-        self.executable = settings['executable']
+    def __init__(self,settings):
+        inLib.Device.__init__(self, 'thorlabs.WFS.WFS_api', settings)
         self.wavefront = None
 
 
