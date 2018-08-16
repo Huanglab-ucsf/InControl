@@ -5,7 +5,7 @@
 # Hazen 3/09
 #
 
-import uspp.uspp as uspp
+from . import uspp.uspp as uspp
 import time
 
 class API():
@@ -17,7 +17,7 @@ class API():
         self.wait_time = wait_time
         time.sleep(self.wait_time)
         self.live = 1
-        print port
+        print(port)
 
     def commWithResp(self, command):
         self.tty.flush()
@@ -37,7 +37,7 @@ class API():
         self.tty.write(command + self.end_of_line)
 
     def shutDown(self):
-        print "RS232 shutDown"
+        print("RS232 shutDown")
         del(self.tty)
 
     def getResponse(self):

@@ -21,10 +21,11 @@ class Control(inLib.Device):
         self.laser_lines = []
         self.power_range = []
 
-        if not(len(self._api.tty) == self.num_ports):
+        nactive_ports = len(self._api.tty)
+        if not(nactive_ports == self.num_ports):
             print("Not all lasers available...")
 
-        for i in range(0,self.num_ports):
+        for i in range(nactive_ports):
             laser_wavelength = self.getWavelength(i)
             self.laser_lines.append(laser_wavelength)
             pow_range = self.getPowerRange(i)

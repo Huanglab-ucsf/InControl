@@ -22,9 +22,13 @@ class API():
 
         instr_name = ct.create_string_buffer(b"",20)
         instr_serial = ct.create_string_buffer(b"",20)
+        global instantiated
+        assert instantiated == 0, "Initialization."
 
+        loadWFSDLL()
+        instantiated = 1
 
-
+    def _device_init_(self):
 
         self.device_ID = ct.c_int32()
         self.in_use = ct.c_int32()
@@ -32,11 +36,9 @@ class API():
         self.ID_query = ct.c_bool()
         self.reset_device = ct.c_bool()
         self.resource_name = ct.create_string_buffer(b"", 30)
+        self.spotsX = ct.c_int32()
+        self.spotsY = ct.c_int32()
 
-        loadWFSDLL()
-        global instantiated
-        assert instantiated == 0, "Initialization."
-        instantiated = 1
         wfs.WFS_GetInstrumentListLen(None, ct.byref(count))
         print("Wavefront Sensor connected:", str(count.value))
         wfs.WFS_GetInstrumentListInfo(None, list_index,ct.byref(self.device_ID), ct.byref(self.in_use), instr_name,instr_serial, self.resource_name)
@@ -44,21 +46,24 @@ class API():
         wfs.WFS_init(self.resource_name,self.ID_query,self.reset_device,ct.byref(self.instr_handle))
         print(self.instr_handle.value) 
 
+
+
     def device_config(self):
-        self.MX, self.MY = 768, 768 
+        self.MX, self.MY = 1280, 1024 
         self.pupil_diam = 4.5
         self.error_message = ct.create_string_buffer(b"", 512)
         self.error_code = ct.c_int32()
         pix_format = ct.c_int32()
         pix_format.value = 0
 
-        dev_status = wfs.WFS_ConfigureCam(self.instr_handle)
-        pass
+        dev_status = wfs.WFS_ConfigureCam(self.instr_handle, pix_format)
 
 
-    def wavefront_measure(self,n_measure =1):
-        pass
-
+    def wavefront_measure(self,n_measure =1, MX = 50, MY = 40):
+        '''
+        Measure a wavefront
+        '''
+        wfs.
 
     def shutDown(self):
         wfs.WFS_close(self.instr_handle)

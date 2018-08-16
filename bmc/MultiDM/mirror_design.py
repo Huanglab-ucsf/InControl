@@ -7,7 +7,8 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from myWidget.matplotlibwidget import MatplotlibWidget
+import sys
+sys.path.append('D:\\Dan\\Programs\\InControl\\myWidget\\')
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -360,3 +361,4 @@ class Ui_Form(object):
         self.pushButton_setToGroup.setText(_translate("Form", "Add value to group"))
         self.tabWidgetPF.setTabText(self.tabWidgetPF.indexOf(self.tab_3), _translate("Form", "GroupSegs"))
 
+from matplotlibwidget import MatplotlibWidget

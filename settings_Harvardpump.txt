@@ -9,7 +9,7 @@ devices:
             port: COM10
 
     mirror:
-        active: true 
+        active: false 
         manufacturer: bmc
         model: MultiDM
         settings:
@@ -71,14 +71,14 @@ devices:
     lasers:
         manufacturer: coherent
         model: obis
-        active: true 
+        active: false 
         settings:
             ports: ["COM4", "COM7"] #com15:405; com13:647; com14:488
             lines: [488, 561] # 488 only
     camera:
         manufacturer: hamamatsu
         model: orcaflash
-        active: true 
+        active: false 
         settings:
             temperature: 20
             exposure_time: 0.2        # in milliseconds
@@ -109,7 +109,7 @@ devices:
     stage:
         manufacturer: marzhauser
         model: stage
-        active: true 
+        active: false 
         settings:
             step: 1.0
     servo:
@@ -121,7 +121,7 @@ devices:
     piezo:
         manufacturer: madCityLabs
         model: nanodrive
-        active: true 
+        active: false 
         settings:
             n_axis: 1              # The number of axis
             response_time: 0.1      # See below for explanation:
@@ -164,10 +164,10 @@ modules:
         active: false
         settings: null
     adaptiveOptics:
-        active: true 
+        active: false 
         settings: {filename: psfm01.npy, nFrames: 2, nIterations: 4, nSlices: 31, range: 9.0, hasSLM: false, hasMirror: true, scan_device: marzhauser}
     piezoscan:
-        active: true 
+        active: false 
         settings:
             ThorlabsMotor: false
             Marzhauser: true

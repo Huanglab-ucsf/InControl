@@ -7,8 +7,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-import sys
-sys.path.append('D:\\Dan\\Programs\\InControl\\myWidget\\')
+
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
@@ -42,7 +41,7 @@ class Ui_Form(object):
         self.doubleSpinBoxRange.setDecimals(1)
         self.doubleSpinBoxRange.setMinimum(-100.0)
         self.doubleSpinBoxRange.setSingleStep(0.1)
-        self.doubleSpinBoxRange.setProperty("value", 4.0)
+        self.doubleSpinBoxRange.setProperty("value", 8.0)
         self.doubleSpinBoxRange.setObjectName("doubleSpinBoxRange")
         self.gridLayout_4.addWidget(self.doubleSpinBoxRange, 1, 2, 1, 1)
         self.label_3 = QtWidgets.QLabel(self.groupBox)
@@ -70,7 +69,7 @@ class Ui_Form(object):
         sizePolicy.setHeightForWidth(self.spinBoxFrames.sizePolicy().hasHeightForWidth())
         self.spinBoxFrames.setSizePolicy(sizePolicy)
         self.spinBoxFrames.setMinimum(1)
-        self.spinBoxFrames.setProperty("value", 5)
+        self.spinBoxFrames.setProperty("value", 2)
         self.spinBoxFrames.setObjectName("spinBoxFrames")
         self.gridLayout_4.addWidget(self.spinBoxFrames, 3, 2, 1, 1)
         self.pushButtonPSF = QtWidgets.QPushButton(self.groupBox)
@@ -82,6 +81,7 @@ class Ui_Form(object):
         self.pushButtonPSF.setObjectName("pushButtonPSF")
         self.gridLayout_4.addWidget(self.pushButtonPSF, 10, 0, 1, 3)
         self.checkBoxSave = QtWidgets.QCheckBox(self.groupBox)
+        self.checkBoxSave.setChecked(True)
         self.checkBoxSave.setObjectName("checkBoxSave")
         self.gridLayout_4.addWidget(self.checkBoxSave, 9, 0, 1, 1)
         self.lineEditFile = QtWidgets.QLineEdit(self.groupBox)
@@ -193,7 +193,7 @@ class Ui_Form(object):
         self.doubleSpinBoxPixel.setDecimals(3)
         self.doubleSpinBoxPixel.setMaximum(9.0)
         self.doubleSpinBoxPixel.setSingleStep(0.01)
-        self.doubleSpinBoxPixel.setProperty("value", 0.163)
+        self.doubleSpinBoxPixel.setProperty("value", 0.103)
         self.doubleSpinBoxPixel.setObjectName("doubleSpinBoxPixel")
         self.gridLayout_3.addWidget(self.doubleSpinBoxPixel, 0, 1, 1, 1)
         self.label_6 = QtWidgets.QLabel(self.groupBoxPhase)
@@ -201,7 +201,7 @@ class Ui_Form(object):
         self.gridLayout_3.addWidget(self.label_6, 1, 0, 1, 1)
         self.doubleSpinBoxWavelength = QtWidgets.QDoubleSpinBox(self.groupBoxPhase)
         self.doubleSpinBoxWavelength.setDecimals(3)
-        self.doubleSpinBoxWavelength.setProperty("value", 0.525)
+        self.doubleSpinBoxWavelength.setProperty("value", 0.515)
         self.doubleSpinBoxWavelength.setObjectName("doubleSpinBoxWavelength")
         self.gridLayout_3.addWidget(self.doubleSpinBoxWavelength, 1, 1, 1, 1)
         self.label_7 = QtWidgets.QLabel(self.groupBoxPhase)
@@ -398,7 +398,7 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.groupBoxModulations)
 
         self.retranslateUi(Form)
-        self.tabWidgetPF.setCurrentIndex(1)
+        self.tabWidgetPF.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
     def retranslateUi(self, Form):
@@ -414,8 +414,8 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "Mask radius:"))
         self.label_11.setText(_translate("Form", "Center X:"))
         self.label_12.setText(_translate("Form", "Center Y:"))
-        self.lineEdit_cX.setText(_translate("Form", "-1"))
-        self.lineEdit_cY.setText(_translate("Form", "-1"))
+        self.lineEdit_cX.setText(_translate("Form", "128"))
+        self.lineEdit_cY.setText(_translate("Form", "128"))
         self.pushButton_runningSharpness.setText(_translate("Form", "Continuous Sharpness"))
         self.pushButton_stopSharpness.setText(_translate("Form", "Stop Sharpness"))
         self.pushButton_sharpnessVsZern.setText(_translate("Form", "Sharpness vs. Zernike"))
@@ -461,6 +461,5 @@ class Ui_Form(object):
         self.tabWidgetPF.setTabText(self.tabWidgetPF.indexOf(self.tab_3), _translate("Form", "Gen Zernikes"))
         self.groupBoxModulations.setTitle(_translate("Form", "Modulations"))
         self.pushButton_setMods.setText(_translate("Form", "Set"))
-
 
 from matplotlibwidget import MatplotlibWidget

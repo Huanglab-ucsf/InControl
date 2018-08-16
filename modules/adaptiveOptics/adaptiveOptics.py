@@ -520,12 +520,13 @@ class Control(inLib.Module):
             MOD = interpolation.shift(MOD,(cy-255.5,cx-255.5),order=0,
                                                    mode='nearest')
             # Cut out center 512x512:
-            c = MOD.shape[0]/2
+            c = int(MOD.shape[0]/2)
             MOD = MOD[c-256:c+256,c-256:c+256]
 
 
         # Add an 'Other' modulation using the SLM API. Store the index in _modulations:
         #index = self._control.slm.addOther(MOD)
+        print("add mod:")
         index = self._addMOD(MOD)
         self._modulations.append(index)
         return index

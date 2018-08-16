@@ -4,18 +4,18 @@ devices:
     syringePumps:
         manufacturer: harvardapparatus
         model: pump
-        active: false
+        active: true 
         settings:
-            port: COM3
+            port: COM10
 
     mirror:
-        active: false
+        active: true 
         manufacturer: bmc
-        model: DM_core
+        model: MultiDM 
         settings:
             pixels: 512
             segments: 12
-            executable: D:/Ryan/BMC_Mirror/UsbExMulti/Win32/Release/UsbExMulti.exe
+            executable: D:/Dan/Programs/UsbExMulti/x64/Release/UsbExMulti.exe
 
     slm:
         active: false
