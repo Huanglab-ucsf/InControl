@@ -13,17 +13,17 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QGroupBox" name="groupBox_488">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>100</y>
      <width>391</width>
-     <height>80</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="title">
-    <string>GroupBox</string>
+    <string>488 nm</string>
    </property>
    <widget class="QRadioButton" name="radioButton_488OD0">
     <property name="geometry">
@@ -75,6 +75,45 @@
     </property>
     <property name="text">
      <string>OD3</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_561">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>190</y>
+     <width>391</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>561 nm</string>
+   </property>
+   <widget class="QRadioButton" name="radioButton">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>20</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD0</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="radioButton_2">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>20</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OD1</string>
     </property>
    </widget>
   </widget>

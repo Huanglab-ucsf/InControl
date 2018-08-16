@@ -145,7 +145,7 @@
      <x>200</x>
      <y>20</y>
      <width>181</width>
-     <height>191</height>
+     <height>171</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -234,12 +234,19 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>220</y>
+     <y>200</y>
      <width>181</width>
-     <height>71</height>
+     <height>121</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QPushButton" name="pushButton_status">
+      <property name="text">
+       <string>Get status</string>
+      </property>
+     </widget>
+    </item>
     <item>
      <widget class="QLabel" name="label_2">
       <property name="text">
