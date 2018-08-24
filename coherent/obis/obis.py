@@ -16,16 +16,16 @@ class Control(inLib.Device):
 
         self.num_ports = len(ports)
         print(self.num_ports)
-        print(len(self._api.tty))
 
         self.laser_lines = []
         self.power_range = []
 
-        nactive_ports = len(self._api.tty)
-        if not(nactive_ports == self.num_ports):
+        self.nactive_ports = len(self._api.tty)
+        print("Number of active ports:", self.nactive_ports)
+        if not(self.nactive_ports == self.num_ports):
             print("Not all lasers available...")
 
-        for i in range(nactive_ports):
+        for i in range(self.nactive_ports):
             laser_wavelength = self.getWavelength(i)
             self.laser_lines.append(laser_wavelength)
             pow_range = self.getPowerRange(i)
@@ -111,7 +111,7 @@ class Control(inLib.Device):
         return (powerFraction*powerRange)+self.power_range[port][0]
 
     def shutDown(self):
-        for i in range(0,self.num_ports):
+        for i in range(0,self.nactive_ports):
             self.setLaserOnOff(i, False)
             self.setInternalCW(i)
 

@@ -6,7 +6,7 @@ devices:
         model: pump
         active: true 
         settings:
-            port: COM10
+            port: COM11
 
     mirror:
         active: true 
@@ -73,7 +73,7 @@ devices:
         model: obis
         active: true 
         settings:
-            ports: ["COM4", "COM7"] #com15:405; com13:647; com14:488
+            ports: ["COM4", "COM12"] #com15:405; com13:647; com14:488
             lines: [488, 561] # 488 only
     camera:
         manufacturer: hamamatsu
