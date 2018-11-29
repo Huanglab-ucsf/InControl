@@ -399,7 +399,8 @@ class Control(inLib.Device):
 
     def beginRecording(self, fileName):
         self.stopCapture()
-        self.daxfile = writer.DaxFile(fileName, self._props)
+        #self.daxfile = writer.DaxFile(fileName, self._props)
+        self.daxfile = DaxFile(fileName, self._props)
         self.latestFrame = -1
         self.recordedFrames = 0
         self.recording = True
@@ -415,7 +416,8 @@ class Control(inLib.Device):
 
     def beginSnaps(self, fileName):
         self.stopCapture()
-        self.daxfile = writer.DaxFile(fileName, self._props)
+        #self.daxfile = writer.DaxFile(fileName, self._props)
+        self.daxfile = DaxFile(fileName, self._props)
         self.latestFrame = -1
         self.recordedFrames = 0
         self.recording = True

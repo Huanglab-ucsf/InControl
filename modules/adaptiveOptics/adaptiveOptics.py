@@ -170,8 +170,11 @@ class Control(inLib.Module):
         self.filename = filename
 
         # Some parameters
-        start = range_/2.0
-        end = -range_/2.0
+        # Added by Dan on Nov27, 2018: 
+        start = range_/np.sqrt(2.0)
+        end = -range_/np.sqrt(2.0) # The x and z directions are coupled, and the scan range should be scaled up by sqrt(2)
+        #start = range_/2.0
+        #end = -range_/2.0
         if self._settings['scan_device'] == 'marzhauser':
             start,end = end, start # the direction of the thorlab motor and the marzhauser stage are opposite
         self._dz = abs(range_/(nSlices-1.0))

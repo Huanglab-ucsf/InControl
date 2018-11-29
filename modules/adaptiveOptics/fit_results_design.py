@@ -53,4 +53,4 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(QtWidgets.QApplication.translate("Dialog", "Zernike fit results", None, QtWidgets.QApplication.UnicodeUTF8))
         self.checkBoxRemovePTTD.setText(QtWidgets.QApplication.translate("Dialog", "Remove Piston, Tip, Tilt, Defocus", None, QtWidgets.QApplication.UnicodeUTF8))
 
-#from matplotlibwidget import MatplotlibWidget
+from matplotlibwidget import MatplotlibWidget
