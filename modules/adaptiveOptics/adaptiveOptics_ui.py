@@ -3,13 +3,13 @@
 
 from PyQt5 import QtWidgets,QtCore
 import inLib
-from Utilities import QExtensions as qext
 import numpy as np
 from numpy.lib.scimath import sqrt as _msqrt
 from . import fit_results_design
-import copy
 import time
 from libs import scipy_gaussfitter
+
+
 
 class UI(inLib.ModuleUI):
 
@@ -54,7 +54,7 @@ class UI(inLib.ModuleUI):
         self._ui.pushButton_unwrap.clicked.connect(self.unwrap)
 
         self._ui.pushButton_zernFitUnwrapped.clicked.connect(self.fitUnwrapped)
-        self._ui.pushButton_modulateZernike.clicked.connect(self.modulateUnwrappedZernike)
+        #self._ui.pushButton_modulateZernike.clicked.connect(self.modulateUnwrappedZernike)
 
         self._ui.spinBox_zernModesToFit.setValue(self._control.zernModesToFit)
         self._ui.spinBox_zernModesToFit.valueChanged.connect(self.setZernModesToFit)
@@ -104,14 +104,14 @@ class UI(inLib.ModuleUI):
 
 
     def _modulation_toggled(self, state):
-        pass
-        '''
+        
+        
         for m in self._modulations:
             state = m.checkbox.isChecked()
             self._control.setModulationActive(m.index, state)
         if self.hasSLM:
             self._ui_control.slm.updateModulationDisplay()
-        '''
+        
 
 
     def _modulations_toggled(self, state):
@@ -131,6 +131,15 @@ class UI(inLib.ModuleUI):
             state = m.checkbox.isChecked()
             self._control.setModulationActive(m.index, state)
 
+    def direct_modulate(self):
+        '''
+        directly modulate the DM 
+        '''
+        self.set_modulations()
+        self._control.direct_modulate()
+        
+
+
     def _setZernikeRadius(self):
         radius = int(self._ui.lineEdit_zernRadius.text())
         self.zernRadius = radius
@@ -139,7 +148,10 @@ class UI(inLib.ModuleUI):
         self.diffLimit = int(self._ui.lineEdit_diffLimit.text())
 
 
-    def acquirePSF(self):
+    def acquirePSF(self, deskew = True):
+        '''
+        Added by Dan on 01/03/2019: A deskew function
+        '''
         range_ = self._ui.doubleSpinBoxRange.value()
         nSlices = self._ui.spinBoxSlices.value()
         nFrames = self._ui.spinBoxFrames.value()
@@ -152,10 +164,14 @@ class UI(inLib.ModuleUI):
         if save:
             fname = str(self._ui.lineEditFile.text())
         self._scanner = Scanner(self._control, range_, nSlices, nFrames, center_xy,
-                                fname, maskRadius, (cX,cY))
+                                fname, maskRadius, (cX,cY), deskew)
         self._scanner.finished.connect(self._on_scan_done)
         self._ui.pushButtonPSF.setEnabled(False)
         self._scanner.start()
+        if deskew:
+            self._control.deskew()
+        
+        
 
 
     def _on_scan_done(self):
@@ -335,11 +351,6 @@ class UI(inLib.ModuleUI):
         if self.hasSLM:
             self._ui_control.slm.updateModulationDisplay()
 
-    def oneRun(self):
-        # added by Dan to perform one-Run experiment
-        self._control.one_Run(4)
-
-
 
     def shutDown(self):
         if self._scanner:
@@ -381,7 +392,7 @@ class FitResultsDialog(QtWidgets.QDialog):
 
 class Scanner(QtCore.QThread):
 
-    def __init__(self, control, range_, nSlices, nFrames, center_xy, fname, maskRadius, maskCenter):
+    def __init__(self, control, range_, nSlices, nFrames, center_xy, fname, maskRadius, maskCenter, deskew):
         QtCore.QThread.__init__(self)
 
         self.control = control
@@ -392,11 +403,12 @@ class Scanner(QtCore.QThread):
         self.fname = fname
         self.maskRadius = maskRadius
         self.maskCenter = maskCenter
+        self.deskew = deskew
 
     def run(self):
         self.control.acquirePSF(self.range_, self.nSlices, self.nFrames,
                                 self.center_xy, self.fname,
-                                self.maskRadius, self.maskCenter)
+                                self.maskRadius, self.maskCenter, self.deskew)
 
 class RunningSharpness(QtCore.QThread):
 

@@ -243,7 +243,7 @@ class Geometry:
         self.cy = float(cy)
         self.d = float(d)
         self.size = size
-        self.nx, self.ny = size
+        self.ny, self.nx = size
         self.x_pxl, self.y_pxl = _np.meshgrid(_np.arange(self.nx),_np.arange(self.ny))
         self.x_pxl -= int(self.cx)
         self.y_pxl -= int(self.cy)

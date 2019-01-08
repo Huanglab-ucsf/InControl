@@ -41,9 +41,9 @@ class DaxFile:
         fp.write("y_start = " + str(p["y_start"] + 1) + nl)
         fp.write("x_end = " + str(p["x_start"]+p["dimensions"][0]) + nl)
         fp.write("y_end = " + str(p["y_start"]+p["dimensions"][1]) + nl)
-        if p.has_key("kinetic_value"):
+        if "kinetic_value" in p:
             fp.write("kinetic value = " + str(p["kinetic_value"]) + nl)
-        if p.has_key("frame_rate"):
+        if "frame_rate" in p:
             fp.write("Frames Per Second = " + str(p["frame_rate"]) + nl)
         '''
         fp.write("machine name = " + p.setup_name + nl)

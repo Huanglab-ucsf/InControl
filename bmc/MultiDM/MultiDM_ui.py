@@ -9,6 +9,7 @@ from numpy.lib.scimath import sqrt as _msqrt
 import copy
 import time
 import skimage
+import threading
 
 class UI(inLib.DeviceUI):
     
@@ -36,6 +37,7 @@ class UI(inLib.DeviceUI):
         self._ui.pushButton_modulateZernike.clicked.connect(self.modZernike)
         self._ui.pushButton_createGroup.clicked.connect(self.createGroup)
         self._ui.pushButton_setToGroup.clicked.connect(self.setGroupVal)
+        self._ui.pushButton_reset.clicked.connect(self.resetMirror)
 
         self._ui.pushButton_loadSegs.clicked.connect(self.loadSegs)
 
@@ -107,6 +109,11 @@ class UI(inLib.DeviceUI):
         pattern = self._control.reconfigGeo(cx,cy,npixels)
         self._displayPhase(pattern)
         self.reportGeo()
+
+    def resetMirror(self):
+        print("reset the mirror!")
+        self._applyToMirrorThread.stop()
+
 
     def setMultiplier(self):
         mult = float(self._ui.lineEdit_mult.text())
@@ -293,7 +300,13 @@ class ApplyToMirror(QtCore.QThread):
     def __init__(self, control):
         QtCore.QThread.__init__(self)
         self._control = control
+        self._lock = threading.Lock()
 
+        
+    def stop(self):
+        with self._lock:
+            self._control.advancePipe()
+            
     def run(self):
         self._control.applyToMirror()
 

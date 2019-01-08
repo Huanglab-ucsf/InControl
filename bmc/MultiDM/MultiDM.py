@@ -5,7 +5,6 @@ import libtim
 import libtim.zern
 from modules.adaptiveOptics import pupil_forInControl as pupil
 import subprocess
-import scipy
 from scipy.ndimage import rotate
 
 class Control(inLib.Device):
@@ -382,6 +381,14 @@ class Control(inLib.Device):
     def advancePatternWithPipe(self):
         if self.proc is not None:
             self.proc.stdin.write("\n")
+            
+            
+            
+    def advancePipe(self):
+        print("The process:", self.proc)
+        if self.proc is not None:
+            print(self.proc.communicate())
+            self.proc = None
 
     def resetPipe(self):
         self.proc = None
@@ -482,6 +489,9 @@ class Control(inLib.Device):
         return index
 
     def setOtherActive(self, index, state):
+        '''
+        set other modes active 
+        '''
         self._other.others[index].active = state
         if state:
             p=self.mirror.addToPattern(self._other.others[index].data)
@@ -496,9 +506,17 @@ class Control(inLib.Device):
 
         wTimeStr = str(wtime)
 
+        self.proc = subprocess.Popen([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr] , stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        for ir in range(11):
+            line = self.proc.stdout.readline()
+            dec_line = line.rstrip().decode()
+            print(dec_line)
+            if line == '':
+                print('Finished reading.')
+                break
+        print("The pattern is added to the mirror.")
         #Run executable
-        subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
-                         "1", wTimeStr], shell=True)
+        #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),"1", wTimeStr], shell=True)
         #subprocess.call([self.executable, self.tempfilename, str(self.multiplier),
          #                "1", "30000"], shell=True)
         
