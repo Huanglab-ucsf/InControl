@@ -3,7 +3,7 @@ import time
 import numpy as np
 import libtim
 import libtim.zern
-from modules.adaptiveOptics import pupil_forInControl as pupil
+from myWidget import pupil
 import subprocess
 from scipy.ndimage import rotate
 
